@@ -1,7 +1,24 @@
+.center {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 * {
   margin: 0 0;
   padding: 0 0;
   box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  text-align: center;
+}
+
+button {
+  cursor: pointer;
 }
 
 textarea {
@@ -16,13 +33,14 @@ textarea {
   display: flex;
   height: 50px;
   padding: 5px 10px;
-  background-color: aqua;
+  background-color: rgb(0, 87, 181);
   align-items: center;
 }
 
 .navbar label {
-  font-size: 30px;
+  font-size: 40px;
   font-weight: bolder;
+  color: white
 }
 
 .navbar a {
@@ -35,7 +53,7 @@ textarea {
   flex-direction: column;
   padding: 10px 5px;
   height: 100vh;
-  background-color: aquamarine;
+  background-color: rgb(219, 236, 255);
   min-width: 200px;
 }
 
@@ -62,6 +80,11 @@ textarea {
 
 .button-bar a {
   text-decoration: none;
+}
+
+.button-bar button {
+  padding: 3px 5px;
+  font-size: 18px;
 }
 
 textarea {
@@ -211,11 +234,20 @@ td:hover > .toolbox {
   padding: 5px 10px;
   margin: 0px 5px;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: bolder;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
-  background-color: antiquewhite;
+  background-color: transparent;
+  border: 2px solid rgb(0, 87, 181);
+  border-radius: 5px;
+  color: rgb(0, 87, 181);
+  transition: all 0.1s linear;
+}
+
+.form-select > *:hover {
+  color: white;
+  background-color: rgb(0, 87, 181);
 }
 
 .table-select-bar {
@@ -253,9 +285,183 @@ td:hover > .toolbox {
 }
 
 .form-search-select label {
+  font-size: 17px;
   margin-right: 5px;
 }
 
 .form-search-select {
   margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.homepage-container {
+  display: flex;
+  justify-content: center;
+}
+
+.homepage-card {
+  margin-top: 150px;
+}
+
+.homepage-header {
+  font-size: 65px;
+  font-weight: bolder;
+}
+
+.homepage-button-container {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.homepage-button {
+  font-size: 30px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  background-color: transparent;
+  border-radius: 5px;
+  padding: 5px 10px;
+  border: 2px solid rgb(0, 87, 181);
+  color: rgb(0, 87, 181);
+  transition: all 0.1s linear;
+}
+
+.homepage-button:hover {
+  color: white;
+  background-color: rgb(0, 87, 181);
+}
+
+.homepage-login-form {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  padding: 10px 10px;
+  border: 1px solid rgb(0, 87, 181);
+  border-radius: 5px;
+}
+
+.homepage-login-form input {
+  font-size: 25px;
+  margin-bottom: 10px;
+  padding: 5px 5px;
+  border-radius: 5px;
+  border: 1px solid rgb(0, 87, 181);
+}
+
+.user-list-table {
+  width: 100%;
+  margin-top: 50px;
+}
+
+.user-list-table tr > * {
+  padding: 5px 10px;
+}
+
+.user-list-table tr > *:nth-child(1) {
+  width: 5%;
+}
+
+.user-list-table tr > *:nth-child(2) {
+  width: 40%;
+}
+.user-list-table tr > *:nth-child(3) {
+  width: 30%;
+}
+.user-list-table tr > *:nth-child(4) {
+  width: 20%;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.backdrop .popup {
+  padding: 40px 10px;
+  width: 500px;
+  background-color: white;
+  border-radius: 8px;
+  border: 2px solid rgb(0, 87, 181);
+  position: relative;
+}
+
+.backdrop .popup-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border-style: none;
+  background-color: transparent;
+}
+
+.backdrop .popup-close:hover {
+  background-color: rgb(212, 212, 212);
+}
+
+.backdrop .popup .popup-input-container {
+  display: flex;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.backdrop .popup .popup-input-container label{
+  flex: 2;
+  text-align: center;
+  padding-right: 15px;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.backdrop .popup .popup-input-container input, .backdrop .popup .popup-input-container select{
+  flex: 8;
+  font-size: 15px;
+  padding: 3px 5px;
+}
+
+.popup .popup-button-edit {
+  width: 100%;
+  font-size: 20px;
+}
+
+.popup .popup-button-edit {
+  background-color: transparent;
+  border: 2px solid rgb(0, 87, 181);
+  padding: 2px 5px;
+  font-size: 25px;
+  font-weight: bolder;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  color: rgb(0, 87, 181);
+  transition: all 0.1s linear;
+}
+
+.popup .popup-button-edit:hover {
+  color: white;
+  background-color: rgb(0, 87, 181);
+}
+
+.semester-title-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+
+.semester-title-container label {
+  font-size: 20px;
+  margin-right: 20px;
+}
+
+.custom-react-select {
+  width: 200px;
 }

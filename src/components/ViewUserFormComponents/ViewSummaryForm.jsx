@@ -4,8 +4,7 @@ import userData2SummaryData from '../../utils/userData2SummaryData'
 import TableSelectBar from '../fractions/TableSelectBar'
 
 function ViewSummaryForm(props) {
-    const [formTemplate, setFormTemplate] = useState(null)
-    const [userData, setUserData] = useState(null)
+    const {formTemplate, setFormTemplate, userData, setUserData} = props
     const [summaryData, setSummaryData] = useState(null)
     const [selectedTable, setSelectedTable] = useState(0)
 
@@ -175,25 +174,6 @@ function ViewSummaryForm(props) {
     //     }
     //     setSummaryData(summary)
     // }
-
-    const loadTemplate = async () => {
-        const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/summary-form-template`, {
-            method: 'GET',
-        })
-        setFormTemplate(await res.json())
-    }
-    
-    const loadData = async () => {
-        const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/user-data`, {
-            method: 'GET',
-        })
-        setUserData(await res.json())
-    }
-
-    useEffect(() => {
-        loadTemplate()
-        loadData()
-    }, [])
 
     if (formTemplate === null || userData === null)
         return <div></div>

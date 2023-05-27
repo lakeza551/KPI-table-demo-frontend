@@ -1,29 +1,21 @@
 import './App.css';
-import Navbar from './components/Navbar';
-import ViewWorkloadForm from './components/ViewWorkloadForm';
-import Sidebar from './components/Sidebar';
-import CreateForm from './components/ViewWorkloadFormComponents/CreateForm';
-import ViewUserForm from './components/ViewUserForm';
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import './ReactDataTable.css'
+import Auth from './Auth'
+import Home from './Home';
+import AdminHomePage from './components/AdminHomePage';
+import {BrowserRouter, Routes, Route, useNavigate} from 'react-router-dom'
 
 function App() {
+  //const navigate = useNavigate()
   return (
-    <div className="App">
-      <div className="app-container">
-      <BrowserRouter>
-        <Navbar></Navbar>
-        <div className="flex">
-          <Sidebar />
-          <Routes>
-            <Route path='/workload-form' element={<ViewWorkloadForm/>}></Route>
-            <Route path='/workload-form/create/*' element={<CreateForm/>}></Route>
-            <Route path='/user-form' element={<ViewUserForm/>}></Route>
-          </Routes>
-        </div>
-      </BrowserRouter>
-      </div>
-    </div>
-  );
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/auth/*' element={<Auth/>}/>
+        <Route path='/admin/*' element={<AdminHomePage/>}/>
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App;

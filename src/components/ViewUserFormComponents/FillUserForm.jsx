@@ -1,42 +1,19 @@
 import { useEffect, useState } from "react"
+import callApi from "../../utils/callApi"
 
 function FillUserForm(props) {
-    const [formTemplate, setFormTemplate] = useState(null)
-    const [formData, setFormData] = useState({})
+    const {formTemplate, setFormTemplate, formData, setFormData, semesterId, userId} = props
     const [selectedTable, setSelectedTable] = useState(0)
 
-    const loadTemplate = async () => {
-        const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/user-form-template`, {
-            method: 'GET',
-        })
-        setFormTemplate(await res.json())
-    }
 
-    const save = async () => {
-        const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/user-data`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-        alert("Save Success")
-    }
-
-    const load = async () => {
-        const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/user-data`, {
-            method: 'GET',
-        })
-        setFormData(await res.json())
-        alert("Load Success")
-    }
-
-    useEffect(() => {
-        loadTemplate()
-    }, [])
 
     if (formTemplate === null)
         return <div></div>
+
+    const save = async () => {
+        const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/raw_data/${userId}/`, 'PUT', formData)
+        console.log(await res.json())
+    }
 
     const TableSelectBar = () => {
         const tableCount = formTemplate.length
@@ -54,13 +31,11 @@ function FillUserForm(props) {
     }
 
     const tableTemplate = formTemplate[selectedTable]
-    console.log(tableTemplate)
 
     return (
         <div className="content-container">
-            <div className="float-button-bar">
-                <button onClick={save}>Save</button>
-                <button onClick={load}>Load</button>
+            <div className="button-bar">
+                <button onClick={save}>save</button>
             </div>
             <TableSelectBar />
             <div className="table-container">
@@ -78,8 +53,9 @@ function FillUserForm(props) {
                                             const inputType = cell.type.split('#')[1]
                                             if(inputType === 'text') {
                                                 const startText = cell.label === undefined ? '' : cell.label
+                                                console.log(startText)
                                                 TableContent = (
-                                                    <textarea value={formData[cell.key] === undefined ? startText : formData[cell.key]} onChange={e => {
+                                                    <textarea value={formData[cell.key] === null ? startText : formData[cell.key]} onChange={e => {
                                                         setFormData(prev => {
                                                             if(e.target.value.length < startText.length)
                                                                 e.target.value = startText
@@ -91,7 +67,7 @@ function FillUserForm(props) {
                                             }
                                             else if(inputType === 'number') {
                                                 TableContent = (
-                                                    <input type="number" value={formData[cell.key] === undefined ? '' : formData[cell.key]} onChange={e => {
+                                                    <input type="number" value={formData[cell.key] === null ? '' : formData[cell.key]} onChange={e => {
                                                         setFormData(prev => {
                                                             prev[cell.key] = e.target.value
                                                             return { ...prev }
@@ -101,7 +77,7 @@ function FillUserForm(props) {
                                             }
                                             else if(inputType === 'checkbox') {
                                                 TableContent = (
-                                                    <input type="checkbox" checked={formData[cell.key] === undefined || formData[cell.key] === null ? false : formData[cell.key]} onChange={e => {
+                                                    <input type="checkbox" checked={formData[cell.key] === null ? false : formData[cell.key]} onChange={e => {
                                                         setFormData(prev => {
                                                             prev[cell.key] = e.target.checked
                                                             return {...prev}
