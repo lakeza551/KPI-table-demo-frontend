@@ -1,5 +1,5 @@
-function CellToolbox(props) {
-    const {formUtils, form, setForm, selectedTable, rIndex, cIndex} = props
+function DashboardCellToolbox(props) {
+    const {formUtils, form, setForm, selectedTable, rIndex, cIndex, departmentList} = props
     return (
         <div className="toolbox">
             <div className="toolbox-sub-menu">
@@ -116,20 +116,21 @@ function CellToolbox(props) {
             </div>
             <div className="toolbox-sub-menu">
                 <div className="toolbox">
-                <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, '!input#text')}>
-                    text
-                </button>
-                <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, '!input#number')}>
-                    number
-                </button>
-                <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, '!input#checkbox')}>
-                    checkbox
-                </button>
+                {departmentList.map(dep => {
+                    return (
+                        <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, `!department#${dep.id}`)}>
+                            {dep.title}
+                        </button>
+                    )
+                })}
                 </div>
-                input
+                department
             </div>
+            <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, '!summary#รวม')}>
+                summary
+            </button>
         </div>
     )
 }
 
-export default CellToolbox
+export default DashboardCellToolbox

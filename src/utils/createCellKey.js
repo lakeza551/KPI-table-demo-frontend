@@ -6,7 +6,7 @@ const createCellKey = (formType, selectedTable, rIndex, cIndex) => {
     if(formType === 'summary-form')
         return `#b${selectedTable + 1}_${columnNameList[cIndex]}${rIndex + 1}`
     if(formType === 'dashboard-form')
-        return `#a${selectedTable + 1}_${columnNameList[cIndex]}${rIndex + 1}`
+        return `#c${selectedTable + 1}_${columnNameList[cIndex]}${rIndex + 1}`
 }
 
 export default createCellKey

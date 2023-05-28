@@ -89,7 +89,7 @@ function EditUserForm(props) {
         <div>
             <div className="float-button-bar">
                 <button onClick={compile}>Compile</button>
-                <button onClick={() => formUtils.undo(setForm)}>Undo</button>
+                <button onClick={() => formUtils.undo()}>Undo</button>
             </div>
             <TableSelectBar form={form} setSelectedTable={setSelectedTable}/>
             <div className="table-container">

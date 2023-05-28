@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react"
 import {CreateFormUtils} from '../../utils/createFormUtils'
-import CellToolbox from "../fractions/CellToolbox"
+import DashboardCellToolbox from "../fractions/DashboardCellToolbox"
+import callApi from "../../utils/callApi"
 
-function EditSummaryForm(props) {
+function EditDashboardForm(props) {
     const [selectedTable, setSelectedTable] = useState(0)
-    const tableActiveStyle = {
-        fontWeight: 'bold',
-        textDecoration: 'underline'
-    }
-    const {form, setForm} = props
+    const {form, setForm, userFormTemplate} = props
     const [formStack, setFormStack] = useState([])
-    const formUtils = new CreateFormUtils(form, setForm, selectedTable, setSelectedTable, 'summary-form', formStack, setFormStack)
+    const formUtils = new CreateFormUtils(form, setForm, selectedTable, setSelectedTable, 'dashboard-form', formStack, setFormStack)
 
+    const [departmentList, setDepartmentList] = useState([])
+
+    const fetchDepartmentList = async () => {
+        const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/group/`, 'GET', null)
+        const resData = await res.json()
+        setDepartmentList(resData.data)
+    }
 
     const compile = async () => {
         form.forEach((table, tIndex) => {
@@ -29,24 +33,23 @@ function EditSummaryForm(props) {
         })
     }
 
-    const load = async () => {
-        const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/summary-form-template`, {
-            method: 'GET',
-        })
-        setForm(await res.json())
-        alert("Load Success")
+    const createDashboardData = async () => {
+        const dashboardForm = form[0]
+        for(const row of dashboardForm.rows) {
+            const firstCell = row.columns[0]
+            if(firstCell.value !== null && firstCell.value.startsWith('!department')) {
+                const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/`)
+            }
+        }
     }
 
-    const save = async () => {
-        const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/summary-form-template`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(form)
-        })
-        alert("Save Success")
-    }
+    useEffect(() => {
+        if(form.length === 0)
+            return
+        createDashboardData()
+    }, [form])
+
+
 
     const TableSelectBar = () => {
         const tableCount = form.length
@@ -55,7 +58,8 @@ function EditSummaryForm(props) {
                 {Array.apply(null, Array(tableCount)).map((temp, index) => {
                     return (
                         <div className="table-select-bar-button-container">
-                            <button style={index === selectedTable ? tableActiveStyle : undefined} onClick={() => {
+                            <button onClick={() => {
+                                //console.log(index)
                                 setSelectedTable(index)
                             }}>ตารางที่ {index + 1}</button>
                             <button onClick={() => formUtils.deleteTable(index)} className="delete-table-button">ลบ</button>
@@ -72,6 +76,7 @@ function EditSummaryForm(props) {
     }
 
     useEffect(() => {
+        fetchDepartmentList()
         if(form.length === 0)
             formUtils.initiateForm()
     }, [])
@@ -86,7 +91,7 @@ function EditSummaryForm(props) {
                 <button onClick={compile}>Compile</button>
                 <button onClick={() => formUtils.undo()}>Undo</button>
             </div>
-            <TableSelectBar />
+            {/* <TableSelectBar /> */}
             <div className="table-container">
                 <table>
                     <tbody>
@@ -105,18 +110,22 @@ function EditSummaryForm(props) {
                                                 height: table.rowHeight[rIndex],
                                                 ...cell.style 
                                             }}>
-                                                <CellToolbox 
+                                                <DashboardCellToolbox 
                                                     formUtils={formUtils}
                                                     form={form} 
                                                     setForm={setForm} 
                                                     selectedTable={selectedTable} 
                                                     rIndex={rIndex} 
-                                                    cIndex={cIndex} 
+                                                    cIndex={cIndex}
+                                                    departmentList={departmentList} 
                                                 />
                                                 <label style={{
                                                     color: cell.type === 'input' ? 'red' : 'black'
                                                 }} className="cell-key">{cell.key ? cell.key : ''}</label>
-                                                <textarea value={cell.value === null ? '' : cell.value} onChange={e => {
+                                                <textarea
+                                                style={cell.textareaStyle}
+                                                value={cell.value === null ? '' : cell.value} 
+                                                onChange={e => {
                                                     setForm(prev => {
                                                         cell.value = e.target.value
                                                         return [...prev]
@@ -136,4 +145,4 @@ function EditSummaryForm(props) {
     )
 }
 
-export default EditSummaryForm
+export default EditDashboardForm

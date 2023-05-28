@@ -1,6 +1,7 @@
 import { Link, Route, Routes, useParams } from "react-router-dom"
 import EditUserForm from './EditUserForm'
 import EditSummaryForm from "./EditSummaryForm"
+import EditDashboardForm from "./EditDashboardForm"
 import { useEffect, useState } from "react"
 import callApi from "../../utils/callApi"
 
@@ -14,9 +15,10 @@ function EditForm(props) {
     const [selectedForm, setSelectedForm] = useState('null')
     const [userForm, setUserForm] = useState([])
     const [summaryForm, setSummaryForm] = useState([])
+    const [dashboardForm, setDashboardForm] = useState([])
     const [semesterTitle, setSemesterTitle] = useState('')
+
     const { semesterId } = useParams()
-    
     const fetchSemesterInfo = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/`, 'GET', null)
         const resData = await res.json()
@@ -37,6 +39,12 @@ function EditForm(props) {
         resData = await res.json()
         if(Object.keys(resData.data).length !== 0)
             setSummaryForm(resData.data)
+
+        //dashboard form
+        res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/dashboard/`, 'GET', null)
+        resData = await res.json()
+        if(Object.keys(resData.data).length !== 0)
+            setDashboardForm(resData.data)
     }
 
     const save = async () => {
@@ -46,6 +54,7 @@ function EditForm(props) {
         try {
             await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/form/`, 'PUT', userForm)
             await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/summary/`, 'PUT', summaryForm)
+            await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/dashboard/`, 'PUT', dashboardForm)
             alert('บันทึกสำเร็จ')
         } catch (error) {
             alert('บันทึกล้มเหลว')
@@ -96,6 +105,7 @@ function EditForm(props) {
             <Routes>
                 <Route path="/summary-form" element={<EditSummaryForm form={summaryForm} setForm={setSummaryForm}/>}></Route>
                 <Route path="/user-form" element={<EditUserForm form={userForm} setForm={setUserForm}/>}></Route>
+                <Route path="/dashboard-form" element={<EditDashboardForm form={dashboardForm} setForm={setDashboardForm} userFormTemplate={userForm}/>}></Route>
             </Routes>
         </div>
     )

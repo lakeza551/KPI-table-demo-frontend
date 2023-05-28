@@ -4,6 +4,7 @@ import Sidebar from './fractions/Sidebar';
 import EditForm from './ViewWorkloadFormComponents/EditForm';
 import ViewUserForm from './ViewUserForm';
 import ViewUserList from './ViewUserList';
+import ViewDashboard from './ViewDashboard';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function AdminHomePage() {
@@ -14,6 +15,7 @@ function AdminHomePage() {
                 <div className="flex">
                     <Sidebar />
                     <Routes>
+                        <Route path='/dashboard' element={<ViewDashboard />}></Route>
                         <Route path='/users' element={<ViewUserList />}></Route>
                         <Route path='/workload-form' element={<ViewWorkloadForm />}></Route>
                         <Route path='/workload-form/edit/:semesterId/*' element={<EditForm />}></Route>

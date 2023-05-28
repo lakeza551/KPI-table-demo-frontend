@@ -300,10 +300,33 @@ export class CreateFormUtils {
         })
     }
 
-    markInputCell(rIndex, cIndex, type) {
+    setTextAlignment(rIndex, cIndex, direction) {
         this.setForm(prev => {
             const cell = prev[this.selectedTable].rows[rIndex].columns[cIndex]
-            cell.value = `!input#${type}`
+            if(direction === 'left') {
+                cell.textareaStyle = {
+                    textAlign: 'left'
+                }
+            }
+            else if(direction === 'right') {
+                cell.textareaStyle = {
+                    textAlign: 'right'
+                }
+            }
+            else if(direction === 'center') {
+                cell.textareaStyle = {
+                    textAlign: 'center'
+                }
+            }
+            console.log(prev)
+            return [...prev]
+        })
+    }
+
+    setTextInCell(rIndex, cIndex, text) {
+        this.setForm(prev => {
+            const cell = prev[this.selectedTable].rows[rIndex].columns[cIndex]
+            cell.value = text
             return [...prev]
         })
     }
