@@ -1,12 +1,11 @@
 import callApi from "./callApi"
 
 async function fetchRawDataAllDeparment(semesterId, setRawDataList) {
-    var res = await callApi(`${process.env.REACT_APP_SERVER_URL}/group/`, 'GET', null)
-    const departmentList = (await res.json()).data
     var rawDataList = {}
-    for(const department of departmentList) {
-        res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/raw_data/?group_id=${department.id}`, 'GET', null)
-        rawDataList[department.id] = (await res.json()).data[0].raw_data_list
+    const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/raw_data/`, 'GET', null)
+    const resData = (await res.json()).data
+    for(const rawDataObj of resData) {
+        rawDataList[rawDataObj.group.id] = rawDataObj.raw_data_list
     }
     setRawDataList(rawDataList)
 }

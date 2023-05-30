@@ -1,5 +1,6 @@
 import './App.css';
 import './ReactDataTable.css'
+import './ReactGoogleChart.css'
 import Auth from './Auth'
 import Home from './Home';
 import AdminHomePage from './components/AdminHomePage';

@@ -38,6 +38,9 @@ function ViewDashboard(props) {
     }, [])
 
     useEffect(() => {
+        setDashboardFormTemplate(null)
+        setRawDataList(null)
+        setSummaryFormTemplate(null)
         if(selectedSemester === null)
             return
         fetchDashboardFormTemplate()

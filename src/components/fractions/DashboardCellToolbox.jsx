@@ -126,7 +126,7 @@ function DashboardCellToolbox(props) {
                 </div>
                 department
             </div>
-            <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, '!summary#รวม')}>
+            <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, '!summary')}>
                 summary
             </button>
         </div>

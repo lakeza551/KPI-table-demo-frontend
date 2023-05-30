@@ -12,17 +12,24 @@ function FillUserForm(props) {
 
     const save = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/raw_data/${userId}/`, 'PUT', formData)
-        console.log(await res.json())
+        const resData = await res.json()
+        if(resData.status === 'success')
+            return alert('บันทึกข้อมูลสำเร็จ')
+            alert('บันทึกข้อมูลล้มเหลว')
     }
 
     const TableSelectBar = () => {
         const tableCount = formTemplate.length
+        const activeStyle = {
+            fontWeight: 'bold',
+            textDecoration: 'underline'
+        }
         return (
             <div className="table-select-bar">
                 {Array.apply(null, Array(tableCount)).map((temp, index) => {
                     return (
                         <div className="table-select-bar-button-container">
-                            <button onClick={() => setSelectedTable(index)}>ตารางที่ {index + 1}</button>
+                            <button style={selectedTable === index ? activeStyle : undefined} onClick={() => setSelectedTable(index)}>ตารางที่ {index + 1}</button>
                         </div>
                     )
                 })}
@@ -53,9 +60,12 @@ function FillUserForm(props) {
                                             const inputType = cell.type.split('#')[1]
                                             if(inputType === 'text') {
                                                 const startText = cell.label === undefined ? '' : cell.label
-                                                console.log(startText)
+                                                if(rIndex === 2) {
+                                                    console.log(formData[cell.key])
+                                                    console.log(startText)
+                                                }
                                                 TableContent = (
-                                                    <textarea value={formData[cell.key] === null ? startText : formData[cell.key]} onChange={e => {
+                                                    <textarea style={cell.textareaStyle} value={formData[cell.key] === null || formData[cell.key] === undefined ? startText : formData[cell.key]} onChange={e => {
                                                         setFormData(prev => {
                                                             if(e.target.value.length < startText.length)
                                                                 e.target.value = startText
@@ -67,7 +77,7 @@ function FillUserForm(props) {
                                             }
                                             else if(inputType === 'number') {
                                                 TableContent = (
-                                                    <input type="number" value={formData[cell.key] === null ? '' : formData[cell.key]} onChange={e => {
+                                                    <input style={cell.textareaStyle} type="number" value={formData[cell.key] === null || formData[cell.key] === undefined ? '' : formData[cell.key]} onChange={e => {
                                                         setFormData(prev => {
                                                             prev[cell.key] = e.target.value
                                                             return { ...prev }
@@ -77,18 +87,21 @@ function FillUserForm(props) {
                                             }
                                             else if(inputType === 'checkbox') {
                                                 TableContent = (
-                                                    <input type="checkbox" checked={formData[cell.key] === null ? false : formData[cell.key]} onChange={e => {
-                                                        setFormData(prev => {
-                                                            prev[cell.key] = e.target.checked
-                                                            return {...prev}
-                                                        })
-                                                    }} />
+                                                    <div>
+                                                        <input style={cell.textareaStyle} type="checkbox" checked={formData[cell.key] === null || formData[cell.key] === undefined ? false : formData[cell.key]} onChange={e => {
+                                                            setFormData(prev => {
+                                                                prev[cell.key] = e.target.checked
+                                                                return {...prev}
+                                                            })
+                                                        }} />
+                                                        <label style={{marginLeft: '10px'}}>{cell.label}</label>
+                                                    </div>
                                                 )
                                             }
                                         }
                                         //is comment
                                         else {
-                                            TableContent = (<textarea disabled={true} value={cell.value} ></textarea>)
+                                            TableContent = (<textarea style={cell.textareaStyle} disabled={true} value={cell.value} ></textarea>)
                                         }
                                         return (
                                             <td colSpan={cell.colSpan} rowSpan={cell.rowSpan} style={{ width: tableTemplate.columnWidth[cIndex], height: tableTemplate.rowHeight[rIndex] }}>

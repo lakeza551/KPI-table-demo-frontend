@@ -59,10 +59,10 @@ function CellToolbox(props) {
             </div>
             <div className="toolbox-sub-menu">
                 <div className="toolbox">
-                <button onClick={() => formUtils.changeWidth(rIndex, 25)}>
+                <button onClick={() => formUtils.changeWidth(cIndex, 25)}>
                     increase width
                 </button>
-                <button onClick={() => formUtils.changeWidth(rIndex, -25)}>
+                <button onClick={() => formUtils.changeWidth(cIndex, -25)}>
                     decrease width
                 </button>
                 </div>

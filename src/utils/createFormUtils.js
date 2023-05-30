@@ -2,7 +2,7 @@ import createCellKey from "./createCellKey"
 
 
 export class CreateFormUtils {  
-    defaultRowHeight = 125
+    defaultRowHeight = 50
     defaultColumnWidth = 175
     defaultTableTemplate = {
         rowHeight: [this.defaultRowHeight],

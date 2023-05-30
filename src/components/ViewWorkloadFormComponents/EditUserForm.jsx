@@ -84,7 +84,7 @@ function EditUserForm(props) {
         return
 
     const table = form[selectedTable]
-    console.log(form)
+    console.log(table)
     return (
         <div>
             <div className="float-button-bar">
@@ -127,6 +127,7 @@ function EditUserForm(props) {
                                                         rIndex: rIndex,
                                                         cIndex: cIndex
                                                     })}
+                                                    style={cell.textareaStyle}
                                                     value={cell.value === null ? '' : cell.value}
                                                     onChange={e => {
                                                         setForm(prev => {
