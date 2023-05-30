@@ -92,7 +92,7 @@ function EditForm(props) {
     }
 
     return (
-        <div className="content-container">
+        <div className="page-content-container">
             <FormSelectButtonBar />
             <div className="semester-title-container">
                 <label>ชื่อเทอม</label>

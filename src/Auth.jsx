@@ -30,7 +30,7 @@ function Auth() {
         }
     }
 
-    const AdminLogin = () => {
+    const Login = () => {
         return (
             <div className="homepage-login-form">
                 <input type="text" placeholder="Username" onChange={e => {
@@ -47,8 +47,7 @@ function Auth() {
     const LoginSelector = () => {
         return (
             <div className="homepage-button-container">
-                <Link to={'./admin-login'} className="homepage-button">เข้าสู่ระบบแอดมิน</Link>
-                <Link to={'./teacher-login'} className="homepage-button">เข้าสู่ระบบผู้ใช้</Link>
+                <Link to={'./login'} className="homepage-button">เข้าสู่ระบบ</Link>
             </div>
         )
     }
@@ -59,7 +58,7 @@ function Auth() {
                 <label className="homepage-header">SCSU-Workload</label>
                 <Routes >
                     <Route path="/" element={<LoginSelector/>}/>
-                    <Route path="/admin-login" element={<AdminLogin/>}/>
+                    <Route path="/login" element={<Login/>}/>
                 </Routes>
             </div>
         </div>

@@ -6,6 +6,7 @@ import callApi from "../../utils/callApi"
 function EditDashboardForm(props) {
     const [selectedTable, setSelectedTable] = useState(0)
     const {form, setForm, userFormTemplate} = props
+    const [showToolbox, setShowToolbox] = useState(null)
     const [formStack, setFormStack] = useState([])
     const formUtils = new CreateFormUtils(form, setForm, selectedTable, setSelectedTable, 'dashboard-form', formStack, setFormStack)
 
@@ -42,6 +43,10 @@ function EditDashboardForm(props) {
             }
         }
     }
+
+    useEffect(() => {
+        setShowToolbox(null)
+    }, [selectedTable])
 
     useEffect(() => {
         if(form.length === 0)
@@ -110,19 +115,30 @@ function EditDashboardForm(props) {
                                                 height: table.rowHeight[rIndex],
                                                 ...cell.style 
                                             }}>
-                                                <DashboardCellToolbox 
+                                                {showToolbox !== null &&
+                                                showToolbox.cIndex === cIndex &&
+                                                showToolbox.rIndex === rIndex &&
+                                                <DashboardCellToolbox
                                                     formUtils={formUtils}
-                                                    form={form} 
-                                                    setForm={setForm} 
-                                                    selectedTable={selectedTable} 
-                                                    rIndex={rIndex} 
+                                                    form={form}
+                                                    setForm={setForm}
+                                                    selectedTable={selectedTable}
+                                                    rIndex={rIndex}
                                                     cIndex={cIndex}
-                                                    departmentList={departmentList} 
-                                                />
+                                                    departmentList={departmentList}
+                                                />}
                                                 <label style={{
                                                     color: cell.type === 'input' ? 'red' : 'black'
                                                 }} className="cell-key">{cell.key ? cell.key : ''}</label>
                                                 <textarea
+                                                onClick={() => setShowToolbox(null)}
+                                                onContextMenu={e => {
+                                                    e.preventDefault()
+                                                    setShowToolbox({
+                                                        rIndex: rIndex,
+                                                        cIndex: cIndex
+                                                    })
+                                                }}
                                                 style={cell.textareaStyle}
                                                 value={cell.value === null ? '' : cell.value} 
                                                 onChange={e => {

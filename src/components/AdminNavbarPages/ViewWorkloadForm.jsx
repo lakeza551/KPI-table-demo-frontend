@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import callApi from "../utils/callApi"
+import callApi from "../../utils/callApi"
 import { useEffect, useState } from "react"
 
 function ViewWorkloadForm(props) {
@@ -48,7 +48,6 @@ function ViewWorkloadForm(props) {
                             <div className="formlist-row">
                                 <Link to={`./edit/${semester.id}`}>{semester.title}</Link>
                                 <div className="formlist-row-menu">
-                                    <Link>แก้ไข</Link>
                                     <input type="checkbox" name="" id="" />
                                     <label>เปิดใช้งาน</label>
                                 </div>
@@ -60,7 +59,7 @@ function ViewWorkloadForm(props) {
     }
 
     return (
-        <div className="content-container">
+        <div className="page-content-container">
             <ButtonBar />
             <FormList />
         </div>

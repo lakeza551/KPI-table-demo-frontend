@@ -2,8 +2,8 @@ function CellToolbox(props) {
     const {formUtils, form, setForm, selectedTable, rIndex, cIndex} = props
     return (
         <div className="toolbox">
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.spanColumn(rIndex, cIndex)}>
                     span column
                 </button>
@@ -13,8 +13,8 @@ function CellToolbox(props) {
                 </div>
                 span
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.unspanColumn(rIndex, cIndex)}>
                     unspan column
                 </button>
@@ -24,8 +24,8 @@ function CellToolbox(props) {
                 </div>
                 unspan
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.addColumn('left', rIndex, cIndex)}>
                     add left column
                 </button>
@@ -35,8 +35,8 @@ function CellToolbox(props) {
                 </div>
                 add column
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.addRow('top', rIndex, cIndex)}>
                     add top row
                 </button>
@@ -46,8 +46,8 @@ function CellToolbox(props) {
                 </div>
                 add row
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                     <button onClick={() => formUtils.changeHeight(rIndex, 25)}>
                         increase height
                     </button>
@@ -57,8 +57,8 @@ function CellToolbox(props) {
                 </div>
                 height
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.changeWidth(cIndex, 25)}>
                     increase width
                 </button>
@@ -69,10 +69,13 @@ function CellToolbox(props) {
                 width
             </div>
             <button onClick={() => formUtils.deleteRow(rIndex)}>
-                delete row
+                delete this row
             </button>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <button onClick={() => formUtils.deleteColumn(cIndex)}>
+                delete this column
+            </button>
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                     <button onClick={() => formUtils.addBorder(rIndex, cIndex, 'top')}>
                         add top border
                     </button>
@@ -100,8 +103,8 @@ function CellToolbox(props) {
                 </div>
                 border
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.setTextAlignment(rIndex, cIndex, 'center')}>
                     center
                 </button>
@@ -114,8 +117,8 @@ function CellToolbox(props) {
                 </div>
                 text aligntment
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, '!input#text')}>
                     text
                 </button>

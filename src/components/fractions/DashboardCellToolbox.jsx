@@ -2,8 +2,8 @@ function DashboardCellToolbox(props) {
     const {formUtils, form, setForm, selectedTable, rIndex, cIndex, departmentList} = props
     return (
         <div className="toolbox">
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.spanColumn(rIndex, cIndex)}>
                     span column
                 </button>
@@ -13,8 +13,8 @@ function DashboardCellToolbox(props) {
                 </div>
                 span
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.unspanColumn(rIndex, cIndex)}>
                     unspan column
                 </button>
@@ -24,8 +24,8 @@ function DashboardCellToolbox(props) {
                 </div>
                 unspan
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.addColumn('left', rIndex, cIndex)}>
                     add left column
                 </button>
@@ -35,8 +35,8 @@ function DashboardCellToolbox(props) {
                 </div>
                 add column
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.addRow('top', rIndex, cIndex)}>
                     add top row
                 </button>
@@ -46,8 +46,8 @@ function DashboardCellToolbox(props) {
                 </div>
                 add row
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                     <button onClick={() => formUtils.changeHeight(rIndex, 25)}>
                         increase height
                     </button>
@@ -57,8 +57,8 @@ function DashboardCellToolbox(props) {
                 </div>
                 height
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.changeWidth(rIndex, 25)}>
                     increase width
                 </button>
@@ -71,8 +71,8 @@ function DashboardCellToolbox(props) {
             <button onClick={() => formUtils.deleteRow(rIndex)}>
                 delete row
             </button>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                     <button onClick={() => formUtils.addBorder(rIndex, cIndex, 'top')}>
                         add top border
                     </button>
@@ -100,8 +100,8 @@ function DashboardCellToolbox(props) {
                 </div>
                 border
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.setTextAlignment(rIndex, cIndex, 'center')}>
                     center
                 </button>
@@ -114,8 +114,8 @@ function DashboardCellToolbox(props) {
                 </div>
                 text aligntment
             </div>
-            <div className="toolbox-sub-menu">
-                <div className="toolbox">
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 {departmentList.map(dep => {
                     return (
                         <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, `!department#${dep.id}`)}>

@@ -1,10 +1,10 @@
 import Select from "react-select"
-import fetchSemesterList from "../utils/fetchSemesterList"
-import ViewDashboardForm from "./ViewWorkloadFormComponents/ViewDashboardForm"
+import fetchSemesterList from "../../utils/fetchSemesterList"
+import ViewDashboardForm from "../ViewWorkloadFormComponents/ViewDashboardForm"
 import { useEffect, useState } from "react"
-import callApi from "../utils/callApi"
-import fetchRawDataAllDeparment from "../utils/fetchRawDataAllDeparment"
-import fetchDepartmentList from "../utils/fetchDepartmentList"
+import callApi from "../../utils/callApi"
+import fetchRawDataAllDeparment from "../../utils/fetchRawDataAllDeparment"
+import fetchDepartmentList from "../../utils/fetchDepartmentList"
 
 function ViewDashboard(props) {
     const [semesterList, setSemesterList] = useState([])
@@ -51,7 +51,7 @@ function ViewDashboard(props) {
     
 
     return (
-        <div className="content-container">
+        <div className="page-content-container">
             <Select
                 className="custom-react-select"
                 placeholder="-- โปรดระบุ --"

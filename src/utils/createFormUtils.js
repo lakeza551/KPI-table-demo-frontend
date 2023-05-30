@@ -244,6 +244,20 @@ export class CreateFormUtils {
         this.generateKeys()
     }
 
+    deleteColumn(cIndex) {
+        if(this.form[this.selectedTable].columnWidth.length === 1)
+            return
+        this.saveFormState(JSON.parse(JSON.stringify(this.form)))
+        this.setForm(prev => {
+            prev[this.selectedTable].columnWidth.splice(cIndex, 1)
+            for(const row of prev[this.selectedTable].rows) {
+                row.columns.splice(cIndex, 1)
+            }
+            return [...prev]
+        })
+        this.generateKeys()
+    }
+
     removeBorder(rIndex, cIndex, direction) {
         this.saveFormState(JSON.parse(JSON.stringify(this.form)))
         this.setForm(prev => {

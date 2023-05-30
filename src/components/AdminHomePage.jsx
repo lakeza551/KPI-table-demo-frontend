@@ -1,10 +1,10 @@
 import Navbar from './fractions/Navbar';
-import ViewWorkloadForm from './ViewWorkloadForm';
+import ViewWorkloadForm from './AdminNavbarPages/ViewWorkloadForm';
 import Sidebar from './fractions/Sidebar';
 import EditForm from './ViewWorkloadFormComponents/EditForm';
-import ViewUserForm from './ViewUserForm';
-import ViewUserList from './ViewUserList';
-import ViewDashboard from './ViewDashboard';
+import ViewUserForm from './AdminNavbarPages/ViewUserForm';
+import ViewUserList from './AdminNavbarPages/ViewUserList';
+import ViewDashboard from './AdminNavbarPages/ViewDashboard';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function AdminHomePage() {

@@ -31,6 +31,8 @@ function ViewDashboardForm(props) {
     const createSummaryDashboardData = () => {
         const topicRow = dashboardFormTemplate[0].rows.filter(row => row.columns[0].value !== null && row.columns[0].value.startsWith('!topic'))[0]
         const summaryRow = dashboardFormTemplate[0].rows.filter(row => row.columns[0].value !== null && row.columns[0].value.startsWith('!summary'))[0]
+        if(topicRow === undefined || summaryRow === undefined)
+            return
         const dashboardSummaryBuffer = []
         for (const summaryCell of summaryRow.columns.slice(1)) {
             const columnIndex = summaryCell.key.split('_')[1].charAt(0)
@@ -82,7 +84,7 @@ function ViewDashboardForm(props) {
             textDecoration: 'underline'
         }
         return (
-            <div className="table-select-bar" style={{marginTop: '20px'}}>
+            <div className="table-select-bar" style={{ marginTop: '20px' }}>
                 <button style={selectedTable === 'table' ? activeStyle : undefined} onClick={() => setSelectedTable('table')}>ตาราง</button>
                 <button style={selectedTable === 'chart' ? activeStyle : undefined} onClick={() => setSelectedTable('chart')}>กราฟ</button>
             </div>
@@ -164,6 +166,7 @@ function ViewDashboardForm(props) {
                                                 height: table.rowHeight[rIndex],
                                                 ...cell.style
                                             }}>
+                                            
                                             <textarea
                                                 style={cell.textareaStyle}
                                                 value={cell.value === null || cell.value === '!topic' ? '' : cell.value}
@@ -181,7 +184,7 @@ function ViewDashboardForm(props) {
     }
 
     const PieChart = () => {
-        return(
+        return (
             <Chart
                 chartType='PieChart'
                 data={[

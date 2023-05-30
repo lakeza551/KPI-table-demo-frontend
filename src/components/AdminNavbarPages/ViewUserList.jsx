@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 import { BeatLoader } from "react-spinners"
 import Cookies from "universal-cookie"
 import DataTable from "react-data-table-component"
-import checkUserDepartment from "../utils/checkUserDepartment"
-import checkUserType from "../utils/checkUserType"
-import callApi from "../utils/callApi"
+import checkUserDepartment from "../../utils/checkUserDepartment"
+import checkUserType from "../../utils/checkUserType"
+import callApi from "../../utils/callApi"
 import {GrFormClose} from 'react-icons/gr'
 
 function ViewUserList() {
@@ -177,7 +177,7 @@ function ViewUserList() {
     }
 
     return (
-        <div className="content-container">
+        <div className="page-content-container">
             <div className="user-list-table-container">
                 <Table />
                 {userPopupData !== null && EditPopup()}

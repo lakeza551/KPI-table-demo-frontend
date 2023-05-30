@@ -10,6 +10,7 @@ function EditSummaryForm(props) {
     }
     const {form, setForm} = props
     const [formStack, setFormStack] = useState([])
+    const [showToolbox, setShowToolbox] = useState(null)
     const formUtils = new CreateFormUtils(form, setForm, selectedTable, setSelectedTable, 'summary-form', formStack, setFormStack)
 
 
@@ -27,6 +28,7 @@ function EditSummaryForm(props) {
                 })
             })
         })
+        alert('Compile สำเร็จ')
     }
 
     const load = async () => {
@@ -72,6 +74,10 @@ function EditSummaryForm(props) {
     }
 
     useEffect(() => {
+        setShowToolbox(null)
+    }, [selectedTable])
+
+    useEffect(() => {
         if(form.length === 0)
             formUtils.initiateForm()
     }, [])
@@ -97,7 +103,7 @@ function EditSummaryForm(props) {
                                         if (cell.isMerged)
                                             return
                                         return (
-                                            <td 
+                                            <td
                                             colSpan={cell.colSpan} 
                                             rowSpan={cell.rowSpan} 
                                             style={{ 
@@ -105,23 +111,38 @@ function EditSummaryForm(props) {
                                                 height: table.rowHeight[rIndex],
                                                 ...cell.style 
                                             }}>
-                                                <CellToolbox 
+                                            {showToolbox !== null &&
+                                             showToolbox.cIndex === cIndex &&
+                                             showToolbox.rIndex === rIndex &&
+                                             <CellToolbox 
                                                     formUtils={formUtils}
                                                     form={form} 
                                                     setForm={setForm} 
                                                     selectedTable={selectedTable} 
                                                     rIndex={rIndex} 
                                                     cIndex={cIndex} 
-                                                />
+                                                />}
                                                 <label style={{
                                                     color: cell.type === 'input' ? 'red' : 'black'
                                                 }} className="cell-key">{cell.key ? cell.key : ''}</label>
-                                                <textarea value={cell.value === null ? '' : cell.value} onChange={e => {
+                                                <textarea 
+                                                style={cell.textareaStyle} 
+                                                value={cell.value === null ? '' : cell.value} 
+                                                onClick={() => setShowToolbox(null)}
+                                                onContextMenu={e => {
+                                                    e.preventDefault()
+                                                    setShowToolbox({
+                                                        rIndex: rIndex,
+                                                        cIndex: cIndex
+                                                    })
+                                                }}
+                                                onChange={e => {
                                                     setForm(prev => {
                                                         cell.value = e.target.value
                                                         return [...prev]
                                                     })
-                                                }}></textarea>
+                                                }}>
+                                                </textarea>
                                                 <label className="cell-key">{cell.key}</label>
                                             </td>
                                         )

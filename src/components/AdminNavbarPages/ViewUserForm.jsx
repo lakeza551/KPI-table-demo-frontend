@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import FillUserForm from "./ViewUserFormComponents/FillUserForm"
-import ViewSummaryForm from "./ViewUserFormComponents/ViewSummaryForm"
-import callApi from "../utils/callApi"
+import FillUserForm from "../ViewUserFormComponents/FillUserForm"
+import ViewSummaryForm from "../ViewUserFormComponents/ViewSummaryForm"
+import callApi from "../../utils/callApi"
 import Select from "react-select"
 import { Link, Route, useSearchParams, Routes } from "react-router-dom"
 
@@ -137,7 +137,7 @@ function ViewUserForm(props) {
     }, [])
 
     return (
-        <div className="content-container">
+        <div className="page-content-container">
             <div className="form-search">
                 <div className="form-search-select">
                     <label htmlFor="">ภาคการศึกษา: </label>

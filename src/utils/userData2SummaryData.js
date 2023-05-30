@@ -9,42 +9,6 @@ const isOperator = term => {
 const isEvaluatable = (exp, userData, summary) => {
     const terms = exp.split(' ')
     for (const [index, term] of terms.entries()) {
-        // if (term.startsWith('sum')) {
-        //     const reg = /\(([^)]*)\)/;
-        //     const selected = exp.match(reg)[1]
-        //     const startCell = selected.split(':')[0]
-        //     const endCell = selected.split(':')[1]
-        //     const startRow = startCell.split('_')[1]
-        //     const startCol = startCell.split('_')[2]
-        //     const endRow = endCell.split('_')[1]
-        //     const endCol = endCell.split('_')[2]
-
-        //     //console.log(term)
-        //     //data from user
-        //     if (startCell.startsWith('#a1'))
-        //         continue
-        //     //data in summary table
-
-        //     //vertical
-        //     if (startRow === endRow) {
-        //         const startC = Number(startCol.substring(1))
-        //         const endC = Number(endCol.substring(1))
-        //         for (var c = startC; c < endC; ++c) {
-        //             if (summary[`#b1_${startRow}_c${c}`] === undefined)
-        //                 return false
-        //         }
-        //     }
-        //     //horizontal
-        //     if (startCol === endCol) {
-        //         const startR = Number(startRow.substring(1))
-        //         const endR = Number(endRow.substring(1))
-        //         for (var r = startR; r < endR; ++r) {
-        //             if (summary[`#b1_r${r}_${startCol}`] === undefined)
-        //                 return false
-        //         }
-        //     }
-        //     continue
-        // }
         if (isOperator(term))
             continue
         //normal number
@@ -52,7 +16,7 @@ const isEvaluatable = (exp, userData, summary) => {
             continue
         //summation term
         //data from user
-        if (term.startsWith('#a1'))
+        if (term.startsWith('#a'))
             continue
         //data from summary
         if (summary[term] !== undefined)
@@ -63,14 +27,14 @@ const isEvaluatable = (exp, userData, summary) => {
     return true
 }
 
-const evalSummation = (exp, userData, summary) => {
+const evalCount = (exp, userData, summary) => {
     const reg = /\(([^)]*)\)/;
     const selected = exp.match(reg)[1]
     const startCell = selected.split(':')[0]
     const endCell = selected.split(':')[1]
-    const startRow = startCell.split('_')[1].substring(1)
+    const startRow = Number(startCell.split('_')[1].substring(1))
     const startCol = startCell.split('_')[1].substring(0, 1)
-    const endRow = endCell.split('_')[1].substring(1)
+    const endRow = Number(endCell.split('_')[1].substring(1))
     const endCol = endCell.split('_')[1].substring(0, 1)
 
     const form = startCell.split('_')[0].substring(0, 2)
@@ -84,28 +48,107 @@ const evalSummation = (exp, userData, summary) => {
             const startC = alphabetList.indexOf(startCol)
             const endC = alphabetList.indexOf(endCol)
             for (var c = startC; c <= endC; ++c) {
-                sum += Number(userData[`#a${table}_${alphabetList[c]}${startRow}`])
+                const val = userData[`#a${table}_${alphabetList[c]}${startRow}`]
+                if(val === '' || val === null || val === undefined)
+                    continue
+                sum += 1
             }
             return sum
         }
         //vertical
         if (startCol === endCol) {
             var sum = 0
-            console.log(userData)
             for (var r = startRow; r <= endRow; ++r) {
-                sum += Number(userData[`#a${table}_${startCol}${r}`])
+                const val = userData[`#a${table}_${startCol}${r}`]
+                if(val === '' || val === null || val === undefined)
+                    continue
+                sum += 1
             }
             return sum
         }
     }
     //data from summary
-    if(table === '#b') {
+    if(form.includes('#b')) {
         //horizontal
         if (startRow === endRow) {
             var sum = 0;
             const startC = alphabetList.indexOf(startCol)
             const endC = alphabetList.indexOf(endCol)
             for (var c = startC; c <= endC; ++c) {
+                const val = summary[`#b${table}_${alphabetList[c]}${startRow}`]
+                if(val === '' || val === null || val === undefined)
+                    continue
+                sum += 1
+            }
+            return sum
+        }
+        //vertical
+        if (startCol === endCol) {
+            var sum = 0
+            console.log(summary)
+            for (var r = startRow; r <= endRow; ++r) {
+                const val = summary[`#b${table}_${startCol}${r}`]
+                console.log(val)
+                if(val === '' || val === null || val === undefined)
+                    continue
+                sum += 1
+            }
+            return sum
+        }
+    }
+}
+
+const evalSummation = (exp, userData, summary) => {
+    const reg = /\(([^)]*)\)/;
+    const selected = exp.match(reg)[1]
+    const startCell = selected.split(':')[0]
+    const endCell = selected.split(':')[1]
+    const startRow = Number(startCell.split('_')[1].substring(1))
+    const startCol = startCell.split('_')[1].substring(0, 1)
+    const endRow = Number(endCell.split('_')[1].substring(1))
+    const endCol = endCell.split('_')[1].substring(0, 1)
+
+    const form = startCell.split('_')[0].substring(0, 2)
+    const table = startCell.split('_')[0].substring(2)
+
+    //data from user
+    if(form.includes('#a')) {
+        //horizontal
+        if (startRow === endRow) {
+            var sum = 0;
+            const startC = alphabetList.indexOf(startCol)
+            const endC = alphabetList.indexOf(endCol)
+            for (var c = startC; c <= endC; ++c) {
+                const val = userData[`#a${table}_${alphabetList[c]}${startRow}`]
+                if(val === '' || val === null || val === undefined || isNaN(Number(val)))
+                    continue
+                sum += Number(val)
+            }
+            return sum
+        }
+        //vertical
+        if (startCol === endCol) {
+            var sum = 0
+            for (var r = startRow; r <= endRow; ++r) {
+                const val = userData[`#a${table}_${startCol}${r}`]
+                if(val === '' || val === null || val === undefined || isNaN(Number(val)))
+                    continue
+                sum += Number(val)
+            }
+            return sum
+        }
+    }
+    //data from summary
+    if(form.includes('#b')) {
+        //horizontal
+        if (startRow === endRow) {
+            var sum = 0;
+            const startC = alphabetList.indexOf(startCol)
+            const endC = alphabetList.indexOf(endCol)
+            for (var c = startC; c <= endC; ++c) {
+                const val = summary[`#b${table}_${alphabetList[c]}${startRow}`]
+                if(val === '' || val === null || val === undefined || isNaN(Number(val)))
+                    continue
                 sum += Number(summary[`#b${table}_${alphabetList[c]}${startRow}`])
             }
             return sum
@@ -113,7 +156,12 @@ const evalSummation = (exp, userData, summary) => {
         //vertical
         if (startCol === endCol) {
             var sum = 0
+            //console.log(summary)
             for (var r = startRow; r <= endRow; ++r) {
+                const val = summary[`#b${table}_${startCol}${r}`]
+                //console.log(val)
+                if(val === '' || val === null || val === undefined || isNaN(Number(val)))
+                    continue
                 sum += Number(summary[`#b${table}_${startCol}${r}`])
             }
             return sum
@@ -128,6 +176,9 @@ const evaluate = (exp, userData, summary) => {
             terms[index] = evalSummation(term, userData, summary)
             continue
         }
+        if(term.startsWith('count')) {
+            terms[index] = evalCount(term, userData, summary)
+        }
         if (isOperator(term))
             continue
         if (term.startsWith('#a')) {
@@ -141,10 +192,12 @@ const evaluate = (exp, userData, summary) => {
     }
     //console.log(mathEval(terms.join('')))
     try {
-        return mathEval(terms.join(''))
+        const val = mathEval(terms.join(''))
+        return Number.isInteger(val) ? val : val.toFixed(2)
     }
     catch(e) {
-        return terms.join('')
+        console.log(e)
+        return ''
     }
 }
 
@@ -155,7 +208,6 @@ const createSummaryData = (formTemplate, userData) => {
         for (const row of table.rows) {
             for (const cell of row.columns) {
                 if (cell.type === 'formula' && isEvaluatable(cell.value.substring(1), userData, summary)) {
-                    //console.log(cell.value)
                     summary[cell.key] = evaluate(cell.value.substring(1), userData, summary)
                 }
                 else if (cell.type === 'formula') {

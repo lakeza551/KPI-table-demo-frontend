@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import callApi from "../../utils/callApi"
+import TableSelectBar from '../fractions/TableSelectBar'
 
 function FillUserForm(props) {
     const {formTemplate, setFormTemplate, formData, setFormData, semesterId, userId} = props
@@ -18,33 +19,14 @@ function FillUserForm(props) {
             alert('บันทึกข้อมูลล้มเหลว')
     }
 
-    const TableSelectBar = () => {
-        const tableCount = formTemplate.length
-        const activeStyle = {
-            fontWeight: 'bold',
-            textDecoration: 'underline'
-        }
-        return (
-            <div className="table-select-bar">
-                {Array.apply(null, Array(tableCount)).map((temp, index) => {
-                    return (
-                        <div className="table-select-bar-button-container">
-                            <button style={selectedTable === index ? activeStyle : undefined} onClick={() => setSelectedTable(index)}>ตารางที่ {index + 1}</button>
-                        </div>
-                    )
-                })}
-            </div>
-        )
-    }
-
     const tableTemplate = formTemplate[selectedTable]
 
     return (
         <div className="content-container">
             <div className="button-bar">
-                <button onClick={save}>save</button>
+                <button className="table-button" onClick={save}>Save</button>
             </div>
-            <TableSelectBar />
+            <TableSelectBar formTemplate={formTemplate} selectedTable={selectedTable} setSelectedTable={setSelectedTable}/>
             <div className="table-container">
                 <table>
                     <tbody>
@@ -65,11 +47,15 @@ function FillUserForm(props) {
                                                     console.log(startText)
                                                 }
                                                 TableContent = (
-                                                    <textarea style={cell.textareaStyle} value={formData[cell.key] === null || formData[cell.key] === undefined ? startText : formData[cell.key]} onChange={e => {
+                                                    <textarea style={cell.textareaStyle} value={formData[cell.key] === null || formData[cell.key] === undefined ? startText : startText + formData[cell.key]} onChange={e => {
                                                         setFormData(prev => {
                                                             if(e.target.value.length < startText.length)
                                                                 e.target.value = startText
-                                                            prev[cell.key] = e.target.value
+                                                            if(e.target.value.substring(startText.length) === '')
+                                                                prev[cell.key] = null
+                                                            else
+                                                                prev[cell.key] = e.target.value.substring(startText.length)
+                                                            console.log(prev[cell.key])
                                                             return { ...prev }
                                                         })
                                                     }}></textarea>
