@@ -3,7 +3,7 @@ import callApi from "../../utils/callApi"
 import TableSelectBar from '../fractions/TableSelectBar'
 
 function FillUserForm(props) {
-    const {formTemplate, setFormTemplate, formData, setFormData, semesterId, userId} = props
+    const {formTemplate, setFormTemplate, formData, setFormData, semesterId, userId, save} = props
     const [selectedTable, setSelectedTable] = useState(0)
 
 
@@ -11,13 +11,6 @@ function FillUserForm(props) {
     if (formTemplate === null)
         return <div></div>
 
-    const save = async () => {
-        const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/raw_data/${userId}/`, 'PUT', formData)
-        const resData = await res.json()
-        if(resData.status === 'success')
-            return alert('บันทึกข้อมูลสำเร็จ')
-            alert('บันทึกข้อมูลล้มเหลว')
-    }
 
     const tableTemplate = formTemplate[selectedTable]
 

@@ -156,7 +156,7 @@ function ViewUserList() {
                 name: "",
                 button: true,
                 cell: row =>(
-                        <>
+                        <div className="user-menu">
                             <button onClick={() => setUserPopupData({
                                 userId: row.id,
                                 name: row.name,
@@ -165,7 +165,7 @@ function ViewUserList() {
                                 type: checkUserType(row)
                             })}>Edit</button>
                             <button style={{marginLeft: '5px'}}>Delete</button>
-                        </>
+                        </div>
                     ) 
             }
         ]

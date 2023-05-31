@@ -196,7 +196,6 @@ const evaluate = (exp, userData, summary) => {
         return Number.isInteger(val) ? val : val.toFixed(2)
     }
     catch(e) {
-        console.log(e)
         return ''
     }
 }

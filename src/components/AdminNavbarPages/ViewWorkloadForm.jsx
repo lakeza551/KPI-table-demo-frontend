@@ -40,7 +40,7 @@ function ViewWorkloadForm(props) {
     const FormList = () => {
         if (semesterList === null)
             return
-        console.log(semesterList.map(semester => semester.title))
+        //console.log(semesterList.map(semester => semester.title))
         return (
             <div className="formlist-container">
                 {semesterList.map(semester => {

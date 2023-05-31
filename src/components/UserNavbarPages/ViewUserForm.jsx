@@ -1,32 +1,27 @@
 import { useEffect, useState } from "react"
-import FillUserForm from "../ViewUserFormComponents/FillUserForm"
+import { Routes, Route, Link, useSearchParams } from "react-router-dom"
 import ViewSummaryForm from "../ViewUserFormComponents/ViewSummaryForm"
+import FillUserForm from "../ViewUserFormComponents/FillUserForm"
 import callApi from "../../utils/callApi"
 import Select from "react-select"
-import { Link, Route, useSearchParams, Routes } from "react-router-dom"
+import Cookies from "universal-cookie"
 
-function ViewUserForm(props) {
-
+function ViewUserForm() {
     const [searchParams, setSearchParams] = useSearchParams({})
-
-    const [selectedForm, setSelectedForm] = useState('user-form')
-    const [departmentList, setDepartmentList] = useState(null)
     const [semesterList, setSemesterList] = useState(null)
+    const [selectedSemester, setSelectedSemester] = useState(null)
+    const [departmentList, setDepartmentList] = useState(null)
     const [userList, setUserList] = useState(null)
     const [filteredUserList, setFilteredUserList] = useState([])
 
-    const [selectedDepartment, setSelectedDepartment] = useState(null)
-    const [selectedSemester, setSelectedSemester] = useState(null)
     const [selectedUser, setSelectedUser] = useState(null)
 
     const [userRawData, setUserRawData] = useState(null)
     const [userFormTemplate, setUserFormTemplate] = useState(null)
     const [summaryFormTemplate, setSummaryFormTemplate] = useState(null)
 
-    const formActiveStyle = {
-        backgroundColor: 'rgb(0, 87, 181)',
-        color: 'white'
-    }
+    const cookies = new Cookies()
+    const {userInfo} = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
 
     const fetchDepartmentList = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/group/`, 'GET', null)
@@ -54,7 +49,7 @@ function ViewUserForm(props) {
     const fetchForm = async () => {
         var res, resData
         //raw data
-        res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'GET', null)
+        res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/me/`, 'GET', null)
         resData = await res.json()
         const rawDataObj = resData
 
@@ -84,7 +79,7 @@ function ViewUserForm(props) {
     const saveInitiateData = async (rawData) => {
         var res, resData
         //raw data
-        res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'PUT', rawData)
+        res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/me/`, 'PUT', rawData)
         resData = await res.json()
     }
 
@@ -104,28 +99,20 @@ function ViewUserForm(props) {
     }
 
     const FormSelectButtonBar = () => {
+        const formActiveStyle = {
+            backgroundColor: 'rgb(0, 87, 181)',
+            color: 'white'
+        }
         return (
             <div className="form-select">
-                <Link to='./user' style={window.location.pathname.endsWith('user') ? formActiveStyle : undefined} >ฟอร์ม Work load</Link>
+                <Link to='./fill' style={window.location.pathname.endsWith('fill') ? formActiveStyle : undefined} >ฟอร์ม Work load</Link>
                 <Link to='./summary' style={window.location.pathname.endsWith('summary') ? formActiveStyle : undefined} >ฟอร์มสรุป</Link>
             </div>
         )
     }
 
-    const initiateWithParams = () => {
-        const semesterId = searchParams.get('semesterId')
-        const userId = searchParams.get('userId')
-        if (semesterId === null || userId === null) {
-            setSearchParams({})
-            return
-        }
-        setSelectedSemester(semesterId)
-        setSelectedUser(userId)
-        fetchForm()
-    }
-
     const save = async () => {
-        const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'PUT', userRawData)
+        const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/me/`, 'PUT', userRawData)
         const resData = await res.json()
         if(resData.status === 'success')
             return alert('บันทึกข้อมูลสำเร็จ')
@@ -133,15 +120,13 @@ function ViewUserForm(props) {
     }
 
     useEffect(() => {
-        if(selectedSemester === null || selectedUser === null)
+        if(selectedSemester === null)
             return
         fetchForm()
-    }, [selectedSemester, selectedUser])
+    }, [selectedSemester])
 
     useEffect(() => {
-        fetchDepartmentList()
         fetchSemesterList()
-        fetchUserList()
     }, [])
 
     return (
@@ -168,40 +153,31 @@ function ViewUserForm(props) {
                     <Select
                         className="custom-react-select"
                         placeholder="-- โปรดระบุ --"
-                        onChange={selected => {
-                            setSelectedDepartment(selected.value)
-                            filterUserListByDepartmentID(selected.value)
+                        defaultValue={{
+                            value: userInfo.groups[0].id,
+                            label: userInfo.groups[0].title
                         }}
-                        options={departmentList !== null && departmentList.map(dep => {
-                            return {
-                                value: dep.id,
-                                label: dep.title
-                            }
-                        })}></Select>
+                        isDisabled></Select>
                 </div>
                 <div className="form-search-select">
                     <label htmlFor="">ชื่ออาจารย์: </label>
                     <Select
                         className="custom-react-select"
                         placeholder="-- โปรดระบุ --"
-                        onChange={selected => {
-                            setSelectedUser(selected.value)
+                        defaultValue={{
+                            value: userInfo.id,
+                            label: userInfo.name
                         }}
-                        options={filteredUserList !== null && filteredUserList.map(user => {
-                            return {
-                                value: user.id,
-                                label: user.name
-                            }
-                        })}></Select>
+                        isDisabled
+                        ></Select>
                 </div>
-                {/* <button onClick={() => fetchForm()}>ค้นหา</button> */}
             </div>
             {userRawData !== null &&
-            userFormTemplate !== null &&
-            summaryFormTemplate !== null &&
-            FormSelectButtonBar()}
+                userFormTemplate !== null &&
+                summaryFormTemplate !== null &&
+                FormSelectButtonBar()}
             <Routes>
-                <Route path="/user"
+                <Route path="/fill"
                     element={
                         <FillUserForm
                             formTemplate={userFormTemplate}
@@ -209,9 +185,9 @@ function ViewUserForm(props) {
                             formData={userRawData}
                             setFormData={setUserRawData}
                             semesterId={selectedSemester}
-                            userId={selectedUser}
+                            userId={userInfo.id}
                             save={save}
-                            />
+                        />
                     }
                 />
                 <Route path="/summary"

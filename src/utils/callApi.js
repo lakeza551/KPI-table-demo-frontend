@@ -1,9 +1,10 @@
 import Cookies from "universal-cookie"
 
 async function callApi(url, method, params) {
-    await refreshToken()
     const cookies = new Cookies()
-    const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME)
+    //console.log(cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN))
+    await refreshToken()
+    const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
     const headers = {
         'Authorization': `Bearer ${workloadCookie.access_token}`,
         'Content-Type': 'application/json'
@@ -26,7 +27,7 @@ async function callApi(url, method, params) {
 
 const refreshToken = async () => {
     const cookies = new Cookies()
-    const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME)
+    const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
     const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/auth/refresh_token/`, {
         method: 'POST',
         headers: {
@@ -37,9 +38,11 @@ const refreshToken = async () => {
         })
     })
     const resData = await res.json()
-    cookies.set(process.env.REACT_APP_COOKIE_NAME, {
-        ...cookies.get(process.env.REACT_APP_COOKIE_NAME),
+    cookies.set(process.env.REACT_APP_COOKIE_NAME_TOKEN, {
+        ...cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN),
         access_token: resData.data.access_token
+    }, {
+        path: '/'
     })
 }
 

@@ -5,9 +5,20 @@ import EditForm from './ViewWorkloadFormComponents/EditForm';
 import ViewUserForm from './AdminNavbarPages/ViewUserForm';
 import ViewUserList from './AdminNavbarPages/ViewUserList';
 import ViewDashboard from './AdminNavbarPages/ViewDashboard';
+import { useNavigate } from 'react-router-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react';
+import Cookies from 'universal-cookie';
 
 function AdminHomePage() {
+    const navigate = useNavigate()
+    const cookies = new Cookies()
+    useEffect(() => {
+        if(cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN) === undefined)
+            navigate('/auth')
+    }, [])
+
+
     return (
         <div className="App">
             <div className="app-container">

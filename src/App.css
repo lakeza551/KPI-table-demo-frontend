@@ -39,7 +39,20 @@ textarea {
   height: 50px;
   padding: 5px 10px;
   background-color: rgb(0, 87, 181);
+  justify-content: space-between;
   align-items: center;
+}
+
+.navbar-button button {
+  background-color: transparent;
+  border-style: none;
+  color: white;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.navbar-button button:hover {
+  text-decoration: underline;
 }
 
 .navbar label {
@@ -57,16 +70,25 @@ textarea {
   display: flex;
   flex-direction: column;
   padding: 10px 5px;
-  height: auto;
+  min-height: 100vh;
   background-color: rgb(219, 236, 255);
   min-width: 200px;
 }
 
 .sidebar a {
+  border-radius: 5px;
   margin-bottom: 10px;
   font-size: 18px;
   font-weight: bold;
   text-decoration: none;
+  text-align: center;
+  padding: 5px 3px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar a:active {
+  color: unset;
 }
 
 .page-content-container {
@@ -249,6 +271,7 @@ td input[type=number] {
 .form-select {
   display: flex;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .form-select > * {
@@ -487,4 +510,14 @@ td input[type=number] {
 
 .custom-react-select {
   width: 200px;
+}
+
+.user-menu {
+  display: flex;
+}
+
+.user-menu button {
+  padding: 3px 5px;
+  border-radius: 3px;
+  border: 1px solid
 }

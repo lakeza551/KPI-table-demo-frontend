@@ -37,7 +37,7 @@ function ViewSummaryForm(props) {
                                                         ...cell.textareaStyle
                                                     }}
                                                 >
-                                                    <textarea disabled style={cell.textareaStyle}>{summaryData === null ? '' : summaryData[cell.key]}</textarea>
+                                                    <textarea disabled style={cell.textareaStyle} value={summaryData === null ? '' : summaryData[cell.key]}></textarea>
                                                 </td>
                                             )
                                         else
@@ -50,7 +50,7 @@ function ViewSummaryForm(props) {
                                                         width: tableTemplate.columnWidth[cIndex],
                                                     }}
                                                 >
-                                                    <textarea disabled style={cell.textareaStyle}>{cell.value}</textarea>
+                                                    <textarea disabled style={cell.textareaStyle} value={cell.value}></textarea>
                                                 </td>
                                             )
                                     })}

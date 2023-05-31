@@ -1,11 +1,11 @@
 import { useState } from "react"
-import { Link, Routes, Route, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import callApi from './utils/callApi'
 import Cookies from "universal-cookie"
-import AdminHomePage from "./components/AdminHomePage"
 
 function Auth() {
-    const [username, setUsername] = useState(null)
-    const [password, setPassword] = useState(null)
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
     const cookies = new Cookies()
     const navigate = useNavigate()
     const login = async () => {
@@ -21,45 +21,29 @@ function Auth() {
             body: raw
         })
         const resData = await res.json()
-        if(resData.status === 'success') {
-            cookies.set(process.env.REACT_APP_COOKIE_NAME, resData.data, {
+        if (resData.status === 'success') {
+            cookies.set(process.env.REACT_APP_COOKIE_NAME_TOKEN, resData.data, {
                 path: '/'
             })
-            console.log(cookies.get(process.env.REACT_APP_COOKIE_NAME))
+            console.log(cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN))
             return navigate('/')
         }
-    }
-
-    const Login = () => {
-        return (
-            <div className="homepage-login-form">
-                <input type="text" placeholder="Username" onChange={e => {
-                    setUsername(e.target.value)
-                }}/>
-                <input type="password" placeholder="Password" onChange={e => {
-                    setPassword(e.target.value)
-                }}/>
-                <button onClick={login} className="homepage-button">เข้าสู่ระบบ</button>
-            </div>
-        )
-    }
-
-    const LoginSelector = () => {
-        return (
-            <div className="homepage-button-container">
-                <Link to={'./login'} className="homepage-button">เข้าสู่ระบบ</Link>
-            </div>
-        )
+        alert('ไม่สามารถเข้าสูระบบได้')
     }
 
     return (
         <div className="homepage-container">
             <div className="homepage-card">
                 <label className="homepage-header">SCSU-Workload</label>
-                <Routes >
-                    <Route path="/" element={<LoginSelector/>}/>
-                    <Route path="/login" element={<Login/>}/>
-                </Routes>
+                <div className="homepage-login-form">
+                    <input type="text" placeholder="Username" onChange={e => {
+                        setUsername(e.target.value)
+                    }} />
+                    <input type="password" placeholder="Password" onChange={e => {
+                        setPassword(e.target.value)
+                    }} />
+                    <button onClick={login} className="homepage-button">เข้าสู่ระบบ</button>
+                </div>
             </div>
         </div>
     )

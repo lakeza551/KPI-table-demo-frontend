@@ -1,19 +1,43 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import callApi from "./utils/callApi"
 import Cookies from "universal-cookie"
 
 function Home() {
     const navigate = useNavigate()
     const cookies = new Cookies()
-    const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME)
+    //cookies.remove(process.env.REACT_APP_COOKIE_NAME_TOKEN)
+    const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
+
+    const getUserInfo = async () => {
+        try {
+            const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/user/me/`, 'GET', null)
+            const resData = await res.json()
+            cookies.set(process.env.REACT_APP_COOKIE_NAME_TOKEN, {
+                ...cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN),
+                userInfo: resData.data
+            }, {
+                path: '/'
+            })
+            return resData.data
+        }
+        catch(e) {
+            return null
+        }
+    }
+
+
     useEffect(() => {
-        if(!workloadCookie) {
+        if(!workloadCookie)
             return navigate('/auth')
-        }
-        if(workloadCookie) {
-            return navigate('/admin')
-        }
+        getUserInfo().then(userData => {
+            if(userData.is_admin)
+                navigate('/admin')
+            else
+                navigate('/user')
+        })
     })
+    return 'hey'
 }
 
 export default Home
