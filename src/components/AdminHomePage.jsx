@@ -5,8 +5,9 @@ import EditForm from './ViewWorkloadFormComponents/EditForm';
 import ViewUserForm from './AdminNavbarPages/ViewUserForm';
 import ViewUserList from './AdminNavbarPages/ViewUserList';
 import ViewDashboard from './AdminNavbarPages/ViewDashboard';
+import ViewDepartment from './AdminNavbarPages/ViewDepartment';
 import { useNavigate } from 'react-router-dom';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react';
 import Cookies from 'universal-cookie';
 
@@ -16,7 +17,7 @@ function AdminHomePage() {
     useEffect(() => {
         if(cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN) === undefined)
             navigate('/auth')
-    }, [])
+    })
 
 
     return (
@@ -29,6 +30,7 @@ function AdminHomePage() {
                         <Route path='/dashboard' element={<ViewDashboard />}></Route>
                         <Route path='/users' element={<ViewUserList />}></Route>
                         <Route path='/workload-form' element={<ViewWorkloadForm />}></Route>
+                        <Route path='/department' element={<ViewDepartment/>}></Route>
                         <Route path='/workload-form/edit/:semesterId/*' element={<EditForm />}></Route>
                         <Route path='/user-form/*' element={<ViewUserForm />}></Route>
                     </Routes>

@@ -172,6 +172,8 @@ function ViewUserList() {
         return <DataTable
             columns={columns}
             data={users}
+            pagination
+            striped
         />
         
     }

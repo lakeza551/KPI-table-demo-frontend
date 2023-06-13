@@ -4,6 +4,7 @@ import {FaUserCircle} from 'react-icons/fa'
 import {MdSpaceDashboard} from 'react-icons/md'
 import {HiClipboardDocumentList} from 'react-icons/hi2'
 import {IoIosPaper} from 'react-icons/io'
+import {FaLayerGroup} from 'react-icons/fa'
 
 function Sidebar(props) {
     const cookies = new Cookies()
@@ -20,6 +21,8 @@ function Sidebar(props) {
             <Link to='./workload-form'><HiClipboardDocumentList size={30} style={{marginRight: '10px'}}/> Workload Form</Link>}
             {userTokenObj.userInfo.is_admin && 
             <Link to='./user-form'><IoIosPaper size={30} style={{marginRight: '10px'}}/>View User Form</Link>}
+            {userTokenObj.userInfo.is_admin && 
+            <Link to='./department'><FaLayerGroup size={30} style={{marginRight: '10px'}}/>Department</Link>}
             {!userTokenObj.userInfo.is_admin && 
             <Link to='./form'><HiClipboardDocumentList size={30} style={{marginRight: '10px'}}/>Workload Form</Link>}
         </div>
