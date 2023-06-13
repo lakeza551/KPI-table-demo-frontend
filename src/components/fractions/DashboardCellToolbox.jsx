@@ -69,7 +69,10 @@ function DashboardCellToolbox(props) {
                 width
             </div>
             <button onClick={() => formUtils.deleteRow(rIndex)}>
-                delete row
+                delete this row
+            </button>
+            <button onClick={() => formUtils.deleteColumn(cIndex)}>
+                delete this column
             </button>
             <div className="toolbox-sub">
                 <div className="toolbox-sub-menu">

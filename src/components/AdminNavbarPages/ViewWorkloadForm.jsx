@@ -9,6 +9,7 @@ function ViewWorkloadForm(props) {
     const fetchSemesterList = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/`, 'GET', null)
         const resData = await res.json()
+        resData.data.reverse()
         setSemesterList(resData.data)
     }
 
