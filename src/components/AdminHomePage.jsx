@@ -28,7 +28,7 @@ function AdminHomePage() {
                     <Sidebar />
                     <Routes>
                         <Route path='/dashboard' element={<ViewDashboard />}></Route>
-                        <Route path='/users' element={<ViewUserList />}></Route>
+                        <Route path='/users' element={<ViewUserList key={'user-list'}/>}></Route>
                         <Route path='/workload-form' element={<ViewWorkloadForm />}></Route>
                         <Route path='/department' element={<ViewDepartment/>}></Route>
                         <Route path='/workload-form/edit/:semesterId/*' element={<EditForm />}></Route>

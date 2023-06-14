@@ -23,12 +23,6 @@ function ViewUserForm() {
     const cookies = new Cookies()
     const {userInfo} = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
 
-    const fetchDepartmentList = async () => {
-        const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/group/`, 'GET', null)
-        const resData = await res.json()
-        setDepartmentList(resData.data)
-    }
-
     const fetchSemesterList = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/`, 'GET', null)
         const resData = await res.json()
@@ -37,14 +31,14 @@ function ViewUserForm() {
     }
 
     const fetchUserList = async () => {
-        const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/user/`, 'GET', null)
+        const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/group/${userInfo.groups[0].id}/`, 'GET', null)
         const resData = await res.json()
-        setUserList(resData.data)
+        console.log(resData.data.user)
+        setUserList(resData.data.user)
     }
 
-    const filterUserListByDepartmentID = async depId => {
-        const filtered = userList.filter(user => user.groups.length > 0 && user.groups[0].id === depId)
-        setFilteredUserList(filtered)
+    const fetchRawDataList = async () => {
+        const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/?group_id=${userInfo.groups[0].id}/`, 'GET', null)
     }
 
     const fetchForm = async () => {
@@ -122,12 +116,14 @@ function ViewUserForm() {
 
     useEffect(() => {
         if(selectedSemester === null)
-            return
+            return 
         fetchForm()
     }, [selectedSemester])
 
     useEffect(() => {
         fetchSemesterList()
+        if(userInfo.groups[0].is_staff) 
+            fetchUserList()
     }, [])
 
     return (
@@ -142,7 +138,7 @@ function ViewUserForm() {
                         onChange={selected => {
                             setSelectedSemester(selected.value)
                         }}
-                        options={semesterList !== null && semesterList.map(semester => {
+                        options={semesterList !== null && semesterList.filter(semester => semester.is_active).map(semester => {
                             return {
                                 value: semester.id,
                                 label: semester.title
@@ -169,7 +165,13 @@ function ViewUserForm() {
                             value: userInfo.id,
                             label: userInfo.name
                         }}
-                        isDisabled
+                        options={userList !== null && userList.map(user => {
+                            return {
+                                value: user.id,
+                                label: user.name
+                            }
+                        })} 
+                        isDisabled={!userInfo.groups[0].is_staff}
                         ></Select>
                 </div>
             </div>

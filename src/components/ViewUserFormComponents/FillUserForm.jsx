@@ -80,7 +80,7 @@ function FillUserForm(props) {
                                         }
                                         //is comment
                                         else {
-                                            TableContent = (<textarea style={cell.textareaStyle} disabled={true} value={cell.value} ></textarea>)
+                                            TableContent = (<textarea style={cell.textareaStyle} disabled={true} value={cell.value === undefined || cell.value === null ? '' : cell.value} ></textarea>)
                                         }
                                         return (
                                             <td colSpan={cell.colSpan} rowSpan={cell.rowSpan} style={{ width: tableTemplate.columnWidth[cIndex], height: tableTemplate.rowHeight[rIndex] }}>

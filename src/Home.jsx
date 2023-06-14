@@ -32,9 +32,9 @@ function Home() {
             return navigate('/auth')
         getUserInfo().then(userData => {
             if(userData.is_admin)
-                navigate('/admin')
+                navigate('/admin/dashboard')
             else
-                navigate('/user')
+                navigate('/user/form')
         })
     })
     return 'hey'

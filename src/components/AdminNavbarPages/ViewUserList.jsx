@@ -1,16 +1,149 @@
 import { useEffect, useState } from "react"
 import { BeatLoader } from "react-spinners"
 import Cookies from "universal-cookie"
-import DataTable from "react-data-table-component"
+import DataTable from "react-data-table-component-with-filter"
 import checkUserDepartment from "../../utils/checkUserDepartment"
 import checkUserType from "../../utils/checkUserType"
 import callApi from "../../utils/callApi"
 import {GrFormClose} from 'react-icons/gr'
+import { useNavigate } from "react-router-dom"
+
+function Table(props) {
+    var {setFilter, filter, setUserPopupData, users} = props  
+    users = users.length === 0 ? ['no data'] : users
+    const columns = [
+        {
+            name: (
+                <div className="table-header">
+                    <label>ID</label>
+                    <input
+                    onClick={e => {
+                        e.stopPropagation()
+                    }} 
+                    onChange={e => {
+                        setFilter(prev => {
+                            return {
+                                ...prev,
+                                id: e.target.value
+                            }
+                        })
+                    }}
+                    value={filter.id}
+                    placeholder="ค้นหาจาก ID" 
+                    className="table-filter" 
+                    type="text" />
+                </div>
+            ),
+            selector: (row, index) => row === 'no data' ? '' : row.id,
+            sortable: true,
+            grow: 1
+        },
+        {
+            name: (
+                <div className="table-header">
+                    <label>ชื่อ - นามสกุล</label>
+                    <input 
+                    value={filter.name} 
+                    onClick={e => {
+                        e.stopPropagation()
+                    }}
+                    onChange={e => {
+                        setFilter(prev => {
+                            return {
+                                ...prev,
+                                name: e.target.value
+                            }
+                        })
+                    }} placeholder="ค้นหาจาก ชื่อ - นามสกุล" className="table-filter" type="text" />
+                </div>
+            ),
+            selector: (row, index) => users[0] === 'no data' ? '' : row.name,
+            sortable: true,
+            grow: 2.3
+        },
+        {
+            name: (
+                <div className="table-header">
+                    <label>ภาควิชา</label>
+                    <input
+                    value={filter.department} 
+                    onClick={e => {
+                        e.stopPropagation()
+                    }}
+                    onChange={e => {
+                        setFilter(prev => {
+                            return {
+                                ...prev,
+                                department: e.target.value
+                            }
+                        })
+                    }} placeholder="ค้นหาจาก ภาควิชา" className="table-filter" type="text" />
+                </div>
+            ),
+            selector: (row, index) => row === 'no data' ? '' : checkUserDepartment(row),
+            sortable: true,
+            grow: 2
+        },
+        {
+            name: (
+                <div className="table-header">
+                    <label>สิทธิ์</label>
+                    <input 
+                    value={filter.type} 
+                    onClick={e => {
+                        e.stopPropagation()
+                    }}
+                    onChange={e => {
+                        setFilter(prev => {
+                            return {
+                                ...prev,
+                                type: e.target.value
+                            }
+                        })
+                    }}placeholder="ค้นหาจาก สิทธิ์" className="table-filter" type="text" />
+                </div>
+            ),
+            selector: (row, index) => row === 'no data' ? '' : checkUserType(row),
+            sortable: true,
+            grow: 1
+        },
+        {
+            name: "",
+            cell: (row, index) => row === 'no data' ? '' : (
+                    <div className="user-menu">
+                        <button onClick={() => setUserPopupData({
+                            userId: row.id,
+                            name: row.name,
+                            oldDepartmentId: row.groups.length === 0 ? -1 : row.groups[0].id,
+                            departmentId: row.groups.length === 0 ? -1 : row.groups[0].id,
+                            type: checkUserType(row)
+                        })}>Edit</button>
+                        <button style={{marginLeft: '5px'}}>Delete</button>
+                    </div>
+                ) 
+        }
+    ]
+    return <DataTable
+        header
+        key={'1'}
+        columns={columns}
+        data={users}
+        pagination
+        striped
+    />
+}
 
 function ViewUserList() {
-    const cookies = new Cookies()
+    const navigate = useNavigate()
 
     const [users, setUsers] = useState(null)
+    const [filteredUsers, setFilteredUsers] = useState(null)
+    const [filter, setFilter] = useState({
+        id: '',
+        name: '',
+        department: '',
+        type: ''
+    })
     const [departmentList, setDepartmentList] = useState(null)
 
     const [userPopupData, setUserPopupData] = useState(null)
@@ -25,6 +158,7 @@ function ViewUserList() {
         const departmentList = (await res.json()).data
         setDepartmentList(departmentList)
     }
+
     useEffect(() => {
         fetchUsers()
         fetchDepartment()
@@ -36,7 +170,6 @@ function ViewUserList() {
                 <BeatLoader size={40} color="rgb(0, 87, 181)" />
             </div>
         )
-
 
     const EditPopup = () => {
 
@@ -82,7 +215,7 @@ function ViewUserList() {
             catch(e) {
                 alert('แก้ไขล้มเหลว')
             }
-            window.location.reload(false)
+            navigate(0)
         }
 
         return (
@@ -129,59 +262,22 @@ function ViewUserList() {
         )
     }
 
-    const Table = () => {
-        const columns = [
-            {
-                name: "ID",
-                selector: row => row.id,
-                sortable: true,
-                grow: 1
-            },
-            {
-                name: "ชื่อ - นามสกุล",
-                selector: row => row.name,
-                sortable: true,
-            },
-            {
-                name: "ภาควิชา",
-                selector: row => checkUserDepartment(row),
-                sortable: true
-            },
-            {
-                name: "สิทธิ์",
-                selector: row => checkUserType(row),
-                sortable: true
-            },
-            {
-                name: "",
-                button: true,
-                cell: row =>(
-                        <div className="user-menu">
-                            <button onClick={() => setUserPopupData({
-                                userId: row.id,
-                                name: row.name,
-                                oldDepartmentId: row.groups.length === 0 ? -1 : row.groups[0].id,
-                                departmentId: row.groups.length === 0 ? -1 : row.groups[0].id,
-                                type: checkUserType(row)
-                            })}>Edit</button>
-                            <button style={{marginLeft: '5px'}}>Delete</button>
-                        </div>
-                    ) 
-            }
-        ]
-        return <DataTable
-            columns={columns}
-            data={users}
-            pagination
-            striped
-        />
-        
-    }
-
     return (
         <div className="page-content-container">
             <div className="user-list-table-container">
-                <Table />
+                <Table
+                setFilter={setFilter}
+                filter={filter}
+                setUserPopupData={setUserPopupData}
+                users={
+                users.filter(user => {
+                    return user.name.includes(filter.name) &&
+                            user.id.toString().includes(filter.id) &&
+                            checkUserDepartment(user).includes(filter.department) &&
+                            checkUserType(user).includes(filter.type)
+                })
+                }
+                />
                 {userPopupData !== null && EditPopup()}
             </div>
         </div>

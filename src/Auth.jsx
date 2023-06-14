@@ -25,7 +25,6 @@ function Auth() {
             cookies.set(process.env.REACT_APP_COOKIE_NAME_TOKEN, resData.data, {
                 path: '/'
             })
-            console.log(cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN))
             return navigate('/')
         }
         alert('ไม่สามารถเข้าสูระบบได้')
