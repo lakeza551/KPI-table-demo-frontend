@@ -59,7 +59,7 @@ textarea {
   font-size: 40px;
   font-weight: bolder;
   color: white;
-  width: fit-content;
+  width: fit-content  ;
 }
 
 .navbar-user-info {
