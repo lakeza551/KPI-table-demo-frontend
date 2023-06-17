@@ -25,7 +25,7 @@ function ViewSummaryForm(props) {
                                 <tr style={{ height: tableTemplate.rowHeight[rIndex] }}>
                                     {row.columns.map((cell, cIndex) => {
                                         if(cell.isMerged)
-                                            return
+                                            return null
                                         if (cell.type === 'formula')
                                             return (
                                                 <td
@@ -41,7 +41,7 @@ function ViewSummaryForm(props) {
                                                 </td>
                                             )
                                         else {
-                                            console.log(cell.value)
+                                            //console.log(cell.value)
                                             return (
                                                 <td
                                                     colSpan={cell.colSpan}

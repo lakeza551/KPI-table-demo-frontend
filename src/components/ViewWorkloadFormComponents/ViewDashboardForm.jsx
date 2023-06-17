@@ -23,12 +23,13 @@ function ViewDashboardForm(props) {
             for (const cell of row.columns.slice(1)) {
                 const summaryKey = cell.value.substring(1)
                 const avg = summaryData.reduce((total, a) => total + Number(a[summaryKey]), 0) / summaryData.length
-                dashboardDataBuffer[cell.key] = avg
+                dashboardDataBuffer[cell.key] = isNaN(avg) ? 0 : avg
             }
         }
     }
 
     const createSummaryDashboardData = () => {
+        
         const topicRow = dashboardFormTemplate[0].rows.filter(row => row.columns[0].value !== null && row.columns[0].value.startsWith('!topic'))[0]
         const summaryRow = dashboardFormTemplate[0].rows.filter(row => row.columns[0].value !== null && row.columns[0].value.startsWith('!summary'))[0]
         if(topicRow === undefined || summaryRow === undefined)

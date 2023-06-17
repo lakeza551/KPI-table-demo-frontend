@@ -3,7 +3,7 @@ import callApi from "../../utils/callApi"
 import TableSelectBar from '../fractions/TableSelectBar'
 
 function FillUserForm(props) {
-    const {formTemplate, setFormTemplate, formData, setFormData, semesterId, userId, save} = props
+    const {formTemplate, setFormTemplate, formData, setFormData, semesterId, userId, save, disabled} = props
     const [selectedTable, setSelectedTable] = useState(0)
 
 
@@ -11,6 +11,12 @@ function FillUserForm(props) {
     if (formTemplate === null)
         return <div></div>
 
+    if(formData === null)
+        return (
+            <div className="page-content-container">
+                <h1>ผู้ใช้ยังไม่เคยกรอกข้อมูล</h1>
+            </div>
+        )
 
     const tableTemplate = formTemplate[selectedTable]
 
@@ -40,7 +46,7 @@ function FillUserForm(props) {
                                                     console.log(startText)
                                                 }
                                                 TableContent = (
-                                                    <textarea style={cell.textareaStyle} value={formData[cell.key] === null || formData[cell.key] === undefined ? startText : startText + formData[cell.key]} onChange={e => {
+                                                    <textarea disabled={disabled} style={cell.textareaStyle} value={formData[cell.key] === null || formData[cell.key] === undefined ? startText : startText + formData[cell.key]} onChange={e => {
                                                         setFormData(prev => {
                                                             if(e.target.value.length < startText.length)
                                                                 e.target.value = startText
@@ -56,7 +62,7 @@ function FillUserForm(props) {
                                             }
                                             else if(inputType === 'number') {
                                                 TableContent = (
-                                                    <input style={cell.textareaStyle} type="number" value={formData[cell.key] === null || formData[cell.key] === undefined ? '' : formData[cell.key]} onChange={e => {
+                                                    <input disabled={disabled} style={cell.textareaStyle} type="number" value={formData[cell.key] === null || formData[cell.key] === undefined ? '' : formData[cell.key]} onChange={e => {
                                                         setFormData(prev => {
                                                             prev[cell.key] = e.target.value
                                                             return { ...prev }
@@ -67,7 +73,7 @@ function FillUserForm(props) {
                                             else if(inputType === 'checkbox') {
                                                 TableContent = (
                                                     <div>
-                                                        <input style={cell.textareaStyle} type="checkbox" checked={formData[cell.key] === null || formData[cell.key] === undefined ? false : formData[cell.key]} onChange={e => {
+                                                        <input disabled={disabled} style={cell.textareaStyle} type="checkbox" checked={formData[cell.key] === null || formData[cell.key] === undefined ? false : formData[cell.key]} onChange={e => {
                                                             setFormData(prev => {
                                                                 prev[cell.key] = e.target.checked
                                                                 return {...prev}

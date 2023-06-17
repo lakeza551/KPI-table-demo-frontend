@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { Routes, Route, Link, useSearchParams } from "react-router-dom"
+import { Routes, Route, Link, useSearchParams, useNavigate } from "react-router-dom"
+import { BeatLoader } from "react-spinners"
 import ViewSummaryForm from "../ViewUserFormComponents/ViewSummaryForm"
 import FillUserForm from "../ViewUserFormComponents/FillUserForm"
 import callApi from "../../utils/callApi"
@@ -7,21 +8,21 @@ import Select from "react-select"
 import Cookies from "universal-cookie"
 
 function ViewUserForm() {
+    const cookies = new Cookies()
+    const navigate = useNavigate()
+    const { userInfo } = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
     const [searchParams, setSearchParams] = useSearchParams({})
+    const [isLoading, setIsLoading] = useState(false)
     const [semesterList, setSemesterList] = useState(null)
     const [selectedSemester, setSelectedSemester] = useState(null)
-    const [departmentList, setDepartmentList] = useState(null)
     const [userList, setUserList] = useState(null)
-    const [filteredUserList, setFilteredUserList] = useState([])
 
-    const [selectedUser, setSelectedUser] = useState(null)
+    const [selectedUser, setSelectedUser] = useState(userInfo.id)
 
     const [userRawData, setUserRawData] = useState(null)
     const [userFormTemplate, setUserFormTemplate] = useState(null)
     const [summaryFormTemplate, setSummaryFormTemplate] = useState(null)
 
-    const cookies = new Cookies()
-    const {userInfo} = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
 
     const fetchSemesterList = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/`, 'GET', null)
@@ -33,18 +34,13 @@ function ViewUserForm() {
     const fetchUserList = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/group/${userInfo.groups[0].id}/`, 'GET', null)
         const resData = await res.json()
-        console.log(resData.data.user)
         setUserList(resData.data.user)
-    }
-
-    const fetchRawDataList = async () => {
-        const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/?group_id=${userInfo.groups[0].id}/`, 'GET', null)
     }
 
     const fetchForm = async () => {
         var res, resData
         //raw data
-        res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/me/`, 'GET', null)
+        res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'GET', null)
         resData = await res.json()
         const rawDataObj = resData
 
@@ -59,11 +55,11 @@ function ViewUserForm() {
         resData = await res.json()
         const summaryFormTemplate = resData.data
 
-        var rawData
-        if (rawDataObj.status === 'fail') {
+        var rawData = null
+        if (selectedUser === userInfo.id && rawDataObj.status === 'fail') {
             rawData = await initiateRawDataIfNotFound(formTemplate)
         }
-        else
+        else if (rawDataObj.status === 'success')
             rawData = rawDataObj.data
 
         setUserRawData(rawData)
@@ -109,21 +105,34 @@ function ViewUserForm() {
     const save = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/me/`, 'PUT', userRawData)
         const resData = await res.json()
-        if(resData.status === 'success')
+        if (resData.status === 'success')
             return alert('บันทึกข้อมูลสำเร็จ')
-            alert('บันทึกข้อมูลล้มเหลว')
+        alert('บันทึกข้อมูลล้มเหลว')
     }
 
     useEffect(() => {
-        if(selectedSemester === null)
-            return 
-        fetchForm()
-    }, [selectedSemester])
+        navigate('/user/form')
+        setIsLoading(true)
+        const wrapper = async () => {
+            if (selectedSemester === null)
+                return
+            fetchForm()
+        }
+        wrapper().finally(() => {
+            setIsLoading(false)
+        })
+    }, [selectedSemester, selectedUser])
 
     useEffect(() => {
-        fetchSemesterList()
-        if(userInfo.groups[0].is_staff) 
-            fetchUserList()
+        setIsLoading(true)
+        const wrapper = async () => {
+            fetchSemesterList()
+            if (userInfo.groups[0].is_staff)
+                fetchUserList()
+        }
+        wrapper().finally(() => {
+            setIsLoading(false)
+        })
     }, [])
 
     return (
@@ -161,6 +170,9 @@ function ViewUserForm() {
                     <Select
                         className="custom-react-select"
                         placeholder="-- โปรดระบุ --"
+                        onChange={selected => {
+                            setSelectedUser(selected.value)
+                        }}
                         defaultValue={{
                             value: userInfo.id,
                             label: userInfo.name
@@ -170,39 +182,50 @@ function ViewUserForm() {
                                 value: user.id,
                                 label: user.name
                             }
-                        })} 
+                        })}
                         isDisabled={!userInfo.groups[0].is_staff}
-                        ></Select>
+                    ></Select>
                 </div>
             </div>
-            {userRawData !== null &&
+            {isLoading && (
+                <div className="center">
+                    <BeatLoader size={40} color="rgb(0, 87, 181)" />
+                </div>
+            )}
+            {
                 userFormTemplate !== null &&
                 summaryFormTemplate !== null &&
-                FormSelectButtonBar()}
-            <Routes>
-                <Route path="/fill"
-                    element={
-                        <FillUserForm
-                            formTemplate={userFormTemplate}
-                            setFormTemplate={setUserFormTemplate}
-                            formData={userRawData}
-                            setFormData={setUserRawData}
-                            semesterId={selectedSemester}
-                            userId={userInfo.id}
-                            save={save}
+                FormSelectButtonBar()
+            }
+            {!isLoading && (
+                <>
+                    <Routes>
+                        <Route path="/fill"
+                            element={
+                                <FillUserForm
+                                    formTemplate={userFormTemplate}
+                                    setFormTemplate={setUserFormTemplate}
+                                    formData={userRawData}
+                                    setFormData={setUserRawData}
+                                    semesterId={selectedSemester}
+                                    userId={userInfo.id}
+                                    save={save}
+                                    disabled={userInfo.id === selectedUser ? false : true}
+                                />
+                            }
                         />
-                    }
-                />
-                <Route path="/summary"
-                    element={
-                        <ViewSummaryForm
-                            formTemplate={summaryFormTemplate}
-                            setFormTemplate={setSummaryFormTemplate}
-                            userData={userRawData}
-                            setUserData={setUserRawData} />
-                    }
-                />
-            </Routes>
+                        <Route path="/summary"
+                            element={
+                                <ViewSummaryForm
+                                    formTemplate={summaryFormTemplate}
+                                    setFormTemplate={setSummaryFormTemplate}
+                                    userData={userRawData}
+                                    setUserData={setUserRawData} />
+                            }
+                        />
+                    </Routes>
+                </>
+            )}
         </div>
     )
 }

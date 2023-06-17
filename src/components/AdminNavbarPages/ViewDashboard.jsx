@@ -64,12 +64,13 @@ function ViewDashboard(props) {
                         label: semester.title
                     }
                 })}></Select>
+            {selectedSemester !== null && 
             <ViewDashboardForm 
             dashboardFormTemplate={dashboardFormTemplate} 
             summaryFormTemplate={summaryFormTemplate} 
             rawDataList={rawDataList} 
             departmentList={departmentList} 
-            selectedSemester={selectedSemester}/>
+            selectedSemester={selectedSemester}/>}
         </div>
     )
 }

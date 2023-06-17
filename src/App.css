@@ -55,10 +55,29 @@ textarea {
   text-decoration: underline;
 }
 
-.navbar label {
+.navbar-label {
   font-size: 40px;
   font-weight: bolder;
-  color: white
+  color: white;
+  width: fit-content;
+}
+
+.navbar-user-info {
+  flex: 6;
+  display: flex;
+  justify-content: end;
+}
+
+.navbar-user-info label {
+  color: white;
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.navbar-button {
+  flex: 2;
+  display: flex;
+  justify-content: end;
 }
 
 .navbar a {
@@ -543,7 +562,7 @@ td input[type=number] {
 }
 
 .custom-react-select {
-  width: 200px;
+  width: 300px;
 }
 
 .width-100 {

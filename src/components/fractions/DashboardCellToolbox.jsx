@@ -117,6 +117,9 @@ function DashboardCellToolbox(props) {
                 </div>
                 text aligntment
             </div>
+            <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, '!topic')}>
+                topic
+            </button>
             <div className="toolbox-sub">
                 <div className="toolbox-sub-menu">
                 {departmentList.map(dep => {

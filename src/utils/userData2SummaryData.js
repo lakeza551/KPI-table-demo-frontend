@@ -27,6 +27,75 @@ const isEvaluatable = (exp, userData, summary) => {
     return true
 }
 
+const evalHasValue = (exp, userData, summary) => {
+    const reg = /\(([^)]*)\)/;
+    const selected = exp.match(reg)[1]
+    const startCell = selected.split(':')[0]
+    const endCell = selected.split(':')[1]
+    const startRow = Number(startCell.split('_')[1].substring(1))
+    const startCol = startCell.split('_')[1].substring(0, 1)
+    const endRow = Number(endCell.split('_')[1].substring(1))
+    const endCol = endCell.split('_')[1].substring(0, 1)
+
+    const form = startCell.split('_')[0].substring(0, 2)
+    const table = startCell.split('_')[0].substring(2)
+
+    //data from user
+    if(form.includes('#a')) {
+        //horizontal
+        if (startRow === endRow) {
+            const startC = alphabetList.indexOf(startCol)
+            const endC = alphabetList.indexOf(endCol)
+            for (var c = startC; c <= endC; ++c) {
+                const val = userData[`#a${table}_${alphabetList[c]}${startRow}`]
+                if(val === '' || val === null || val === undefined)
+                    continue
+                return 1
+            }
+            return 0
+        }
+        //vertical
+        if (startCol === endCol) {
+            for (var r = startRow; r <= endRow; ++r) {
+                const val = userData[`#a${table}_${startCol}${r}`]
+                if(val === '' || val === null || val === undefined)
+                    continue
+                return 1
+            }
+            return 0
+        }
+    }
+    //data from summary
+    if(form.includes('#b')) {
+        //horizontal
+        if (startRow === endRow) {
+            var sum = 0;
+            const startC = alphabetList.indexOf(startCol)
+            const endC = alphabetList.indexOf(endCol)
+            for (var c = startC; c <= endC; ++c) {
+                const val = summary[`#b${table}_${alphabetList[c]}${startRow}`]
+                if(val === '' || val === null || val === undefined)
+                    continue
+                sum += 1
+            }
+            return sum
+        }
+        //vertical
+        if (startCol === endCol) {
+            var sum = 0
+            console.log(summary)
+            for (var r = startRow; r <= endRow; ++r) {
+                const val = summary[`#b${table}_${startCol}${r}`]
+                console.log(val)
+                if(val === '' || val === null || val === undefined)
+                    continue
+                sum += 1
+            }
+            return sum
+        }
+    }
+}
+
 const evalCount = (exp, userData, summary) => {
     const reg = /\(([^)]*)\)/;
     const selected = exp.match(reg)[1]
@@ -178,6 +247,9 @@ const evaluate = (exp, userData, summary) => {
         }
         if(term.startsWith('count')) {
             terms[index] = evalCount(term, userData, summary)
+        }
+        if(term.startsWith('hasValue')) {
+            terms[index] = evalHasValue(term, userData, summary)
         }
         if (isOperator(term))
             continue

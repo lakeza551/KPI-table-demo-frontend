@@ -31,7 +31,7 @@ function ViewUserForm(props) {
     const fetchDepartmentList = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/group/`, 'GET', null)
         const resData = await res.json()
-        setDepartmentList(resData.data)
+        setDepartmentList(resData.data.filter(dep => dep.is_active))
     }
 
     const fetchSemesterList = async () => {
@@ -111,18 +111,6 @@ function ViewUserForm(props) {
                 <Link to='./summary' style={window.location.pathname.endsWith('summary') ? formActiveStyle : undefined} >ฟอร์มสรุป</Link>
             </div>
         )
-    }
-
-    const initiateWithParams = () => {
-        const semesterId = searchParams.get('semesterId')
-        const userId = searchParams.get('userId')
-        if (semesterId === null || userId === null) {
-            setSearchParams({})
-            return
-        }
-        setSelectedSemester(semesterId)
-        setSelectedUser(userId)
-        fetchForm()
     }
 
     const save = async () => {

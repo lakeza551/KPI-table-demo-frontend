@@ -13,6 +13,7 @@ function Table(props) {
     users = users.length === 0 ? ['no data'] : users
     const columns = [
         {
+            id: 'ID',
             name: (
                 <div className="table-header">
                     <label>ID</label>
@@ -125,6 +126,8 @@ function Table(props) {
     ]
     return <DataTable
         header
+        defaultSortFieldId={'ID'}
+        defaultSortAsc={true}
         key={'1'}
         columns={columns}
         data={users}
