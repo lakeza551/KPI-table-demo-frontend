@@ -23,7 +23,7 @@ function ViewDashboardForm(props) {
             for (const cell of row.columns.slice(1)) {
                 const summaryKey = cell.value.substring(1)
                 const avg = summaryData.reduce((total, a) => total + Number(a[summaryKey]), 0) / summaryData.length
-                dashboardDataBuffer[cell.key] = isNaN(avg) ? 0 : avg
+                dashboardDataBuffer[cell.key] = isNaN(avg) ? 0 : avg.toFixed(2)
             }
         }
     }
@@ -40,9 +40,9 @@ function ViewDashboardForm(props) {
             const rowIndex = Number(summaryCell.key.split('_')[1].substring(1))
             var sum = 0
             for (var i = 2; i < rowIndex; ++i) {
-                sum += dashboardDataBuffer[`#c1_${columnIndex}${i}`]
+                sum += Number(dashboardDataBuffer[`#c1_${columnIndex}${i}`])
             }
-            dashboardDataBuffer[`#c1_${columnIndex}${rowIndex}`] = sum
+            dashboardDataBuffer[`#c1_${columnIndex}${rowIndex}`] = sum.toFixed(2)
             const columnIndexNumber = columnNameList.indexOf(columnIndex)
             dashboardSummaryBuffer.push([topicRow.columns[columnIndexNumber].value, sum])
         }

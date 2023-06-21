@@ -10,7 +10,7 @@ function Navbar(props) {
     return (
         <div className="navbar">
             <label className="navbar-label" htmlFor="">
-                SC-SU-Workload
+             SC-Workload
             </label>
             <div className="navbar-user-info">
                 <label>ยินดีต้อนรับ {userInfo.name}</label>
@@ -19,7 +19,7 @@ function Navbar(props) {
                 <button onClick={() => {
                     cookies.remove(process.env.REACT_APP_COOKIE_NAME_TOKEN)
                     navigate('/auth')
-                }}>LOG OUT</button>
+                }}>ออกจากระบบ</button>
             </div>
         </div>
     )

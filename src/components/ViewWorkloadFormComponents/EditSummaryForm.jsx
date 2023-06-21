@@ -1,6 +1,33 @@
 import { useEffect, useState } from "react"
 import {CreateFormUtils} from '../../utils/createFormUtils'
 import CellToolbox from "../fractions/CellToolbox"
+import Select from "react-select"
+
+function TableSelectBar(props) {
+    const {setSelectedTable, form} = props
+    const tableCount = form.length
+    return (
+        <div className="table-select-bar">
+            <Select 
+            className="custom-react-select"
+            placeholder="-- โปรดระบุ --"
+            defaultValue={{
+                label: 'ตารางที่ 1',
+                value: 0
+            }}
+            onChange={selected => {
+                setSelectedTable(selected.value)
+            }}
+            options={Array.apply(null, Array(tableCount)).map((temp, index) => {
+                return {
+                    label: `ตารางที่ ${index + 1}`,
+                    value: index
+                }
+            })}
+            ></Select>
+        </div>
+    )
+}
 
 function EditSummaryForm(props) {
     const [selectedTable, setSelectedTable] = useState(0)
@@ -31,48 +58,6 @@ function EditSummaryForm(props) {
         alert('Compile สำเร็จ')
     }
 
-    const load = async () => {
-        const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/summary-form-template`, {
-            method: 'GET',
-        })
-        setForm(await res.json())
-        alert("Load Success")
-    }
-
-    const save = async () => {
-        const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/summary-form-template`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(form)
-        })
-        alert("Save Success")
-    }
-
-    const TableSelectBar = () => {
-        const tableCount = form.length
-        return (
-            <div className="table-select-bar">
-                {Array.apply(null, Array(tableCount)).map((temp, index) => {
-                    return (
-                        <div className="table-select-bar-button-container">
-                            <button style={index === selectedTable ? tableActiveStyle : undefined} onClick={() => {
-                                setSelectedTable(index)
-                            }}>ตารางที่ {index + 1}</button>
-                            <button onClick={() => formUtils.deleteTable(index)} className="delete-table-button">ลบ</button>
-                        </div>
-                    )
-                })}
-                <button style={{
-                    fontWeight: 'bold'
-                }} onClick={() => {
-                    formUtils.addTable()}
-                }>เพิ่มตาราง</button>
-            </div>
-        )
-    }
-
     useEffect(() => {
         setShowToolbox(null)
     }, [selectedTable])
@@ -86,13 +71,24 @@ function EditSummaryForm(props) {
         return
     
     const table = form[selectedTable]
+    if(table === undefined) {
+        setSelectedTable(0)
+        return <div></div>
+    }
     return (
         <div>
             <div className="float-button-bar">
                 <button onClick={compile}>Compile</button>
                 <button onClick={() => formUtils.undo()}>Undo</button>
             </div>
-            <TableSelectBar />
+            <TableSelectBar setSelectedTable={setSelectedTable} form={form}/>
+            <div className="table-name-input">
+                <label>ชื่อตาราง</label>
+                <input onChange={e => setForm(prev => {
+                    table.name = e.target.value
+                    return [...prev]
+                })} value={table.name === undefined ? '' : table.name} type="text" />
+            </div>
             <div className="table-container">
                 <table>
                     <tbody>

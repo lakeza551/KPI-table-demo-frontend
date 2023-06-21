@@ -1,6 +1,33 @@
 import { useEffect, useState } from "react"
 import callApi from "../../utils/callApi"
-import TableSelectBar from '../fractions/TableSelectBar'
+import Select from 'react-select'
+
+
+function TableSelectBar(props) {
+    const {setSelectedTable, form} = props
+    console.log(form)
+    return (
+        <div className="table-select-bar">
+            <Select 
+            className="custom-react-select"
+            placeholder="-- โปรดระบุ --"
+            defaultValue={{
+                label: `ตารางที่ 1 ${form[0].name}`,
+                value: 0
+            }}
+            onChange={selected => {
+                setSelectedTable(selected.value)
+            }}
+            options={form.map((table, index) => {
+                return {
+                    label: `ตารางที่ ${index + 1} ${table.name}`,
+                    value: index
+                }
+            })}
+            ></Select>
+        </div>
+    )
+}
 
 function FillUserForm(props) {
     const {formTemplate, setFormTemplate, formData, setFormData, semesterId, userId, save, disabled} = props
@@ -25,7 +52,7 @@ function FillUserForm(props) {
             <div className="button-bar">
                 <button className="table-button" onClick={save}>Save</button>
             </div>
-            <TableSelectBar formTemplate={formTemplate} selectedTable={selectedTable} setSelectedTable={setSelectedTable}/>
+            <TableSelectBar form={formTemplate} setSelectedTable={setSelectedTable}/>
             <div className="table-container">
                 <table>
                     <tbody>

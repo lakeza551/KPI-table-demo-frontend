@@ -1,7 +1,32 @@
 import { evaluate as mathEval, sum } from 'mathjs'
 import { useState, useEffect } from "react"
 import userData2SummaryData from '../../utils/userData2SummaryData'
-import TableSelectBar from '../fractions/TableSelectBar'
+import Select from 'react-select'
+
+function TableSelectBar(props) {
+    const {setSelectedTable, form} = props
+    return (
+        <div className="table-select-bar">
+            <Select 
+            className="custom-react-select"
+            placeholder="-- โปรดระบุ --"
+            defaultValue={{
+                label: `ตารางที่ 1 ${form[0].name}`,
+                value: 0
+            }}
+            onChange={selected => {
+                setSelectedTable(selected.value)
+            }}
+            options={form.map((table, index) => {
+                return {
+                    label: `ตารางที่ ${index + 1} ${table.name}`,
+                    value: index
+                }
+            })}
+            ></Select>
+        </div>
+    )
+}
 
 function ViewSummaryForm(props) {
     const {formTemplate, setFormTemplate, userData, setUserData} = props
@@ -16,7 +41,7 @@ function ViewSummaryForm(props) {
 
     return (
         <div className='content-container'>
-            <TableSelectBar formTemplate={formTemplate} selectedTable={selectedTable} setSelectedTable={setSelectedTable}/>
+            <TableSelectBar form={formTemplate}/>
             <div className="table-container">
                 <table>
                     <tbody>

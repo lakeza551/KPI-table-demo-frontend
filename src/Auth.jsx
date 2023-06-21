@@ -33,7 +33,7 @@ function Auth() {
     return (
         <div className="homepage-container">
             <div className="homepage-card">
-                <label className="homepage-header">SCSU-Workload</label>
+                <label className="homepage-header">SC-Workload</label>
                 <div className="homepage-login-form">
                     <input type="text" placeholder="Username" onChange={e => {
                         setUsername(e.target.value)

@@ -1,4 +1,4 @@
-import { Link, Route, Routes, useParams } from "react-router-dom"
+import { Link, Route, Routes, useParams, useNavigate } from "react-router-dom"
 import EditUserForm from './EditUserForm'
 import EditSummaryForm from "./EditSummaryForm"
 import EditDashboardForm from "./EditDashboardForm"
@@ -25,6 +25,7 @@ function EditForm(props) {
     const [selectedImportForm, setSelectedImportForm] = useState(null)
 
     const { semesterId } = useParams()
+    const navigate = useNavigate()
 
     const fetchSemesterInfo = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/`, 'GET', null)
@@ -104,7 +105,7 @@ function EditForm(props) {
                         onChange={selected => {
                             setSelectedImportForm(selected.value)
                         }}
-                        options={semesterList !== null && semesterList.map(semester => {
+                        options={semesterList !== null && semesterList.filter(sem => sem.id !== Number(semesterId)).map(semester => {
                             return {
                                 value: semester.id,
                                 label: semester.title

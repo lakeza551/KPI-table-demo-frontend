@@ -1,7 +1,34 @@
 import { useEffect, useRef, useState } from "react"
 import { CreateFormUtils } from '../../utils/createFormUtils'
+import Select from 'react-select'
 import createCellKey from "../../utils/createCellKey"
 import CellToolbox from "../fractions/CellToolbox"
+
+function TableSelectBar(props) {
+    const {setSelectedTable, form} = props
+    const tableCount = form.length
+    return (
+        <div className="table-select-bar">
+            <Select 
+            className="custom-react-select"
+            placeholder="-- โปรดระบุ --"
+            defaultValue={{
+                label: 'ตารางที่ 1',
+                value: 0
+            }}
+            onChange={selected => {
+                setSelectedTable(selected.value)
+            }}
+            options={Array.apply(null, Array(tableCount)).map((temp, index) => {
+                return {
+                    label: `ตารางที่ ${index + 1}`,
+                    value: index
+                }
+            })}
+            ></Select>
+        </div>
+    )
+}
 
 function EditUserForm(props) {
     const [selectedTable, setSelectedTable] = useState(0)
@@ -37,30 +64,6 @@ function EditUserForm(props) {
         alert('Compile สำเร็จ')
     }
 
-    const TableSelectBar = () => {
-        const tableCount = form.length
-        return (
-            <div className="table-select-bar">
-                {Array.apply(null, Array(tableCount)).map((temp, index) => {
-                    return (
-                        <div className="table-select-bar-button-container">
-                            <button style={index === selectedTable ? tableActiveStyle : undefined} onClick={() => {
-                                setSelectedTable(index)
-                            }}>ตารางที่ {index + 1}</button>
-                            <button onClick={() => formUtils.deleteTable(index)} className="delete-table-button">ลบ</button>
-                        </div>
-                    )
-                })}
-                <button style={{
-                    fontWeight: 'bold'
-                }} onClick={() => {
-                    formUtils.addTable()
-                }
-                }>เพิ่มตาราง</button>
-            </div>
-        )
-    }
-
     useEffect(() => {
         setShowToolbox(null)
     }, [selectedTable])
@@ -73,6 +76,10 @@ function EditUserForm(props) {
         return
 
     const table = form[selectedTable]
+    if(table === undefined) {
+        setSelectedTable(0)
+        return <div></div>
+    }
     return (
         <div>
             <div className="float-button-bar">
@@ -80,6 +87,13 @@ function EditUserForm(props) {
                 <button onClick={() => formUtils.undo()}>Undo</button>
             </div>
             <TableSelectBar form={form} setSelectedTable={setSelectedTable} />
+            <div className="table-name-input">
+                <label>ชื่อตาราง</label>
+                <input onChange={e => setForm(prev => {
+                    table.name = e.target.value
+                    return [...prev]
+                })} value={table.name === undefined ? '' : table.name} type="text" />
+            </div>
             <div className="table-container">
                 <table>
                     <tbody>

@@ -158,7 +158,7 @@ function ViewUserList() {
     }
     const fetchDepartment = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/group/`, 'GET', null)
-        const departmentList = (await res.json()).data
+        const departmentList = (await res.json()).data.filter(dep => dep.is_active)
         setDepartmentList(departmentList)
     }
 
