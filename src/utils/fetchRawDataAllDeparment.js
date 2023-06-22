@@ -7,6 +7,7 @@ async function fetchRawDataAllDeparment(semesterId, setRawDataList) {
     for(const rawDataObj of resData) {
         rawDataList[rawDataObj.group.id] = rawDataObj.raw_data_list
     }
+    console.log(rawDataList)
     setRawDataList(rawDataList)
 }
 

@@ -49,6 +49,7 @@ function ViewDashboard(props) {
     }, [selectedSemester])
 
     
+    console.log(rawDataList)
     return (
         <div className="page-content-container">
             <Select
@@ -70,9 +71,7 @@ function ViewDashboard(props) {
             summaryFormTemplate={summaryFormTemplate} 
             rawDataList={rawDataList} 
             departmentList={departmentList} 
-            selectedSemester={selectedSemester}
-            />
-            }
+            selectedSemester={selectedSemester}/>}
         </div>
     )
 }
