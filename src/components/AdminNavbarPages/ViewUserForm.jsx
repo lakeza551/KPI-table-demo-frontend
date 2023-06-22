@@ -4,12 +4,12 @@ import ViewSummaryForm from "../ViewUserFormComponents/ViewSummaryForm"
 import callApi from "../../utils/callApi"
 import Select from "react-select"
 import { Link, Route, useSearchParams, Routes } from "react-router-dom"
+import Cookies from "universal-cookie"
 
 function ViewUserForm(props) {
 
     const [searchParams, setSearchParams] = useSearchParams({})
 
-    const [selectedForm, setSelectedForm] = useState('user-form')
     const [departmentList, setDepartmentList] = useState(null)
     const [semesterList, setSemesterList] = useState(null)
     const [userList, setUserList] = useState(null)
@@ -114,11 +114,46 @@ function ViewUserForm(props) {
     }
 
     const save = async () => {
-        const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'PUT', userRawData)
-        const resData = await res.json()
-        if(resData.status === 'success')
-            return alert('บันทึกข้อมูลสำเร็จ')
+        try {
+            const arrFiles = Object.entries(userRawData).filter(([key, val]) => val !== null && typeof val === 'object')
+            for(const [key, file] of arrFiles) {
+                if(!file instanceof File)
+                    continue
+                const data = new FormData()
+                const cookies = new Cookies()
+                const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
+                data.append('file', file)
+                console.log(data)
+                const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`, 'POST', data, true)
+                // const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`, {
+                //     headers: {
+                //         'Authorization' : `Bearer ${workloadCookie.access_token}`, 
+                //     },
+                //     method: 'POST',
+                //     body: data
+                // })
+                const resData = await res.json()
+                console.log(resData)
+                if(resData.status === 'error' || resData.status === 'fail')
+                    throw resData.data
+                setUserRawData(prev => {
+                    prev[key] = {
+                        filename: resData.data.filename,
+                        filepath: resData.data.url
+                    }
+                    return {...prev}
+                })
+            }
+            const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'PUT', userRawData)
+            const resData = await res.json()
+            if(resData.status === 'success')
+                return alert('บันทึกข้อมูลสำเร็จ')
+            else
+                throw resData.data
+        } catch (error) {
+            console.log(error)
             alert('บันทึกข้อมูลล้มเหลว')
+        }
     }
 
     useEffect(() => {

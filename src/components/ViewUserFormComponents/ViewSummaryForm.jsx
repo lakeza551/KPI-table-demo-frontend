@@ -1,6 +1,7 @@
 import { evaluate as mathEval, sum } from 'mathjs'
 import { useState, useEffect } from "react"
 import userData2SummaryData from '../../utils/userData2SummaryData'
+import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Select from 'react-select'
 
 function TableSelectBar(props) {
@@ -47,7 +48,7 @@ function ViewSummaryForm(props) {
                     <tbody>
                         {tableTemplate.rows.map((row, rIndex) => {
                             return (
-                                <tr style={{ height: tableTemplate.rowHeight[rIndex] }}>
+                                <tr>
                                     {row.columns.map((cell, cIndex) => {
                                         if(cell.isMerged)
                                             return null
@@ -57,7 +58,6 @@ function ViewSummaryForm(props) {
                                                     colSpan={cell.colSpan}
                                                     rowSpan={cell.rowSpan}
                                                     style={{
-                                                        height: tableTemplate.rowHeight[rIndex],
                                                         width: tableTemplate.columnWidth[cIndex],
                                                         ...cell.textareaStyle
                                                     }}
@@ -72,11 +72,10 @@ function ViewSummaryForm(props) {
                                                     colSpan={cell.colSpan}
                                                     rowSpan={cell.rowSpan}
                                                     style={{
-                                                        height: tableTemplate.rowHeight[rIndex],
                                                         width: tableTemplate.columnWidth[cIndex],
                                                     }}
                                                 >
-                                                    <textarea disabled style={cell.textareaStyle} value={cell.value === null ? '' : cell.value}></textarea>
+                                                    <TextareaAutosize disabled style={cell.textareaStyle} value={cell.value === null ? '' : cell.value}></TextareaAutosize>
                                                 </td>
                                             )
                                         }

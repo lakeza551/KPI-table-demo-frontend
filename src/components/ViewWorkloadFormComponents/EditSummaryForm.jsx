@@ -2,29 +2,32 @@ import { useEffect, useState } from "react"
 import {CreateFormUtils} from '../../utils/createFormUtils'
 import CellToolbox from "../fractions/CellToolbox"
 import Select from "react-select"
+import TextareaAutosize from '@mui/base/TextareaAutosize';
 
 function TableSelectBar(props) {
-    const {setSelectedTable, form} = props
-    const tableCount = form.length
+    const {selectedTable, setSelectedTable, form, formUtils} = props
     return (
         <div className="table-select-bar">
             <Select 
             className="custom-react-select"
             placeholder="-- โปรดระบุ --"
-            defaultValue={{
-                label: 'ตารางที่ 1',
-                value: 0
+            value={{
+                label: `ตารางที่ ${selectedTable + 1} ${form[selectedTable].name === undefined ? '' : form[selectedTable].name}`,
+                value: selectedTable
             }}
             onChange={selected => {
                 setSelectedTable(selected.value)
             }}
-            options={Array.apply(null, Array(tableCount)).map((temp, index) => {
+            options={form.map((table, index) => {
                 return {
-                    label: `ตารางที่ ${index + 1}`,
+                    label: `ตารางที่ ${index + 1} ${table.name === undefined ? '' : table.name}`,
                     value: index
                 }
             })}
             ></Select>
+            <button onClick={() => formUtils.addTable(selectedTable)}>เพิ่มตารางก่อนหน้า</button>
+            <button onClick={() => formUtils.addTable(selectedTable + 1)}>เพิ่มตารางถัดไป</button>
+            <button onClick={() => formUtils.deleteTable(selectedTable)}>ลบตาราง</button>
         </div>
     )
 }
@@ -81,7 +84,7 @@ function EditSummaryForm(props) {
                 <button onClick={compile}>Compile</button>
                 <button onClick={() => formUtils.undo()}>Undo</button>
             </div>
-            <TableSelectBar setSelectedTable={setSelectedTable} form={form}/>
+            <TableSelectBar formUtils={formUtils} selectedTable={selectedTable} setSelectedTable={setSelectedTable} form={form}/>
             <div className="table-name-input">
                 <label>ชื่อตาราง</label>
                 <input onChange={e => setForm(prev => {
@@ -94,17 +97,27 @@ function EditSummaryForm(props) {
                     <tbody>
                         {table.rows.map((row, rIndex) => {
                             return (
-                                <tr style={{ height: table.rowHeight[rIndex] }}>
+                                <tr>
                                     {row.columns.map((cell, cIndex) => {
                                         if (cell.isMerged)
                                             return
                                         return (
                                             <td
+                                            onContextMenu={e => {
+                                                e.preventDefault()
+                                                const bound = e.target.getBoundingClientRect()
+                                                setShowToolbox({
+                                                    rIndex: rIndex,
+                                                    cIndex: cIndex,
+                                                    pageX: e.clientX - bound.left,
+                                                    pageY: e.clientY - bound.top
+                                                })
+                                            }}
                                             colSpan={cell.colSpan} 
                                             rowSpan={cell.rowSpan} 
                                             style={{ 
                                                 width: table.columnWidth[cIndex], 
-                                                height: table.rowHeight[rIndex],
+                                                paddingBottom: '25px',
                                                 ...cell.style 
                                             }}>
                                             {showToolbox !== null &&
@@ -112,33 +125,25 @@ function EditSummaryForm(props) {
                                              showToolbox.rIndex === rIndex &&
                                              <CellToolbox 
                                                     formUtils={formUtils}
-                                                    form={form} 
-                                                    setForm={setForm} 
-                                                    selectedTable={selectedTable} 
+                                                    pageX={showToolbox.pageX}
+                                                    pageY={showToolbox.pageY}
                                                     rIndex={rIndex} 
                                                     cIndex={cIndex} 
                                                 />}
                                                 <label style={{
                                                     color: cell.type === 'input' ? 'red' : 'black'
                                                 }} className="cell-key">{cell.key ? cell.key : ''}</label>
-                                                <textarea 
+                                                <TextareaAutosize
                                                 style={cell.textareaStyle} 
                                                 value={cell.value === null ? '' : cell.value} 
                                                 onClick={() => setShowToolbox(null)}
-                                                onContextMenu={e => {
-                                                    e.preventDefault()
-                                                    setShowToolbox({
-                                                        rIndex: rIndex,
-                                                        cIndex: cIndex
-                                                    })
-                                                }}
                                                 onChange={e => {
                                                     setForm(prev => {
                                                         cell.value = e.target.value
                                                         return [...prev]
                                                     })
                                                 }}>
-                                                </textarea>
+                                                </TextareaAutosize>
                                                 <label className="cell-key">{cell.key}</label>
                                             </td>
                                         )

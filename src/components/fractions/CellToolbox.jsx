@@ -1,7 +1,10 @@
 function CellToolbox(props) {
-    const {formUtils, form, setForm, selectedTable, rIndex, cIndex} = props
+    const {formUtils, rIndex, cIndex, pageX, pageY} = props
     return (
-        <div className="toolbox">
+        <div className="toolbox" style={{
+            left: pageX,
+            top: pageY
+        }}>
             <div className="toolbox-sub">
                 <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.spanColumn(rIndex, cIndex)}>
@@ -45,17 +48,6 @@ function CellToolbox(props) {
                 </button>
                 </div>
                 add row
-            </div>
-            <div className="toolbox-sub">
-                <div className="toolbox-sub-menu">
-                    <button onClick={() => formUtils.changeHeight(rIndex, 25)}>
-                        increase height
-                    </button>
-                    <button onClick={() => formUtils.changeHeight(rIndex, -25)}>
-                        decrease height
-                    </button>
-                </div>
-                height
             </div>
             <div className="toolbox-sub">
                 <div className="toolbox-sub-menu">
@@ -127,6 +119,9 @@ function CellToolbox(props) {
                 </button>
                 <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, '!input#checkbox')}>
                     checkbox
+                </button>
+                <button onClick={() => formUtils.setTextInCell(rIndex, cIndex, '!input#file')}>
+                    file
                 </button>
                 </div>
                 input

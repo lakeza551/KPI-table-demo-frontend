@@ -107,7 +107,17 @@ function EditDashboardForm(props) {
                                         if (cell.isMerged)
                                             return
                                         return (
-                                            <td 
+                                            <td
+                                            onContextMenu={e => {
+                                                e.preventDefault()
+                                                const bound = e.target.getBoundingClientRect()
+                                                setShowToolbox({
+                                                    rIndex: rIndex,
+                                                    cIndex: cIndex,
+                                                    pageX: e.clientX - bound.left,
+                                                    pageY: e.clientY - bound.top
+                                                })
+                                            }} 
                                             colSpan={cell.colSpan} 
                                             rowSpan={cell.rowSpan} 
                                             style={{ 
@@ -121,6 +131,8 @@ function EditDashboardForm(props) {
                                                 <DashboardCellToolbox
                                                     formUtils={formUtils}
                                                     form={form}
+                                                    pageX={showToolbox.pageX}
+                                                    pageY={showToolbox.pageY}
                                                     setForm={setForm}
                                                     selectedTable={selectedTable}
                                                     rIndex={rIndex}

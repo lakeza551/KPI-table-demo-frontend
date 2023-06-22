@@ -6,10 +6,7 @@
   align-items: center;
 }
 
-body {
-  height: 100%;
-  overflow-y: hidden;
-}
+
 
 * {
   margin: 0 0;
@@ -91,7 +88,7 @@ textarea {
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 5px;
-  min-height: 100vh;
+  height: 100vh;
   background-color: rgb(219, 236, 255);
   min-width: 200px;
 }
@@ -149,35 +146,39 @@ textarea {
 textarea {
   width: 100%;
   height: 100%;
-  padding: 5px 10px;
-  font-size: 18px;
   vertical-align:middle;
   text-align: center;
   border-style: none;
+  font-size: 18px;
+  background-color: transparent;
+  border: none;
+  outline: none;
 }
-
 
 table {
   /* border: 1px solid; */
   border-collapse: separate;
   border-spacing: 0px;
   padding-bottom: 100px;
-  
+  width: fit-content;
+  height: fit-content;
+  table-layout: auto
 }
 
 td {
   position: relative;
-  text-align: center;
   border: 1px solid black;
+  height: fit-content;
+  vertical-align: top;
+  padding: 0px 1px;
 }
 
 td input[type=number] {
   font-size: 18px;
-  padding-bottom: 57%;
   text-align: center;
-  height: 100%;
   width: 100%;
   border-style: none;
+  outline: none;
 }
 
 .cell-button-bar {
@@ -188,11 +189,8 @@ td input[type=number] {
 .toolbox {
   position: absolute;
   flex-direction: column;
-  width: fit-content;
-  left: 100%;
-  top: 50%;
-  z-index: 50;
-  transform: translateY(-50%);
+  max-width: 135px;
+  z-index: 1000;
   background-color: rgb(250, 250, 250);
   border-radius: 10px;
   padding: 3px 3px;
@@ -230,10 +228,6 @@ td input[type=number] {
   display: flex;
 }
 
-/* td:hover > .toolbox {
-  display: flex;
-} */
-
 .cell-key {
   position: absolute;
   bottom: 0px;
@@ -262,8 +256,8 @@ td input[type=number] {
   display: flex;
   justify-content: center;
   height: 65vh;
-  overflow-x: scroll;
-  overflow-y: scroll;
+  padding-bottom: 100px;
+  overflow: scroll;
 }
 
 .formlist-container {
@@ -359,7 +353,13 @@ td input[type=number] {
   border-style: none;
   cursor: pointer;
   font-size: 18px;
-  margin-right: 15px;
+  margin-left: 12px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.table-select-bar button:hover {
+  text-decoration: underline;
 }
 
 .table-select-bar-button-container {

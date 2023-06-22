@@ -196,10 +196,10 @@ export class CreateFormUtils {
         })
     }
     
-    addTable() {
+    addTable(tIndex) {
         this.saveFormState(JSON.parse(JSON.stringify(this.form)))
         this.setForm(prev => {
-            prev.push({
+            const newTable = {
                 rowHeight: [this.defaultRowHeight],
                 columnWidth: [this.defaultColumnWidth],
                 rows: [
@@ -214,15 +214,16 @@ export class CreateFormUtils {
                         ]
                     }
                 ]
-            })
-            return [...prev]
+            }
+            const left = prev.slice(0, tIndex)
+            const right = prev.slice(tIndex, prev.length)
+            return [...left, newTable, ...right]
         })
         this.generateKeys()
     }
     
     deleteTable(deleteIndex) {
         this.saveFormState(JSON.parse(JSON.stringify(this.form)))
-        console.log(this.selectedTable, deleteIndex)
         if (this.form.length === 1)
             return
             this.setForm(prev => {

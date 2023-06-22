@@ -48,17 +48,6 @@ function DashboardCellToolbox(props) {
             </div>
             <div className="toolbox-sub">
                 <div className="toolbox-sub-menu">
-                    <button onClick={() => formUtils.changeHeight(rIndex, 25)}>
-                        increase height
-                    </button>
-                    <button onClick={() => formUtils.changeHeight(rIndex, -25)}>
-                        decrease height
-                    </button>
-                </div>
-                height
-            </div>
-            <div className="toolbox-sub">
-                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.changeWidth(rIndex, 25)}>
                     increase width
                 </button>

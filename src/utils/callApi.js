@@ -1,13 +1,13 @@
 import Cookies from "universal-cookie"
 
-async function callApi(url, method, params) {
+async function callApi(url, method, params, isFormdata = false) {
     const cookies = new Cookies()
     //console.log(cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN))
     await refreshToken()
     const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
     const headers = {
         'Authorization': `Bearer ${workloadCookie.access_token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': isFormdata ? 'multipart/form-data' : 'application/json'
     }
     if(method === 'GET') {
         const res =  await fetch(url, {
@@ -16,12 +16,24 @@ async function callApi(url, method, params) {
         })
         return res
     }
-    if(method === 'POST' || method === 'PUT') {
-        return await fetch(url, {
-            headers: headers,
-            method: method,
-            body: JSON.stringify(params)
-        })
+    else if(method === 'POST' || method === 'PUT') {
+        if(!isFormdata) {
+            return await fetch(url, {
+                headers: headers,
+                method: method,
+                body: JSON.stringify(params)
+            })
+        }
+        else{
+            const res = await fetch(url, {
+                headers: {
+                    'Authorization' : `Bearer ${workloadCookie.access_token}`, 
+                },
+                method: 'POST',
+                body: params
+            })
+            return res
+        }
     }
 }
 
