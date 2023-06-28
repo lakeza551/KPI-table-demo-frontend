@@ -1,13 +1,16 @@
 version: "3"
 
 services:
-  workload_frontend:
+  workload_frontend_dev:
+    container_name: workload_frontend_dev
     build:
       context: .
       dockerfile: dev.dockerfile
     restart: unless-stopped
+    volumes:
+      - ./:/usr/web
     ports:
-      - 3001:3000
+      - 3002:3000
     networks:
       - default
       - webproxy

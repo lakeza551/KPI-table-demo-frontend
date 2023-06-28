@@ -1,7 +1,8 @@
 version: "3"
 
 services:
-  workload_frontend:
+  workload_frontend_production:
+    container_name: workload_frontend_production
     build:
       context: .
       dockerfile: production.dockerfile
