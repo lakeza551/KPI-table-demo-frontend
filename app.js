@@ -13,14 +13,6 @@ const CLIENT_SECRET = 'KrKCyu9W5oC90kgZEx-KbUQfr4lFffj0UXxE8ACtB1TwRQzqotq-g088X
 app.use(express.static('build'))
 app.use(cookieParser())
 
-app.get('/', (req, res) => {
-    res.redirect('/#')
-})
-
-app.get('/#/*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
-})
-
 app.get('/login', (req, res) => {
     res.redirect(
         `https://nidp.su.ac.th/nidp/oauth/nam/authz?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&response_type=code&grant_type=authorization_code&scope=suappportal&redirect_uri=http://workload.sc.su.ac.th/su-auth`
