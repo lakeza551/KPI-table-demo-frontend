@@ -21,7 +21,7 @@ app.get('/login', (req, res) => {
     )
 })
 
-app.get('/redirect', async(req, res) => {
+app.get('/su-auth', async(req, res) => {
     const { code } = req.query
     const data = queryString.stringify({
         'code': code,
