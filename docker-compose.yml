@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  workload_frontend_dev:
+    container_name: workload_frontend_dev
+    build:
+      context: .
+      dockerfile: dev.dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./:/usr/web
+    ports:
+      - 3002:3000
+    networks:
+      - default
+      - webproxy
+    environment:
+      VIRTUAL_HOST: workload.sc.su.ac.th
+
+networks:
+  default:
+    name: workload
+    external: true
+  webproxy:
+    name: webproxy
+    external: true

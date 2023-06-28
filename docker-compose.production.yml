@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  workload_frontend_production:
+    container_name: workload_frontend_production
+    build:
+      context: .
+      dockerfile: production.dockerfile
+    restart: unless-stopped
+    ports:
+      - 3001:3000
+    networks:
+      - default
+      - webproxy
+    environment:
+      VIRTUAL_HOST: workload.sc.su.ac.th
+
+networks:
+    default:
+      name: workload
+      external: true
+    webproxy:
+      name: webproxy
+      external: true
+  
