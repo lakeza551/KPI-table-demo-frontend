@@ -12,6 +12,8 @@ services:
     networks:
       - default
       - webproxy
+    environment:
+      VIRTUAL_HOST: workload.sc.su.ac.th
 
 networks:
     default:

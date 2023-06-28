@@ -14,12 +14,13 @@ services:
     networks:
       - default
       - webproxy
+    environment:
+      VIRTUAL_HOST: workload.sc.su.ac.th
 
 networks:
-    default:
-      name: workload
-      external: true
-    webproxy:
-      name: webproxy
-      external: true
-  
+  default:
+    name: workload
+    external: true
+  webproxy:
+    name: webproxy
+    external: true
