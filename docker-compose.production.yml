@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  workload_frontend:
+    build:
+      context: .
+      dockerfile: production.dockerfile
+    restart: unless-stopped
+    ports:
+      - 3001:3000
+    networks:
+      - default
+      - webproxy
+
+networks:
+    default:
+      name: workload
+      external: true
+    webproxy:
+      name: webproxy
+      external: true
+  
