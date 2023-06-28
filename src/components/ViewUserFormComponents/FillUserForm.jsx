@@ -69,23 +69,23 @@ function FillUserForm(props) {
                                             if (inputType === 'text') {
                                                 const startText = cell.label === undefined ? '' : cell.label
                                                 TableContent = (
-                                                    <TextareaAutosize 
-                                                    onDurationChangeCapture={e => {
-                                                        console.log(e)
-                                                    }}
-                                                    minRows={1} 
-                                                    disabled={disabled} 
-                                                    value={formData[cell.key] === null || formData[cell.key] === undefined ? startText : startText + formData[cell.key]} onChange={e => {
-                                                        setFormData(prev => {
-                                                            if (e.target.value.length < startText.length)
-                                                                e.target.value = startText
-                                                            if (e.target.value.substring(startText.length) === '')
-                                                                prev[cell.key] = null
-                                                            else
-                                                                prev[cell.key] = e.target.value.substring(startText.length)
-                                                            return { ...prev }
-                                                        })
-                                                    }}></TextareaAutosize>
+                                                    <TextareaAutosize
+                                                        onDurationChangeCapture={e => {
+                                                            console.log(e)
+                                                        }}
+                                                        minRows={1}
+                                                        disabled={disabled}
+                                                        value={formData[cell.key] === null || formData[cell.key] === undefined ? startText : startText + formData[cell.key]} onChange={e => {
+                                                            setFormData(prev => {
+                                                                if (e.target.value.length < startText.length)
+                                                                    e.target.value = startText
+                                                                if (e.target.value.substring(startText.length) === '')
+                                                                    prev[cell.key] = null
+                                                                else
+                                                                    prev[cell.key] = e.target.value.substring(startText.length)
+                                                                return { ...prev }
+                                                            })
+                                                        }}></TextareaAutosize>
                                                 )
                                             }
                                             else if (inputType === 'number') {
@@ -142,17 +142,22 @@ function FillUserForm(props) {
                                         //is comment
                                         else {
                                             TableContent = (
-                                            <TextareaAutosize 
-                                            disabled={true}
-                                            style={cell.textareaStyle} 
-                                            value={cell.value === undefined || cell.value === null ? '' : cell.value} >
-                                            </TextareaAutosize>)
+                                                <TextareaAutosize
+                                                    disabled={true}
+                                                    style={cell.textareaStyle}
+                                                    value={cell.value === undefined || cell.value === null ? '' : cell.value} >
+                                                </TextareaAutosize>)
                                         }
                                         return (
-                                            <td 
-                                            colSpan={cell.colSpan} 
-                                            rowSpan={cell.rowSpan} 
-                                            style={{ width: tableTemplate.columnWidth[cIndex]}}>
+                                            <td
+                                                colSpan={cell.colSpan}
+                                                rowSpan={cell.rowSpan}
+                                                style={
+                                                    {
+                                                        width: tableTemplate.columnWidth[cIndex],
+                                                        ...cell.cellStyle
+                                                    }
+                                                }>
                                                 {TableContent}
                                             </td>
                                         )
@@ -162,7 +167,7 @@ function FillUserForm(props) {
                         })}
                     </tbody>
                 </table>
-            {/* <TextareaAutosize></TextareaAutosize> */}
+                {/* <TextareaAutosize></TextareaAutosize> */}
             </div>
         </div>
     )

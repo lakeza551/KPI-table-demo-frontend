@@ -317,25 +317,32 @@ export class CreateFormUtils {
         })
     }
 
-    setTextAlignment(rIndex, cIndex, direction) {
+    addCellStyle(rIndex, cIndex, cellStyle) {
+        this.saveFormState(JSON.parse(JSON.stringify(this.form)))
         this.setForm(prev => {
             const cell = prev[this.selectedTable].rows[rIndex].columns[cIndex]
-            if(direction === 'left') {
-                cell.textareaStyle = {
-                    textAlign: 'left'
+            if(cell.cellStyle === undefined)
+                cell.cellStyle = cellStyle
+            else
+                cell.cellStyle = {
+                    ...cell.cellStyle,
+                    ...cellStyle
                 }
-            }
-            else if(direction === 'right') {
+            return [...prev]
+        })
+    }
+
+    addTextareaStyle(rIndex, cIndex, textareaStyle) {
+        this.saveFormState(JSON.parse(JSON.stringify(this.form)))
+        this.setForm(prev => {
+            const cell = prev[this.selectedTable].rows[rIndex].columns[cIndex]
+            if(cell.textareaStyle === undefined)
+                cell.textareaStyle = textareaStyle
+            else
                 cell.textareaStyle = {
-                    textAlign: 'right'
+                    ...cell.textareaStyle,
+                    ...textareaStyle
                 }
-            }
-            else if(direction === 'center') {
-                cell.textareaStyle = {
-                    textAlign: 'center'
-                }
-            }
-            console.log(prev)
             return [...prev]
         })
     }

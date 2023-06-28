@@ -118,7 +118,7 @@ function EditSummaryForm(props) {
                                             style={{ 
                                                 width: table.columnWidth[cIndex], 
                                                 paddingBottom: '25px',
-                                                ...cell.style 
+                                                ...cell.cellStyle
                                             }}>
                                             {showToolbox !== null &&
                                              showToolbox.cIndex === cIndex &&

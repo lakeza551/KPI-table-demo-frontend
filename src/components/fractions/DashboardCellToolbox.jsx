@@ -1,7 +1,10 @@
 function DashboardCellToolbox(props) {
-    const {formUtils, form, setForm, selectedTable, rIndex, cIndex, departmentList} = props
+    const {formUtils, rIndex, cIndex, pageX, pageY, departmentList} = props
     return (
-        <div className="toolbox">
+        <div className="toolbox" style={{
+            left: pageX,
+            top: pageY
+        }}>
             <div className="toolbox-sub">
                 <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.spanColumn(rIndex, cIndex)}>

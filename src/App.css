@@ -202,6 +202,13 @@ td input[type=number] {
   border-style: none;
   border-radius: 5px;
   background-color: rgb(250, 250, 250);
+  text-align: center;
+  font-weight: bold;
+}
+
+.toolbox button {
+  font-weight: bold;
+  text-align: center;
 }
 
 .toolbox button:hover {

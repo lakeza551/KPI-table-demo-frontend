@@ -73,6 +73,7 @@ function ViewSummaryForm(props) {
                                                     rowSpan={cell.rowSpan}
                                                     style={{
                                                         width: tableTemplate.columnWidth[cIndex],
+                                                        ...cell.cellStyle
                                                     }}
                                                 >
                                                     <TextareaAutosize disabled style={cell.textareaStyle} value={cell.value === null ? '' : cell.value}></TextareaAutosize>

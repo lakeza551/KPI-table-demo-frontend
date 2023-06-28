@@ -7,6 +7,36 @@ function CellToolbox(props) {
         }}>
             <div className="toolbox-sub">
                 <div className="toolbox-sub-menu">
+                <button onClick={() => formUtils.addCellStyle(rIndex, cIndex, {
+                    backgroundColor: 'yellow'
+                })}>
+                    highlight
+                </button>
+                <button onClick={() => formUtils.addCellStyle(rIndex, cIndex, {
+                    backgroundColor: 'transparent'
+                })}>
+                    unhighlight
+                </button>
+                </div>
+                cell
+            </div>
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
+                <button onClick={() => formUtils.addTextareaStyle(rIndex, cIndex, {
+                    fontWeight: 'normal'
+                })}>
+                    normal
+                </button>
+                <button onClick={() => formUtils.addTextareaStyle(rIndex, cIndex, {
+                    fontWeight: 'bold'
+                })}>
+                    bold
+                </button>
+                </div>
+                font
+            </div>
+            <div className="toolbox-sub">
+                <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.spanColumn(rIndex, cIndex)}>
                     span column
                 </button>
@@ -97,13 +127,19 @@ function CellToolbox(props) {
             </div>
             <div className="toolbox-sub">
                 <div className="toolbox-sub-menu">
-                <button onClick={() => formUtils.setTextAlignment(rIndex, cIndex, 'center')}>
+                <button onClick={() => formUtils.addTextareaStyle(rIndex, cIndex, {
+                    textAlign: 'center'
+                })}>
                     center
                 </button>
-                <button onClick={() => formUtils.setTextAlignment(rIndex, cIndex, 'left')}>
+                <button onClick={() => formUtils.addTextareaStyle(rIndex, cIndex, {
+                    textAlign: 'left'
+                })}>
                     left
                 </button>
-                <button onClick={() => formUtils.setTextAlignment(rIndex, cIndex, 'right')}>
+                <button onClick={() => formUtils.addTextareaStyle(rIndex, cIndex, {
+                    textAlign: 'right'
+                })}>
                     right
                 </button>
                 </div>

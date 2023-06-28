@@ -129,7 +129,7 @@ function EditUserForm(props) {
                                                 style={{
                                                     width: table.columnWidth[cIndex],
                                                     paddingBottom: '20px',
-                                                    ...cell.style
+                                                    ...cell.cellStyle
                                                 }}>
                                                 {showToolbox !== null &&
                                                     showToolbox.cIndex === cIndex &&
