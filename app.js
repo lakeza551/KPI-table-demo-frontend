@@ -1,4 +1,5 @@
 const express = require('express')
+const cookieParser = require('cookie-parser')
 const path = require('path')
 const queryString = require('querystring')
 const https = require('follow-redirects').https
@@ -7,11 +8,16 @@ const app = express()
 const PORT = 3000
 
 const CLIENT_ID = '1d5d0546-0f74-400a-9bad-22182c72de3d'
-const CLIENT_SECRET = 'KrKCyu9W5oC90kgZEx-kbUQfr4lFffj0UXxE8ACtB1TwRQzqotq-g088X5vjlCFj0aVppE-mkAwlT78yxHtHAA'
+const CLIENT_SECRET = 'KrKCyu9W5oC90kgZEx-KbUQfr4lFffj0UXxE8ACtB1TwRQzqotq-g088X5vjlCFj0aVppE-mkAwlT78yxHtHAA'
 
 app.use(express.static('build'))
+app.use(cookieParser())
 
 app.get('/', (req, res) => {
+    res.redirect('/#')
+})
+
+app.get('/#/*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 })
 
@@ -51,8 +57,8 @@ app.get('/su-auth', async(req, res) => {
         response.on("end", function(chunk) {
             var body = JSON.parse(Buffer.concat(chunks).toString());
             const { access_token } = body
-            console.log(body)
-            //console.log(body.toString());
+            res.cookie('su-access-token', access_token)
+            res.redirect('/su-auth-get-info')
         });
 
         response.on("error", function(error) {
@@ -62,6 +68,36 @@ app.get('/su-auth', async(req, res) => {
     });
     request.write(data)
     request.end()
+})
+
+app.get('/su-auth-get-info', (req, res) => {
+    console.log(req.cookies)
+    const access_token = req.cookies['su-access-token'];
+    options = {
+        'method': 'GET',
+        'hostname': 'nidp.su.ac.th',
+        'path': '/nidp/oauth/nam/userinfo',
+        'headers': {
+            'Authorization': `Bearer ${access_token}`,
+        }
+    }
+    var request = https.request(options, result => {
+        var chunks = [];
+
+        result.on("data", function (chunk) {
+            chunks.push(chunk);
+        });
+
+        result.on("end", function (chunk) {
+            var body = Buffer.concat(chunks).toString('utf8');
+            console.log(body)
+        });
+
+        result.on("error", function (error) {
+            console.error(error);
+        });
+    });
+    request.end();
 })
 
 app.listen(PORT, () => {

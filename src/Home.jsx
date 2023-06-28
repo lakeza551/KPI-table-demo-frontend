@@ -29,12 +29,12 @@ function Home() {
 
     useEffect(() => {
         if(!workloadCookie)
-            return navigate('/auth')
+            return navigate('./auth')
         getUserInfo().then(userData => {
             if(userData.is_admin)
-                navigate('/admin/dashboard')
+                navigate('./admin/dashboard')
             else
-                navigate('/user/form')
+                navigate('./user/form')
         })
     })
     return 'hey'
