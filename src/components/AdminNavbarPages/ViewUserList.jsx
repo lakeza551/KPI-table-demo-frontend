@@ -121,13 +121,13 @@ function Table(props) {
                         setFilter(prev => {
                             return {
                                 ...prev,
-                                type: e.target.value
+                                is_active: e.target.value
                             }
                         })
                     }}placeholder="ค้นหาจาก สถานะ" className="table-filter" type="text" />
                 </div>
             ),
-            selector: (row, index) => row,
+            selector: (row, index) => row.is_active,
             sortable: true,
             grow: 1
         },
@@ -342,11 +342,11 @@ function ViewUserList() {
 
     return (
         <div className="page-content-container">
-            {/* <div className="button-bar">
+            <div className="button-bar">
                 <button onClick={e => {
                     setNewUserData({})
                 }}>เพิ่มผู้ใช้ใหม่</button>
-            </div> */}
+            </div>
             <div className="user-list-table-container">
                 <Table
                 setFilter={setFilter}
@@ -357,7 +357,8 @@ function ViewUserList() {
                     return user.name.includes(filter.name) &&
                             user.id.toString().includes(filter.id) &&
                             checkUserDepartment(user).includes(filter.department) &&
-                            checkUserType(user).includes(filter.type)
+                            checkUserType(user).includes(filter.type) &&
+                            user.is_active.includes(filter.is_active)
                 })
                 }
                 />
