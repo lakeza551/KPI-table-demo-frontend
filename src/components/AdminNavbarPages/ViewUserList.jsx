@@ -251,14 +251,14 @@ function ViewUserList() {
                 if(userPopupData.type === 'แอดมิน') {
                     res = await callApi(`${process.env.REACT_APP_SERVER_URL}/user/${userPopupData.userId}/`, 'PUT', {
                         name: userPopupData.name,
-                        is_active: userPopupData === 'active' ? true : false,
+                        is_active: userPopupData.is_active === 'active' ? true : false,
                         is_admin: true
                     })
                 }
                 else if(userPopupData.type === 'อาจารย์' || userPopupData.type === 'หัวหน้าภาควิชา') {
                     res = await callApi(`${process.env.REACT_APP_SERVER_URL}/user/${userPopupData.userId}/`, 'PUT', {
                         name: userPopupData.name,
-                        is_active: userPopupData === 'active' ? true : false,
+                        is_active: userPopupData.is_active === 'active' ? true : false,
                         is_admin: false
                     })
                 }
@@ -282,11 +282,12 @@ function ViewUserList() {
                 if(resJson.status === 'failed')
                     throw resJson
                 alert('แก้ไขสำเร็จ')
+                setUserPopupData(null)
+                fetchUsers()
             }
             catch(e) {
                 alert('แก้ไขล้มเหลว')
             }
-            navigate(0)
         }
 
         return (
@@ -334,7 +335,7 @@ function ViewUserList() {
                             is_active: e.target.value
                         }))}>
                             <option value='active'>active</option>
-                            <option value='in_active'>inactive</option>
+                            <option value='inactive'>inactive</option>
                         </select>
                     </div>
                     <button onClick={submitEdit} className="popup-button-edit">แก้ไข</button>
