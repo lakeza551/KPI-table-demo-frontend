@@ -167,7 +167,8 @@ function ViewUserList() {
         id: '',
         name: '',
         department: '',
-        type: ''
+        type: '',
+        is_active: ''
     })
     const [departmentList, setDepartmentList] = useState(null)
 
@@ -249,14 +250,14 @@ function ViewUserList() {
                 if(userPopupData.type === 'แอดมิน') {
                     res = await callApi(`${process.env.REACT_APP_SERVER_URL}/user/${userPopupData.userId}/`, 'PUT', {
                         name: userPopupData.name,
-                        is_active: true,
+                        is_active: userPopupData === 'active' ? true : false,
                         is_admin: true
                     })
                 }
                 else if(userPopupData.type === 'อาจารย์' || userPopupData.type === 'หัวหน้าภาควิชา') {
                     res = await callApi(`${process.env.REACT_APP_SERVER_URL}/user/${userPopupData.userId}/`, 'PUT', {
                         name: userPopupData.name,
-                        is_active: true,
+                        is_active: userPopupData === 'active' ? true : false,
                         is_admin: false
                     })
                 }
