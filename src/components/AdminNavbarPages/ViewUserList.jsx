@@ -202,7 +202,8 @@ function ViewUserList() {
     const CreatePopup = () => {
         const createUser = async () => {
             const res = await callApi(`/register`, 'POST', newUserData, null)
-            if(res.status === 'success') {
+            const resData = await res.json()
+            if(resData.status === 'success') {
                 alert('เพิ่มผู้ใช้ใหม่สำเร็จ')
                 setNewUserData(null)
                 fetchUsers()

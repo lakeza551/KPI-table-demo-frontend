@@ -18,14 +18,16 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 app.post('/register', async (req, res) => {
+    console.log(req.body)
     const {id, name} = req.body
     const password = hashPassword(id)
     const {SERVER_URL} = process.env
+    console.log(JSON.parse(req.cookies['SCSU_Workload_Token']))
     fetch(`${SERVER_URL}/user/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNfYWRtaW4iOnRydWUsImlzX2FjdGl2ZSI6dHJ1ZSwiZ3JvdXBzIjpbXSwiZXhwIjoxNjg4NDY1ODA0fQ.Y9JRmgUCXlDa0P--qhI9TR3EraiAZb9re-GgdXtQC3o'
+            'Authorization': `Bearer ${JSON.parse(req.cookies['SCSU_Workload_Token']).access_token}`
         },
         body: JSON.stringify({
             username: id,
@@ -35,7 +37,8 @@ app.post('/register', async (req, res) => {
     })
     .then(async response => {
         const resBody = JSON.parse(await response.text())
-        res.send(resBody)
+        console.log(resBody)
+        res.json(resBody)
     })
     .catch(err => {
         console.log(err)
