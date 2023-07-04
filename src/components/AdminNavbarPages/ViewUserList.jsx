@@ -113,7 +113,7 @@ function Table(props) {
                 <div className="table-header">
                     <label>สถานะ</label>
                     <input 
-                    value={filter.type} 
+                    value={filter.is_active} 
                     onClick={e => {
                         e.stopPropagation()
                     }}
