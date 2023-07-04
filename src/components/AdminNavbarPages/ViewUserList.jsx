@@ -358,7 +358,7 @@ function ViewUserList() {
                             user.id.toString().includes(filter.id) &&
                             checkUserDepartment(user).includes(filter.department) &&
                             checkUserType(user).includes(filter.type) &&
-                            user.is_active.includes(filter.is_active)
+                            (user.is_active ? 'active' : 'inactive').includes(filter.is_active)
                 })
                 }
                 />
