@@ -140,9 +140,9 @@ function Table(props) {
                             name: row.name,
                             oldDepartmentId: row.groups.length === 0 ? -1 : row.groups[0].id,
                             departmentId: row.groups.length === 0 ? -1 : row.groups[0].id,
-                            type: checkUserType(row)
+                            type: checkUserType(row),
+                            is_active: row.is_active
                         })}>Edit</button>
-                        <button style={{marginLeft: '5px'}}>Delete</button>
                     </div>
                 ) 
         }
@@ -197,7 +197,7 @@ function ViewUserList() {
             </div>
         )
 
-    const createPopup = () => {
+    const CreatePopup = () => {
         const createUser = async () => {
             const res = await callApi(`/register`, 'POST', newUserData, null)
             if(res.status === 'success') {
@@ -324,6 +324,16 @@ function ViewUserList() {
                             <option value='แอดมิน'>แอดมิน</option>
                         </select>
                     </div>
+                    <div className="popup-input-container">
+                        <label>สถานะ</label>
+                        <select value={userPopupData.is_active} onChange={e => setUserPopupData(prev => ({
+                            ...prev,
+                            is_active: e.target.value
+                        }))}>
+                            <option value='active'>active</option>
+                            <option value='in_active'>inactive</option>
+                        </select>
+                    </div>
                     <button onClick={submitEdit} className="popup-button-edit">แก้ไข</button>
                 </div>
             </div>
@@ -334,9 +344,8 @@ function ViewUserList() {
         <div className="page-content-container">
             <div className="button-bar">
                 <button onClick={e => {
-                    const semesterTitle = prompt('ระบุชื่อเทอม')
-                    createSemester(semesterTitle)
-                }}>สร้างเทอมใหม่</button>
+                    setNewUserData({})
+                }}>เพิ่มผู้ใช้ใหม่</button>
             </div>
             <div className="user-list-table-container">
                 <Table
@@ -353,7 +362,7 @@ function ViewUserList() {
                 }
                 />
                 {userPopupData !== null && EditPopup()}
-                {newUserData !== null && createUserPopup()}
+                {newUserData !== null && CreatePopup()}
             </div>
         </div>
     )
