@@ -37,7 +37,6 @@ function Home() {
                 navigate('./user/form')
         })
     })
-    return 'hey'
 }
 
 export default Home

@@ -1,19 +1,53 @@
 const express = require('express')
+const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
-const path = require('path')
+const hashPassword = require('./services/hashPassword')
 const queryString = require('querystring')
+const fetch = require('node-fetch')
+const Cookies = require('universal-cookie')
 const https = require('follow-redirects').https
 const app = express()
 
-const PORT = 3000
+dotenv.config()
 
-const CLIENT_ID = '1d5d0546-0f74-400a-9bad-22182c72de3d'
-const CLIENT_SECRET = 'KrKCyu9W5oC90kgZEx-KbUQfr4lFffj0UXxE8ACtB1TwRQzqotq-g088X5vjlCFj0aVppE-mkAwlT78yxHtHAA'
+const PORT = 3000
 
 app.use(express.static('build'))
 app.use(cookieParser())
 
+app.get('/register', async (req, res) => {
+    const {id, name} = req.query
+    const password = hashPassword(id)
+    const {SERVER_URL} = process.env
+    fetch(`${SERVER_URL}/user/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNfYWRtaW4iOnRydWUsImlzX2FjdGl2ZSI6dHJ1ZSwiZ3JvdXBzIjpbXSwiZXhwIjoxNjg4NDYxODgwfQ.xDt1Yq1pmwt1akqY9ntaxYtRcq3FvQQHQFRR47PUnAI'
+        },
+        body: JSON.stringify({
+            username: id,
+            password: password,
+            name: name
+        })
+    })
+    .then(async response => {
+        const resBody = await response.text()
+        console.log(resBody)
+        if(resBody.status === 'success') 
+            res.send("success")
+        else
+            throw resBody.message
+    })
+    .catch(err => {
+        console.log(err)
+        res.send('failed')
+    })
+})
+
 app.get('/login', (req, res) => {
+    console.log(process.env)
+    const {CLIENT_ID, CLIENT_SECRET} = process.env
     res.redirect(
         `https://nidp.su.ac.th/nidp/oauth/nam/authz?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&response_type=code&grant_type=authorization_code&scope=suappportal&redirect_uri=http://workload.sc.su.ac.th/su-auth`
     )
@@ -21,6 +55,7 @@ app.get('/login', (req, res) => {
 
 app.get('/su-auth', async(req, res) => {
     const { code } = req.query
+    const {CLIENT_ID, CLIENT_SECRET} = process.env
     const data = queryString.stringify({
         'code': code,
         'client_id': CLIENT_ID,
@@ -63,7 +98,6 @@ app.get('/su-auth', async(req, res) => {
 })
 
 app.get('/su-auth-get-info', (req, res) => {
-    console.log(req.cookies)
     const access_token = req.cookies['su-access-token'];
     options = {
         'method': 'GET',
@@ -80,9 +114,32 @@ app.get('/su-auth-get-info', (req, res) => {
             chunks.push(chunk);
         });
 
-        result.on("end", function (chunk) {
+        result.on("end", async function (chunk) {
+            const cookies = new Cookies(req.headers.cookie)
             var body = Buffer.concat(chunks).toString('utf8');
-            console.log(body)
+            body = JSON.parse(body)
+            //console.log(body)
+            const {SERVER_URL, REACT_APP_COOKIE_NAME_TOKEN} = process.env
+            const response = await fetch(`${SERVER_URL}/auth/basic_login/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: body.uid,
+                    password: hashPassword(body.uid)
+                })
+            })
+            
+            const resBody = JSON.parse(await response.text())
+            if(resBody.status === 'success') {
+                cookies.set(REACT_APP_COOKIE_NAME_TOKEN, resBody.data)
+                console.log(cookies.get(REACT_APP_COOKIE_NAME_TOKEN))
+                //res.cookie(REACT_APP_COOKIE_NAME_TOKEN, JSON.stringify(resBody.data))
+                res.redirect('/#/')
+            }
+            if(resBody.status === 'failed')
+                res.send("<script>alert('คุณไม่มีสิทธิ์เข้าถึงเว็บไซต์')</script>")
         });
 
         result.on("error", function (error) {
