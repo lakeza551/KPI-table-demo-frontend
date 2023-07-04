@@ -127,7 +127,7 @@ function Table(props) {
                     }}placeholder="ค้นหาจาก สถานะ" className="table-filter" type="text" />
                 </div>
             ),
-            selector: (row, index) => row.is_active ? 'active' : 'inactive',
+            selector: (row, index) => row === 'no data' ?  '' : row.is_active ? 'active' : 'inactive',
             sortable: true,
             grow: 1
         },
