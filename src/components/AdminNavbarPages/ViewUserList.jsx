@@ -342,11 +342,11 @@ function ViewUserList() {
 
     return (
         <div className="page-content-container">
-            <div className="button-bar">
+            {/* <div className="button-bar">
                 <button onClick={e => {
                     setNewUserData({})
                 }}>เพิ่มผู้ใช้ใหม่</button>
-            </div>
+            </div> */}
             <div className="user-list-table-container">
                 <Table
                 setFilter={setFilter}
