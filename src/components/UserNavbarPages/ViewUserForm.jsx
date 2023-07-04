@@ -127,7 +127,7 @@ function ViewUserForm() {
         setIsLoading(true)
         const wrapper = async () => {
             fetchSemesterList()
-            if (userInfo.groups[0].is_staff)
+            if (userInfo.groups.length > 0 && userInfo.groups[0].is_staff)
                 fetchUserList()
         }
         wrapper().finally(() => {
@@ -188,7 +188,7 @@ function ViewUserForm() {
                                 label: user.name
                             }
                         })}
-                        isDisabled={!userInfo.groups[0].is_staff}
+                        isDisabled={userInfo.groups.length > 0 && !userInfo.groups[0].is_staff}
                     ></Select>
                 </div>
             </div>
