@@ -8,6 +8,7 @@ function Home() {
     const cookies = new Cookies()
     //cookies.remove(process.env.REACT_APP_COOKIE_NAME_TOKEN)
     const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
+    console.log(workloadCookie)
 
     const getUserInfo = async () => {
         try {

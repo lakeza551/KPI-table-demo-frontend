@@ -115,7 +115,7 @@ app.get('/su-auth-get-info', (req, res) => {
         });
 
         result.on("end", async function (chunk) {
-            const cookies = new Cookies(req.headers.cookie)
+            const cookies = new Cookies(res.cookie)
             var body = Buffer.concat(chunks).toString('utf8');
             body = JSON.parse(body)
             //console.log(body)
@@ -133,9 +133,10 @@ app.get('/su-auth-get-info', (req, res) => {
             
             const resBody = JSON.parse(await response.text())
             if(resBody.status === 'success') {
-                cookies.set(REACT_APP_COOKIE_NAME_TOKEN, resBody.data)
-                console.log(cookies.get(REACT_APP_COOKIE_NAME_TOKEN))
-                //res.cookie(REACT_APP_COOKIE_NAME_TOKEN, JSON.stringify(resBody.data))
+                cookies.set(REACT_APP_COOKIE_NAME_TOKEN, resBody.data, {
+                    httpOnly: false
+                })
+                res.cookie(REACT_APP_COOKIE_NAME_TOKEN, JSON.stringify(resBody.data))
                 res.redirect('/#/')
             }
             if(resBody.status === 'failed')
