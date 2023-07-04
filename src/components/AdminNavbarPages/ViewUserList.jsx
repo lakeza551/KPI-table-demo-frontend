@@ -109,6 +109,29 @@ function Table(props) {
             grow: 1
         },
         {
+            name: (
+                <div className="table-header">
+                    <label>สถานะ</label>
+                    <input 
+                    value={filter.type} 
+                    onClick={e => {
+                        e.stopPropagation()
+                    }}
+                    onChange={e => {
+                        setFilter(prev => {
+                            return {
+                                ...prev,
+                                type: e.target.value
+                            }
+                        })
+                    }}placeholder="ค้นหาจาก สถานะ" className="table-filter" type="text" />
+                </div>
+            ),
+            selector: (row, index) => row,
+            sortable: true,
+            grow: 1
+        },
+        {
             name: "",
             cell: (row, index) => row === 'no data' ? '' : (
                     <div className="user-menu">
@@ -140,7 +163,6 @@ function ViewUserList() {
     const navigate = useNavigate()
 
     const [users, setUsers] = useState(null)
-    const [filteredUsers, setFilteredUsers] = useState(null)
     const [filter, setFilter] = useState({
         id: '',
         name: '',
@@ -150,6 +172,7 @@ function ViewUserList() {
     const [departmentList, setDepartmentList] = useState(null)
 
     const [userPopupData, setUserPopupData] = useState(null)
+    const [newUserData, setNewUserData] = useState(null)
 
     const fetchUsers = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/user/`, 'GET', null)
@@ -173,6 +196,48 @@ function ViewUserList() {
                 <BeatLoader size={40} color="rgb(0, 87, 181)" />
             </div>
         )
+
+    const createPopup = () => {
+        const createUser = async () => {
+            const res = await callApi(`/register`, 'POST', newUserData, null)
+            if(res.status === 'success') {
+                alert('เพิ่มผู้ใช้ใหม่สำเร็จ')
+                setNewUserData(null)
+                fetchUsers()
+            }
+            else
+                alert('เพิ่มผู้ใช้ใหม่ล้มเหลว')
+        }
+
+        return (
+            <div className="backdrop">
+                <div className="popup">
+                    <button className="popup-close">
+                        <GrFormClose onClick={() => setNewUserData(null)} size={30} color='rgb(240, 240, 240)'/>
+                    </button>
+                    <div className="popup-input-container">
+                        <label>ID</label>
+                        <input type="text" value={newUserData.id} onChange={e => setNewUserData(prev => (
+                            {
+                                ...prev,
+                                id: e.target.value,
+                            }
+                        ))}/>
+                    </div>
+                    <div className="popup-input-container">
+                        <label>ชื่อ - สกุล</label>
+                        <input type="text" value={newUserData.name} onChange={e => setNewUserData(prev => (
+                            {
+                                ...prev,
+                                name: e.target.value,
+                            }
+                        ))}/>
+                    </div>
+                    <button onClick={createUser} className="popup-button-edit">เพิ่มผู้ใช้</button>
+                </div>
+            </div>
+        )
+    }
 
     const EditPopup = () => {
 
@@ -267,6 +332,12 @@ function ViewUserList() {
 
     return (
         <div className="page-content-container">
+            <div className="button-bar">
+                <button onClick={e => {
+                    const semesterTitle = prompt('ระบุชื่อเทอม')
+                    createSemester(semesterTitle)
+                }}>สร้างเทอมใหม่</button>
+            </div>
             <div className="user-list-table-container">
                 <Table
                 setFilter={setFilter}
@@ -282,6 +353,7 @@ function ViewUserList() {
                 }
                 />
                 {userPopupData !== null && EditPopup()}
+                {newUserData !== null && createUserPopup()}
             </div>
         </div>
     )

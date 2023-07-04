@@ -6,6 +6,7 @@ const queryString = require('querystring')
 const fetch = require('node-fetch')
 const Cookies = require('universal-cookie')
 const https = require('follow-redirects').https
+const bodyParser = require('body-parser')
 const app = express()
 
 dotenv.config()
@@ -13,17 +14,18 @@ dotenv.config()
 const PORT = 3000
 
 app.use(express.static('build'))
+app.use(bodyParser.json())
 app.use(cookieParser())
 
-app.get('/register', async (req, res) => {
-    const {id, name} = req.query
+app.post('/register', async (req, res) => {
+    const {id, name} = req.body
     const password = hashPassword(id)
     const {SERVER_URL} = process.env
     fetch(`${SERVER_URL}/user/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNfYWRtaW4iOnRydWUsImlzX2FjdGl2ZSI6dHJ1ZSwiZ3JvdXBzIjpbXSwiZXhwIjoxNjg4NDYxODgwfQ.xDt1Yq1pmwt1akqY9ntaxYtRcq3FvQQHQFRR47PUnAI'
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNfYWRtaW4iOnRydWUsImlzX2FjdGl2ZSI6dHJ1ZSwiZ3JvdXBzIjpbXSwiZXhwIjoxNjg4NDY1ODA0fQ.Y9JRmgUCXlDa0P--qhI9TR3EraiAZb9re-GgdXtQC3o'
         },
         body: JSON.stringify({
             username: id,
@@ -32,12 +34,8 @@ app.get('/register', async (req, res) => {
         })
     })
     .then(async response => {
-        const resBody = await response.text()
-        console.log(resBody)
-        if(resBody.status === 'success') 
-            res.send("success")
-        else
-            throw resBody.message
+        const resBody = JSON.parse(await response.text())
+        res.send(resBody)
     })
     .catch(err => {
         console.log(err)
