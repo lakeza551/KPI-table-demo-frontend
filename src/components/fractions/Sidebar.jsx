@@ -44,7 +44,7 @@ function Sidebar(props) {
             style={selectedPage === 'form' ? {backgroundColor: 'white'} : undefined} 
             to='./form'><HiClipboardDocumentList size={30} style={{marginRight: '10px'}}/>Workload Form</Link>}
 
-            {!userTokenObj.userInfo.is_admin && userTokenObj.userInfo.groups[0].is_staff && 
+            {!userTokenObj.userInfo.is_admin && userTokenObj.userInfo.groups.length > 0 && userTokenObj.userInfo.groups[0].is_staff && 
             <Link 
             style={selectedPage === 'dashboard' ? {backgroundColor: 'white'} : undefined} 
             to='./dashboard'><MdSpaceDashboard size={30} style={{marginRight: '10px'}}/>สรุป</Link>}

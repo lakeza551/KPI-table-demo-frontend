@@ -159,9 +159,14 @@ function ViewUserForm() {
                     <Select
                         className="custom-react-select"
                         placeholder="-- โปรดระบุ --"
-                        defaultValue={{
+                        defaultValue={
+                        userInfo.groups.length > 0 ?
+                        {
                             value: userInfo.groups[0].id,
                             label: userInfo.groups[0].title
+                        } : {
+                            value: '',
+                            label: ''
                         }}
                         isDisabled></Select>
                 </div>
