@@ -3,7 +3,7 @@ import FillUserForm from "../ViewUserFormComponents/FillUserForm"
 import ViewSummaryForm from "../ViewUserFormComponents/ViewSummaryForm"
 import callApi from "../../utils/callApi"
 import Select from "react-select"
-import { Link, Route, useSearchParams, Routes } from "react-router-dom"
+import { Link, Route, useSearchParams, Routes, useLocation } from "react-router-dom"
 import Cookies from "universal-cookie"
 
 function ViewUserForm(props) {
@@ -105,10 +105,11 @@ function ViewUserForm(props) {
     }
 
     const FormSelectButtonBar = () => {
+        const location = useLocation()
         return (
             <div className="form-select">
-                <Link to='./user' style={window.location.pathname.endsWith('user') ? formActiveStyle : undefined} >ฟอร์ม Work load</Link>
-                <Link to='./summary' style={window.location.pathname.endsWith('summary') ? formActiveStyle : undefined} >ฟอร์มสรุป</Link>
+                <Link to='./user' style={location.pathname.endsWith('user') ? formActiveStyle : undefined} >ฟอร์ม Work load</Link>
+                <Link to='./summary' style={location.pathname.endsWith('summary') ? formActiveStyle : undefined} >ฟอร์มสรุป</Link>
             </div>
         )
     }

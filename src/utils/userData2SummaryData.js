@@ -83,10 +83,10 @@ const evalHasValue = (exp, userData, summary) => {
         //vertical
         if (startCol === endCol) {
             var sum = 0
-            console.log(summary)
+            //console.log(summary)
             for (var r = startRow; r <= endRow; ++r) {
                 const val = summary[`#b${table}_${startCol}${r}`]
-                console.log(val)
+                //console.log(val)
                 if(val === '' || val === null || val === undefined)
                     continue
                 sum += 1
@@ -154,10 +154,10 @@ const evalCount = (exp, userData, summary) => {
         //vertical
         if (startCol === endCol) {
             var sum = 0
-            console.log(summary)
+            //console.log(summary)
             for (var r = startRow; r <= endRow; ++r) {
                 const val = summary[`#b${table}_${startCol}${r}`]
-                console.log(val)
+                //console.log(val)
                 if(val === '' || val === null || val === undefined)
                     continue
                 sum += 1

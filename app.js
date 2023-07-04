@@ -18,11 +18,11 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 app.post('/register', async (req, res) => {
-    console.log(req.body)
+    //console.log(req.body)
     const {id, name} = req.body
     const password = hashPassword(id)
     const {SERVER_URL} = process.env
-    console.log(JSON.parse(req.cookies['SCSU_Workload_Token']))
+    //console.log(JSON.parse(req.cookies['SCSU_Workload_Token']))
     fetch(`${SERVER_URL}/user/`, {
         method: 'POST',
         headers: {
@@ -37,17 +37,17 @@ app.post('/register', async (req, res) => {
     })
     .then(async response => {
         const resBody = JSON.parse(await response.text())
-        console.log(resBody)
+        //console.log(resBody)
         res.json(resBody)
     })
     .catch(err => {
-        console.log(err)
+        //console.log(err)
         res.send('failed')
     })
 })
 
 app.get('/login', (req, res) => {
-    console.log(process.env)
+    //console.log(process.env)
     const {CLIENT_ID, CLIENT_SECRET} = process.env
     res.redirect(
         `https://nidp.su.ac.th/nidp/oauth/nam/authz?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&response_type=code&grant_type=authorization_code&scope=suappportal&redirect_uri=http://workload.sc.su.ac.th/su-auth`

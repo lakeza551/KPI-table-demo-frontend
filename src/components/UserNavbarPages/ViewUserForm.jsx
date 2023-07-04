@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Routes, Route, Link, useSearchParams, useNavigate } from "react-router-dom"
+import { Routes, Route, Link, useSearchParams, useNavigate, useLocation } from "react-router-dom"
 import { BeatLoader } from "react-spinners"
 import ViewSummaryForm from "../ViewUserFormComponents/ViewSummaryForm"
 import FillUserForm from "../ViewUserFormComponents/FillUserForm"
@@ -94,10 +94,11 @@ function ViewUserForm() {
             backgroundColor: 'rgb(0, 87, 181)',
             color: 'white'
         }
+        const location = useLocation()
         return (
             <div className="form-select">
-                <Link to='./fill' style={window.location.pathname.endsWith('fill') ? formActiveStyle : undefined} >ฟอร์ม Work load</Link>
-                <Link to='./summary' style={window.location.pathname.endsWith('summary') ? formActiveStyle : undefined} >ฟอร์มสรุป</Link>
+                <Link to='./fill' style={location.pathname.endsWith('fill') ? formActiveStyle : undefined} >ฟอร์ม Work load</Link>
+                <Link to='./summary' style={location.pathname.endsWith('summary') ? formActiveStyle : undefined} >ฟอร์มสรุป</Link>
             </div>
         )
     }

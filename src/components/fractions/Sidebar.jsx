@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import Cookies from "universal-cookie"
 import {FaUserCircle} from 'react-icons/fa'
 import {MdSpaceDashboard} from 'react-icons/md'
@@ -8,8 +8,9 @@ import {FaLayerGroup} from 'react-icons/fa'
 
 function Sidebar(props) {
     const cookies = new Cookies()
+    const location = useLocation()
     const userTokenObj = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
-    const selectedPage = window.location.pathname.split('/')[2]
+    const selectedPage = location.pathname.split('/')[2]
     if(userTokenObj === undefined)
         return <div></div>
     return (
