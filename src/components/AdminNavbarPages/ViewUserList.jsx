@@ -127,7 +127,7 @@ function Table(props) {
                     }}placeholder="ค้นหาจาก สถานะ" className="table-filter" type="text" />
                 </div>
             ),
-            selector: (row, index) => row.is_active,
+            selector: (row, index) => row.is_active ? 'active' : 'inactive',
             sortable: true,
             grow: 1
         },
@@ -177,6 +177,7 @@ function ViewUserList() {
     const fetchUsers = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/user/`, 'GET', null)
         const userList = (await res.json()).data
+        console.log(userList)
         setUsers(userList)
     }
     const fetchDepartment = async () => {
