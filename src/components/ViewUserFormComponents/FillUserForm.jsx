@@ -71,7 +71,7 @@ function FillUserForm(props) {
                                                 TableContent = (
                                                     <TextareaAutosize
                                                         onDurationChangeCapture={e => {
-                                                            console.log(e)
+                                                            //console.log(e)
                                                         }}
                                                         minRows={1}
                                                         disabled={disabled}
@@ -112,7 +112,7 @@ function FillUserForm(props) {
                                                 )
                                             }
                                             else if (inputType === 'file') {
-                                                console.log(formData[cell.key])
+                                                //console.log(formData[cell.key])
                                                 TableContent = (
                                                     <div>
                                                         <input disabled={disabled} type="file" onChange={e => {

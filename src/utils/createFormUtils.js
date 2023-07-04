@@ -252,7 +252,7 @@ export class CreateFormUtils {
         this.setForm(prev => {
             prev[this.selectedTable].columnWidth.splice(cIndex, 1)
             for(const row of prev[this.selectedTable].rows) {
-                console.log(row)
+                //console.log(row)
                 var cIndexTemp = cIndex
                 row.columns.splice(cIndex, 1)
             }

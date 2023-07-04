@@ -141,7 +141,7 @@ function Table(props) {
                             oldDepartmentId: row.groups.length === 0 ? -1 : row.groups[0].id,
                             departmentId: row.groups.length === 0 ? -1 : row.groups[0].id,
                             type: checkUserType(row),
-                            is_active: row.is_active
+                            is_active: (row.is_active ? 'active' : 'inactive')
                         })}>Edit</button>
                     </div>
                 ) 
@@ -178,7 +178,7 @@ function ViewUserList() {
     const fetchUsers = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/user/`, 'GET', null)
         const userList = (await res.json()).data
-        console.log(userList)
+        //console.log(userList)
         setUsers(userList)
     }
     const fetchDepartment = async () => {

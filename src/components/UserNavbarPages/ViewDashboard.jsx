@@ -49,7 +49,7 @@ function ViewDashboard(props) {
     }, [selectedSemester])
 
     
-    console.log(rawDataList)
+    //console.log(rawDataList)
     return (
         <div className="page-content-container">
             <Select

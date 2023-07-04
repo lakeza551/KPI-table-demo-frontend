@@ -6,7 +6,7 @@ function Navbar(props) {
     const navigate = useNavigate()
     const cookies = new Cookies()
     const {userInfo} = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
-    console.log(userInfo)
+    //console.log(userInfo)
     return (
         <div className="navbar">
             <label className="navbar-label" htmlFor="">

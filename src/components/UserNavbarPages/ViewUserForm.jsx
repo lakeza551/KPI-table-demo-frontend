@@ -75,7 +75,7 @@ function ViewUserForm() {
     }
 
     const initiateRawDataIfNotFound = async formTemplate => {
-        console.log(formTemplate)
+        //console.log(formTemplate)
         const rawData = {}
         for (const table of formTemplate) {
             for (const row of table.rows) {

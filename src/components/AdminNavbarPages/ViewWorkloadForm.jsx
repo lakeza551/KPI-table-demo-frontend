@@ -66,7 +66,7 @@ function ViewWorkloadForm(props) {
                                                 description: semester.description,
                                                 is_active: e.target.checked
                                             })
-                                            console.log(await res.json())
+                                            //console.log(await res.json())
                                             alert('แก้ไขสถานะสำเร็จ')
                                             navigate(0)
                                         } catch (error) {

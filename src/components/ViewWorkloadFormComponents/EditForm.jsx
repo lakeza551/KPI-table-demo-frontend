@@ -92,7 +92,7 @@ function EditForm(props) {
 
             reader.readAsText(jsonFile)
         } catch (error) {
-            console.log(error)
+            //console.log(error)
             alert('Import ฟอร์มล้มเหลว')
         }
         setShowImportFormMenu(false)
@@ -125,7 +125,7 @@ function EditForm(props) {
 
     const FormSelectButtonBar = () => {
         const location = useLocation()
-        console.log(location)
+        //console.log(location)
         return (
             <div className="form-select">
                 <Link
