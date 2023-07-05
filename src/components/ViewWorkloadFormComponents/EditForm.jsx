@@ -57,9 +57,21 @@ function EditForm(props) {
     const save = async () => {
         //user form
         try {
-            await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/form/`, 'PUT', userForm)
-            await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/summary/`, 'PUT', summaryForm)
-            await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/dashboard/`, 'PUT', dashboardForm)
+            var res, resJson
+            res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/form/`, 'PUT', userForm)
+            resJson = await res.json()
+            if(resJson.status === 'fail')
+                throw resJson.data
+            res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/summary/`, 'PUT', summaryForm)
+            resJson = await res.json()
+
+            if(resJson.status === 'fail')
+                throw resJson.data
+
+            res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${semesterId}/dashboard/`, 'PUT', dashboardForm)
+            resJson = await res.json()
+            if(resJson.status === 'fail')
+                throw resJson.data
             alert('บันทึกสำเร็จ')
         } catch (error) {
             alert('บันทึกล้มเหลว')
