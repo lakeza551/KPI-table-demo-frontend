@@ -9,6 +9,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./:/usr/web
+    env_file:
+      - .env
     ports:
       - 3002:3000
     networks:
