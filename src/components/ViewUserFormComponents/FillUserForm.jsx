@@ -70,9 +70,7 @@ function FillUserForm(props) {
                                                 const startText = cell.label === undefined ? '' : cell.label
                                                 TableContent = (
                                                     <TextareaAutosize
-                                                        onDurationChangeCapture={e => {
-                                                            //console.log(e)
-                                                        }}
+                                                        style={cell.textareaStyle}
                                                         minRows={1}
                                                         disabled={disabled}
                                                         value={formData[cell.key] === null || formData[cell.key] === undefined ? startText : startText + formData[cell.key]} onChange={e => {
