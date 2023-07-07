@@ -63,6 +63,7 @@ function FillUserForm(props) {
                                         if (cell.isMerged)
                                             return null
                                         var TableContent
+                                        var cellColor = 'transparent'
                                         //is input
                                         if (cell.type.startsWith('input')) {
                                             const inputType = cell.type.split('#')[1]
@@ -139,6 +140,7 @@ function FillUserForm(props) {
                                         }
                                         //is comment
                                         else {
+                                            cellColor = '#E0E0E0'
                                             TableContent = (
                                                 <TextareaAutosize
                                                     disabled={true}
@@ -153,7 +155,8 @@ function FillUserForm(props) {
                                                 style={
                                                     {
                                                         width: tableTemplate.columnWidth[cIndex],
-                                                        ...cell.cellStyle
+                                                        ...cell.cellStyle,
+                                                        backgroundColor: cellColor
                                                     }
                                                 }>
                                                 {TableContent}

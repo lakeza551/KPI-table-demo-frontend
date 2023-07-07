@@ -275,10 +275,13 @@ const evaluate = (exp, userData, summary) => {
 const createSummaryData = (formTemplate, userData) => {
     const summary = {}
     const queue = []
+    console.log(userData)
     for(const table of formTemplate) {
         for (const row of table.rows) {
             for (const cell of row.columns) {
-                if (cell.type === 'formula' && isEvaluatable(cell.value.substring(1), userData, summary)) {
+                if(userData === null)
+                    summary[cell.key] = 0
+                else if (cell.type === 'formula' && isEvaluatable(cell.value.substring(1), userData, summary)) {
                     summary[cell.key] = evaluate(cell.value.substring(1), userData, summary)
                 }
                 else if (cell.type === 'formula') {

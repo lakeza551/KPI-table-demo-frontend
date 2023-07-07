@@ -150,6 +150,7 @@ textarea {
   background-color: transparent;
   border: none;
   outline: none;
+  padding: 3px;
 }
 
 table {
