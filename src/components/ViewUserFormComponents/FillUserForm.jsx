@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import callApi from "../../utils/callApi"
 import Select from 'react-select'
 import TextareaAutosize from '@mui/base/TextareaAutosize';
@@ -31,7 +31,11 @@ function TableSelectBar(props) {
 
 function FillUserForm(props) {
     const { formTemplate, setFormTemplate, formData, setFormData, save, disabled } = props
+    const inputRef = useRef({})
     const [selectedTable, setSelectedTable] = useState(0)
+    const focusInput = key => {
+        inputRef.current[key].focus()
+    }
 
 
 
@@ -71,6 +75,7 @@ function FillUserForm(props) {
                                                 const startText = cell.label === undefined ? '' : cell.label
                                                 TableContent = (
                                                     <TextareaAutosize
+                                                        ref={element => inputRef.current[cell.key] = element}
                                                         style={cell.textareaStyle}
                                                         minRows={1}
                                                         disabled={disabled}
@@ -89,7 +94,12 @@ function FillUserForm(props) {
                                             }
                                             else if (inputType === 'number') {
                                                 TableContent = (
-                                                    <input onClick={e => e.stopPropagation()} disabled={disabled} type="number" value={formData[cell.key] === null || formData[cell.key] === undefined ? '' : formData[cell.key]} onChange={e => {
+                                                    <input
+                                                    ref={element => inputRef.current[cell.key] = element} 
+                                                    onClick={e => e.stopPropagation()} 
+                                                    disabled={disabled} 
+                                                    type="number" 
+                                                    value={formData[cell.key] === null || formData[cell.key] === undefined ? '' : formData[cell.key]} onChange={e => {
                                                         setFormData(prev => {
                                                             prev[cell.key] = e.target.value
                                                             return { ...prev }
@@ -100,7 +110,10 @@ function FillUserForm(props) {
                                             else if (inputType === 'checkbox') {
                                                 TableContent = (
                                                     <div>
-                                                        <input disabled={disabled} type="checkbox" checked={formData[cell.key] === null || formData[cell.key] === undefined ? false : formData[cell.key]} onChange={e => {
+                                                        <input 
+                                                        disabled={disabled} 
+                                                        type="checkbox" 
+                                                        checked={formData[cell.key] === null || formData[cell.key] === undefined ? false : formData[cell.key]} onChange={e => {
                                                             setFormData(prev => {
                                                                 prev[cell.key] = e.target.checked
                                                                 return { ...prev }
@@ -114,7 +127,9 @@ function FillUserForm(props) {
                                                 //console.log(formData[cell.key])
                                                 TableContent = (
                                                     <div>
-                                                        <input disabled={disabled} type="file" onChange={e => {
+                                                        <input 
+                                                        disabled={disabled} 
+                                                        type="file" onChange={e => {
                                                             setFormData(prev => {
                                                                 prev[cell.key] = e.target.files[0]
                                                                 return { ...prev }
@@ -152,6 +167,7 @@ function FillUserForm(props) {
                                             <td
                                                 colSpan={cell.colSpan}
                                                 rowSpan={cell.rowSpan}
+                                                onClick={() => focusInput(cell.key)}
                                                 style={
                                                     {
                                                         width: tableTemplate.columnWidth[cIndex],
