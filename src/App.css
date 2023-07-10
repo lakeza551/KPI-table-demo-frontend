@@ -194,7 +194,7 @@ td input[type=number] {
   padding: 3px 3px;
 }
 
-.toolbox * {
+.toolbox > div {
   width: 135px;
   padding: 10px 10px;
   font-size: 13px;
@@ -204,10 +204,18 @@ td input[type=number] {
   border-radius: 5px;
   background-color: rgb(250, 250, 250);
   text-align: center;
-  font-weight: bold;
 }
 
 .toolbox button {
+  width: 135px;
+  padding: 10px 10px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  border-style: none;
+  border-radius: 5px;
+  background-color: rgb(250, 250, 250);
+  text-align: center;
   font-weight: bold;
   text-align: center;
 }
@@ -231,6 +239,12 @@ td input[type=number] {
 
 .toolbox-sub:hover > .toolbox-sub-menu {
   display: flex;
+}
+
+.toolbox-color-indicator {
+  width: 100%;
+  height: 30px;
+  box-sizing: border-box;
 }
 
 .cell-key {
@@ -262,6 +276,7 @@ td input[type=number] {
   justify-content: center;
   height: 65vh;
   padding-bottom: 100px;
+  padding-top: 150px;
   overflow: scroll;
 }
 

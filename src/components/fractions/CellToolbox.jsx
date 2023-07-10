@@ -8,9 +8,34 @@ function CellToolbox(props) {
             <div className="toolbox-sub">
                 <div className="toolbox-sub-menu">
                 <button onClick={() => formUtils.addCellStyle(rIndex, cIndex, {
-                    backgroundColor: 'yellow'
+                    backgroundColor: '#E6E6FA'
                 })}>
-                    highlight
+                    <div className="toolbox-color-indicator" style={{backgroundColor: '#E6E6FA'}}></div>
+                </button>
+                <button onClick={() => formUtils.addCellStyle(rIndex, cIndex, {
+                    backgroundColor: '#FFB6C1'
+                })}>
+                    <div className="toolbox-color-indicator" style={{backgroundColor: '#FFB6C1'}}></div>
+                </button>
+                <button onClick={() => formUtils.addCellStyle(rIndex, cIndex, {
+                    backgroundColor: '#FFFACD'
+                })}>
+                    <div className="toolbox-color-indicator" style={{backgroundColor: '#FFFACD'}}></div>
+                </button>
+                <button onClick={() => formUtils.addCellStyle(rIndex, cIndex, {
+                    backgroundColor: '#CCFFCC'
+                })}>
+                    <div className="toolbox-color-indicator" style={{backgroundColor: '#CCFFCC'}}></div>
+                </button>
+                <button onClick={() => formUtils.addCellStyle(rIndex, cIndex, {
+                    backgroundColor: '#FFC0CB'
+                })}>
+                    <div className="toolbox-color-indicator" style={{backgroundColor: '#FFC0CB'}}></div>
+                </button>
+                <button onClick={() => formUtils.addCellStyle(rIndex, cIndex, {
+                    backgroundColor: '#F0F8FF'
+                })}>
+                    <div className="toolbox-color-indicator" style={{backgroundColor: '#F0F8FF'}}></div>
                 </button>
                 <button onClick={() => formUtils.addCellStyle(rIndex, cIndex, {
                     backgroundColor: 'transparent'
@@ -18,7 +43,7 @@ function CellToolbox(props) {
                     unhighlight
                 </button>
                 </div>
-                cell
+                highlight
             </div>
             <div className="toolbox-sub">
                 <div className="toolbox-sub-menu">
