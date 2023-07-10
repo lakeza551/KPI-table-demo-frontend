@@ -103,7 +103,10 @@ function EditUserForm(props) {
                     return [...prev]
                 })} value={table.name === undefined ? '' : table.name} type="text" />
             </div>
-            <div className="table-container">
+            <div className="table-container" style={{
+                overflow: 'auto',
+                paddingBottom: '400px'
+            }}>
                 <table>
                     <tbody>
                         {table.rows.map((row, rIndex) => {
