@@ -140,8 +140,10 @@ app.get('/su-auth-get-info', (req, res) => {
                 res.cookie(REACT_APP_COOKIE_NAME_TOKEN, JSON.stringify(resBody.data))
                 res.redirect('/#/')
             }
-            if(resBody.status === 'failed')
+            else {
                 res.send("<script>alert('คุณไม่มีสิทธิ์เข้าถึงเว็บไซต์')</script>")
+                res.redirect('/')
+            }
         });
 
         result.on("error", function (error) {
