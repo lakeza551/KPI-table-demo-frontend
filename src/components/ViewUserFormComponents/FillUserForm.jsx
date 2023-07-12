@@ -95,6 +95,7 @@ function FillUserForm(props) {
                                             else if (inputType === 'number') {
                                                 TableContent = (
                                                     <input
+                                                    style={cell.textareaStyle}
                                                     ref={element => inputRef.current[cell.key] = element} 
                                                     onClick={e => e.stopPropagation()} 
                                                     disabled={disabled} 
@@ -109,7 +110,7 @@ function FillUserForm(props) {
                                             }
                                             else if (inputType === 'checkbox') {
                                                 TableContent = (
-                                                    <div>
+                                                    <div style={cell.textareaStyle}>
                                                         <input 
                                                         disabled={disabled} 
                                                         type="checkbox" 
