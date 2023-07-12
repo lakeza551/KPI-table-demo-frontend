@@ -34,7 +34,7 @@ function FillUserForm(props) {
     const inputRef = useRef({})
     const [selectedTable, setSelectedTable] = useState(0)
     const focusInput = key => {
-        inputRef.current[key].focus()
+        inputRef.current[key] && inputRef.current[key].focus()
     }
 
 
@@ -135,7 +135,7 @@ function FillUserForm(props) {
                                                                 return { ...prev }
                                                             })
                                                         }} />
-                                                        <label
+                                                        {formData[cell.key] !== null && <label
                                                             onClick={async e => {
                                                                 const res = await callApi(`${process.env.REACT_APP_SERVER_URL}${formData[cell.key].filepath}`, 'GET')
                                                                 const file = await res.blob()
@@ -148,7 +148,7 @@ function FillUserForm(props) {
                                                                 fontWeight: 'bold',
                                                                 margin: '5px',
                                                                 cursor: 'pointer'
-                                                            }}>{formData[cell.key].filename}</label>
+                                                            }}>{formData[cell.key].filename}</label>}
                                                     </div>
                                                 )
                                             }

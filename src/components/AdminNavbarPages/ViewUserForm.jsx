@@ -124,6 +124,7 @@ function ViewUserForm(props) {
                 const cookies = new Cookies()
                 const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
                 data.append('file', file)
+                console.log(file)
                 //console.log(data)
                 const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`, 'POST', data, true)
                 // const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`, {
@@ -134,7 +135,7 @@ function ViewUserForm(props) {
                 //     body: data
                 // })
                 const resData = await res.json()
-                //console.log(resData)
+                console.log(resData)
                 if(resData.status === 'error' || resData.status === 'fail')
                     throw resData.data
                 setUserRawData(prev => {
@@ -153,7 +154,7 @@ function ViewUserForm(props) {
                 throw resData.data
         } catch (error) {
             //console.log(error)
-            alert('บันทึกข้อมูลล้มเหลว')
+            alert('บันทึกข้อมูลล้มเหลว\n' + error)
         }
     }
 
