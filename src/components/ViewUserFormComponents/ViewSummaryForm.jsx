@@ -16,6 +16,7 @@ function TableSelectBar(props) {
                 value: 0
             }}
             onChange={selected => {
+                console.log(selected)
                 setSelectedTable(selected.value)
             }}
             options={form.map((table, index) => {
@@ -42,7 +43,7 @@ function ViewSummaryForm(props) {
 
     return (
         <div className='content-container'>
-            <TableSelectBar form={formTemplate}/>
+            <TableSelectBar form={formTemplate} setSelectedTable={setSelectedTable}/>
             <div className="table-container">
                 <table>
                     <tbody>
