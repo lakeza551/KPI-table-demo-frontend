@@ -136,7 +136,7 @@ function FillUserForm(props) {
                                                                 return { ...prev }
                                                             })
                                                         }} />
-                                                        {formData[cell.key] !== null && <label
+                                                        {(formData[cell.key] !== null || formData[cell.key] !== undefined) && <label
                                                             onClick={async e => {
                                                                 const res = await callApi(`${process.env.REACT_APP_SERVER_URL}${formData[cell.key].filepath}`, 'GET')
                                                                 const file = await res.blob()
