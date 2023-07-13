@@ -12,7 +12,7 @@ function TableSelectBar(props) {
                 className="custom-react-select"
                 placeholder="-- โปรดระบุ --"
                 defaultValue={{
-                    label: `ตารางที่ 1 ${form[0].name}`,
+                    label: `ตารางที่ 1   ${form[0].name}`,
                     value: 0
                 }}
                 onChange={selected => {
@@ -20,7 +20,7 @@ function TableSelectBar(props) {
                 }}
                 options={form.map((table, index) => {
                     return {
-                        label: `ตารางที่ ${index + 1} ${table.name}`,
+                        label: `ตารางที่   ${index + 1} ${table.name}`,
                         value: index
                     }
                 })}
@@ -127,7 +127,8 @@ function FillUserForm(props) {
                                             else if (inputType === 'file') {
                                                 //console.log(formData[cell.key])
                                                 TableContent = (
-                                                    <div>
+                                                    <div style={{margin: '5px'}}>
+                                                        <label style={{marginRight: '5px', fontWeight:'bold'}}>{cell.label ? cell.label : ''}</label>
                                                         <input 
                                                         disabled={disabled} 
                                                         type="file" onChange={e => {

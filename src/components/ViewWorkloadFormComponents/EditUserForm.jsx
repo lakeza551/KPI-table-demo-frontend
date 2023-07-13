@@ -13,7 +13,7 @@ function TableSelectBar(props) {
             className="custom-react-select"
             placeholder="-- โปรดระบุ --"
             value={{
-                label: `ตารางที่ ${selectedTable + 1} ${form[selectedTable].name === undefined ? '' : form[selectedTable].name}`,
+                label: `ตารางที่ ${selectedTable + 1}   ${form[selectedTable].name === undefined ? '' : form[selectedTable].name}`,
                 value: selectedTable
             }}
             onChange={selected => {
@@ -21,7 +21,7 @@ function TableSelectBar(props) {
             }}
             options={form.map((table, index) => {
                 return {
-                    label: `ตารางที่ ${index + 1} ${table.name === undefined ? '' : table.name}`,
+                    label: `ตารางที่ ${index + 1}   ${table.name === undefined ? '' : table.name}`,
                     value: index
                 }
             })}
