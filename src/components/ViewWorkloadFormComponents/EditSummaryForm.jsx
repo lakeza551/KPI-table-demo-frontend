@@ -92,7 +92,11 @@ function EditSummaryForm(props) {
                     return [...prev]
                 })} value={table.name === undefined ? '' : table.name} type="text" />
             </div>
-            <div className="table-container">
+            <div 
+            className="table-container" style={{
+                paddingTop: '150px',
+                paddingBottom: '400px'
+            }}>
                 <table>
                     <tbody>
                         {table.rows.map((row, rIndex) => {
