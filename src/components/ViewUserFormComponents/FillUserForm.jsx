@@ -119,7 +119,12 @@ function FillUserForm(props) {
                                             }
                                             else if (inputType === 'checkbox') {
                                                 TableContent = (
-                                                    <div style={cell.textareaStyle}>
+                                                    <div style={{
+                                                        margin: '10px',
+                                                        display: 'flex',
+                                                        justifyContent: cell.textareaStyle ? cell.textareaStyle.textAlign : 'center',
+                                                        alignItems: 'center'
+                                                    }}>
                                                         <input 
                                                         disabled={disabled} 
                                                         type="checkbox" 
@@ -129,7 +134,10 @@ function FillUserForm(props) {
                                                                 return { ...prev }
                                                             })
                                                         }} />
-                                                        <label style={{ marginLeft: '10px' }}>{cell.label}</label>
+                                                        <label style={{ 
+                                                            marginLeft: '10px',
+                                                            fontSize: '18px'
+                                                        }}>{cell.label}</label>
                                                     </div>
                                                 )
                                             }

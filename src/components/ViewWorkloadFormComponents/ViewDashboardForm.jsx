@@ -186,8 +186,9 @@ function ViewDashboardForm(props) {
                             <tr>
                                 {row.columns.map((cell, cIndex) => {
                                     return <td style={{
+                                        padding: '3px 5px',
                                         width: cIndex === 0 ? 'fit-content' : table.columnWidth[cIndex - 1],
-                                        textAlign: 'center'
+                                        textAlign: rIndex === 0 || rIndex >= table.rows.length - 2 || cIndex > 0 ? 'center' : 'left'
                                     }}>{cell.value}</td>
                                 })}
                             </tr>

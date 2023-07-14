@@ -277,7 +277,7 @@ const evaluate = (exp, userData, summary) => {
 const createSummaryData = (formTemplate, userData) => {
     const summary = {}
     const queue = []
-    console.log(userData)
+    //console.log(userData)
     for(const table of formTemplate) {
         for (const row of table.rows) {
             for (const cell of row.columns) {
@@ -297,7 +297,7 @@ const createSummaryData = (formTemplate, userData) => {
             summary[cell.key] = evaluate(cell.value.substring(1), userData, summary)
         }
     }
-    console.log(summary)
+    //console.log(summary)
     return summary
 }
 

@@ -105,7 +105,8 @@ function EditUserForm(props) {
             </div>
             <div className="table-container" style={{
                 overflow: 'auto',
-                paddingBottom: '400px'
+                paddingBottom: '400px',
+                paddingTop: '100px'
             }}>
                 <table>
                     <tbody>
@@ -157,16 +158,17 @@ function EditUserForm(props) {
                                                     value={cell.value === null ? '' : cell.value}
                                                     onClick={() => setShowToolbox(null)}
                                                     onKeyDown={e => {
-                                                        e.preventDefault()
-                                                        if(e.ctrlKey && e.key === 'm')
+                                                        if(e.ctrlKey)
+                                                            e.preventDefault()
+                                                        if(e.ctrlKey && (e.key.toLocaleLowerCase() === 'm'))
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'center'
                                                             })
-                                                        if(e.ctrlKey && e.key === 'l')
+                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 'l')
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'left'
                                                             })
-                                                        if(e.ctrlKey && e.key === 'r')
+                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 'r')
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'right'
                                                             })
