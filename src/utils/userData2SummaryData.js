@@ -1,4 +1,4 @@
-import { evaluate as mathEval }  from "mathjs";
+import { isNumber, evaluate as mathEval }  from "mathjs";
 
 const alphabetList = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
@@ -263,6 +263,8 @@ const evaluate = (exp, userData, summary) => {
         }
     }
     //console.log(mathEval(terms.join('')))
+    if(terms.length === 1)
+        return terms[0]
     try {
         const val = mathEval(terms.join(''))
         return Number.isInteger(val) ? val : val.toFixed(2)
@@ -295,6 +297,7 @@ const createSummaryData = (formTemplate, userData) => {
             summary[cell.key] = evaluate(cell.value.substring(1), userData, summary)
         }
     }
+    console.log(summary)
     return summary
 }
 

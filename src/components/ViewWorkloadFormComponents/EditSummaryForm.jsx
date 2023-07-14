@@ -142,6 +142,21 @@ function EditSummaryForm(props) {
                                                         cell.value = e.target.value
                                                         return [...prev]
                                                     })
+                                                }}
+                                                onKeyDown={e => {
+                                                    e.preventDefault()
+                                                    if(e.ctrlKey && e.key === 'm')
+                                                        formUtils.addTextareaStyle(rIndex, cIndex, {
+                                                            textAlign: 'center'
+                                                        })
+                                                    if(e.ctrlKey && e.key === 'l')
+                                                        formUtils.addTextareaStyle(rIndex, cIndex, {
+                                                            textAlign: 'left'
+                                                        })
+                                                    if(e.ctrlKey && e.key === 'r')
+                                                        formUtils.addTextareaStyle(rIndex, cIndex, {
+                                                            textAlign: 'right'
+                                                        })
                                                 }}>
                                                 </TextareaAutosize>
                                                 <label className="cell-key">{cell.key}</label>

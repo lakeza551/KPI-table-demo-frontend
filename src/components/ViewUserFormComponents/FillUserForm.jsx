@@ -5,15 +5,19 @@ import TextareaAutosize from '@mui/base/TextareaAutosize';
 
 
 function TableSelectBar(props) {
-    const { setSelectedTable, form } = props
+    const { selectedTable, setSelectedTable, form } = props
     return (
         <div className="table-select-bar">
             <Select
                 className="custom-react-select"
                 placeholder="-- โปรดระบุ --"
-                defaultValue={{
-                    label: `ตารางที่ 1   ${form[0].name}`,
-                    value: 0
+                // defaultValue={{
+                //     label: `ตารางที่ 1   ${form[selectedTable].name}`,
+                //     value: selectedTable
+                // }}
+                value={{
+                    label: `ตารางที่ ${selectedTable + 1}   ${form[selectedTable].name}`,
+                    value: selectedTable
                 }}
                 onChange={selected => {
                     setSelectedTable(selected.value)
@@ -30,7 +34,7 @@ function TableSelectBar(props) {
 }
 
 function FillUserForm(props) {
-    const { formTemplate, setFormTemplate, formData, setFormData, save, disabled } = props
+    const { formTemplate, setFormTemplate, formData, setFormData, save, disabled, semesterId } = props
     const inputRef = useRef({})
     const [selectedTable, setSelectedTable] = useState(0)
     const focusInput = key => {
@@ -38,6 +42,9 @@ function FillUserForm(props) {
     }
 
 
+    useEffect(() => {
+        setSelectedTable(0)
+    }, [semesterId])
 
     if (formTemplate === null)
         return <div></div>
@@ -56,7 +63,7 @@ function FillUserForm(props) {
             <div className="button-bar">
                 <button className="table-button" onClick={save}>Save</button>
             </div>
-            <TableSelectBar form={formTemplate} setSelectedTable={setSelectedTable} />
+            <TableSelectBar form={formTemplate} setSelectedTable={setSelectedTable} selectedTable={selectedTable}/>
             <div className="table-container">
                 <table>
                     <tbody>
@@ -79,7 +86,8 @@ function FillUserForm(props) {
                                                         style={cell.textareaStyle}
                                                         minRows={1}
                                                         disabled={disabled}
-                                                        value={formData[cell.key] === null || formData[cell.key] === undefined ? startText : startText + formData[cell.key]} onChange={e => {
+                                                        value={formData[cell.key] === null || formData[cell.key] === undefined ? startText : startText + formData[cell.key]} 
+                                                        onChange={e => {
                                                             setFormData(prev => {
                                                                 if (e.target.value.length < startText.length)
                                                                     e.target.value = startText
@@ -89,7 +97,8 @@ function FillUserForm(props) {
                                                                     prev[cell.key] = e.target.value.substring(startText.length)
                                                                 return { ...prev }
                                                             })
-                                                        }}></TextareaAutosize>
+                                                        }}
+                                                        ></TextareaAutosize>
                                                 )
                                             }
                                             else if (inputType === 'number') {

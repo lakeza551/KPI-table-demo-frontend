@@ -156,7 +156,21 @@ function EditUserForm(props) {
                                                     style={cell.textareaStyle}
                                                     value={cell.value === null ? '' : cell.value}
                                                     onClick={() => setShowToolbox(null)}
-                                                    
+                                                    onKeyDown={e => {
+                                                        e.preventDefault()
+                                                        if(e.ctrlKey && e.key === 'm')
+                                                            formUtils.addTextareaStyle(rIndex, cIndex, {
+                                                                textAlign: 'center'
+                                                            })
+                                                        if(e.ctrlKey && e.key === 'l')
+                                                            formUtils.addTextareaStyle(rIndex, cIndex, {
+                                                                textAlign: 'left'
+                                                            })
+                                                        if(e.ctrlKey && e.key === 'r')
+                                                            formUtils.addTextareaStyle(rIndex, cIndex, {
+                                                                textAlign: 'right'
+                                                            })
+                                                    }}
                                                     onChange={e => {
                                                         setForm(prev => {
                                                             cell.value = e.target.value

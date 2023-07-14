@@ -63,7 +63,11 @@ function ViewSummaryForm(props) {
                                                         ...cell.textareaStyle
                                                     }}
                                                 >
-                                                    <textarea disabled style={cell.textareaStyle} value={summaryData === null ? '' : summaryData[cell.key]}></textarea>
+                                                    <TextareaAutosize
+                                                    disabled 
+                                                    style={cell.textareaStyle} 
+                                                    value={summaryData === null ? '' : summaryData[cell.key] === null ? '' : summaryData[cell.key]}> 
+                                                    </TextareaAutosize>
                                                 </td>
                                             )
                                         else {
@@ -77,7 +81,13 @@ function ViewSummaryForm(props) {
                                                         ...cell.cellStyle
                                                     }}
                                                 >
-                                                    <TextareaAutosize disabled style={cell.textareaStyle} value={cell.value === null ? '' : cell.value}></TextareaAutosize>
+                                                    <TextareaAutosize 
+                                                    disabled 
+                                                    style={cell.textareaStyle} 
+                                                    value={cell.value === null ? '' : cell.value}
+                                                    minRows={1}
+                                                    >
+                                                    </TextareaAutosize>
                                                 </td>
                                             )
                                         }
