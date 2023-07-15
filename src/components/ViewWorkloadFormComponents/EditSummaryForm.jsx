@@ -148,20 +148,24 @@ function EditSummaryForm(props) {
                                                         })
                                                     }}
                                                     onKeyDown={e => {
-                                                        if (e.ctrlKey)
+                                                        if (e.ctrlKey && (e.key.toLocaleLowerCase() === 'm')) {
                                                             e.preventDefault()
-                                                        if (e.ctrlKey && (e.key.toLocaleLowerCase() === 'm'))
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'center'
                                                             })
-                                                        if (e.ctrlKey && e.key.toLocaleLowerCase() === 'l')
+                                                        }
+                                                        if (e.ctrlKey && e.key.toLocaleLowerCase() === 'l') {
+                                                            e.preventDefault()
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'left'
                                                             })
-                                                        if (e.ctrlKey && e.key.toLocaleLowerCase() === 'r')
+                                                        }
+                                                        if (e.ctrlKey && e.key.toLocaleLowerCase() === 'r') {
+                                                            e.preventDefault()
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'right'
                                                             })
+                                                        }
                                                     }}>
                                                 </TextareaAutosize>
                                                 <label className="cell-key">{cell.key}</label>
