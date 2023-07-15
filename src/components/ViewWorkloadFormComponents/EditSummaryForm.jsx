@@ -148,39 +148,23 @@ function EditSummaryForm(props) {
                                                         })
                                                     }}
                                                     onKeyDown={e => {
-                                                        if(e.ctrlKey && (e.key.toLocaleLowerCase() === 'q')) {
+                                                        if (e.ctrlKey && (e.key.toLocaleLowerCase() === 'm')) {
                                                             e.preventDefault()
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'center'
                                                             })
                                                         }
-                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 'w') {
+                                                        if (e.ctrlKey && e.key.toLocaleLowerCase() === 'l') {
                                                             e.preventDefault()
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'left'
                                                             })
                                                         }
-                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 'e') {
+                                                        if (e.ctrlKey && e.key.toLocaleLowerCase() === 'r') {
                                                             e.preventDefault()
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'right'
                                                             })
-                                                        }
-                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 'r') {
-                                                            e.preventDefault()
-                                                            formUtils.spanRow(rIndex, cIndex)
-                                                        }
-                                                        if(e.ctrlKey && e.shiftKey && e.key.toLocaleLowerCase() === 'r') {
-                                                            e.preventDefault()
-                                                            formUtils.unspanRow(rIndex, cIndex)
-                                                        }
-                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 't') {
-                                                            e.preventDefault()
-                                                            formUtils.spanColumn(rIndex, cIndex)
-                                                        }
-                                                        if(e.ctrlKey && e.shiftKey && e.key.toLocaleLowerCase() === 't') {
-                                                            e.preventDefault()
-                                                            formUtils.unspanColumn(rIndex, cIndex)
                                                         }
                                                     }}>
                                                 </TextareaAutosize>
