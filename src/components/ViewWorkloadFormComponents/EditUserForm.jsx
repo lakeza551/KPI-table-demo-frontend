@@ -158,23 +158,39 @@ function EditUserForm(props) {
                                                     value={cell.value === null ? '' : cell.value}
                                                     onClick={() => setShowToolbox(null)}
                                                     onKeyDown={e => {
-                                                        if(e.ctrlKey && (e.key.toLocaleLowerCase() === 'm')) {
+                                                        if(e.ctrlKey && (e.key.toLocaleLowerCase() === 'q')) {
                                                             e.preventDefault()
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'center'
                                                             })
                                                         }
-                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 'l') {
+                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 'w') {
                                                             e.preventDefault()
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'left'
                                                             })
                                                         }
-                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 'r') {
+                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 'e') {
                                                             e.preventDefault()
                                                             formUtils.addTextareaStyle(rIndex, cIndex, {
                                                                 textAlign: 'right'
                                                             })
+                                                        }
+                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 'r') {
+                                                            e.preventDefault()
+                                                            formUtils.spanRow(rIndex, cIndex)
+                                                        }
+                                                        if(e.ctrlKey && e.shiftKey && e.key.toLocaleLowerCase() === 'r') {
+                                                            e.preventDefault()
+                                                            formUtils.unspanRow(rIndex, cIndex)
+                                                        }
+                                                        if(e.ctrlKey && e.key.toLocaleLowerCase() === 't') {
+                                                            e.preventDefault()
+                                                            formUtils.spanColumn(rIndex, cIndex)
+                                                        }
+                                                        if(e.ctrlKey && e.shiftKey && e.key.toLocaleLowerCase() === 't') {
+                                                            e.preventDefault()
+                                                            formUtils.unspanColumn(rIndex, cIndex)
                                                         }
                                                     }}
                                                     onChange={e => {
