@@ -115,7 +115,7 @@ function ViewUserForm() {
                 data.append('file', file)
                 console.log(file)
                 //console.log(data)
-                const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`, 'POST', data, true)
+                const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/me/`, 'POST', data, true)
                 // const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`, {
                 //     headers: {
                 //         'Authorization' : `Bearer ${workloadCookie.access_token}`, 
@@ -135,7 +135,7 @@ function ViewUserForm() {
                     return {...prev}
                 })
             }
-            const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'PUT', userRawData)
+            const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/me/`, 'PUT', userRawData)
             const resData = await res.json()
             if(resData.status === 'success')
                 return alert('บันทึกข้อมูลสำเร็จ')
