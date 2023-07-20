@@ -18,7 +18,8 @@ function Home() {
                 ...cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN),
                 userInfo: resData.data
             }, {
-                path: '/'
+                path: '/',
+                expires: new Date(Date.now()+(12 * 60 * 60))
             })
             return resData.data
         }
