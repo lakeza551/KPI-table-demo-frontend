@@ -74,7 +74,7 @@ function EditForm(props) {
                 throw resJson.data
             alert('บันทึกสำเร็จ')
         } catch (error) {
-            alert('บันทึกล้มเหลว')
+            alert('บันทึกล้มเหลว\n' + error)
         }
     }
 
