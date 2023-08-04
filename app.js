@@ -136,7 +136,7 @@ app.get('/su-auth-get-info', (req, res) => {
             if(resBody.status === 'success') {
                 cookies.set(REACT_APP_COOKIE_NAME_TOKEN, resBody.data, {
                     httpOnly: false,
-                    expires: new Date(Date.now()+(12 * 60 * 60 * 100))
+                    expires: new Date(Date.now()+(12 * 60 * 60 * 1000))
                 })
                 res.cookie(REACT_APP_COOKIE_NAME_TOKEN, JSON.stringify(resBody.data))
                 res.redirect('/#/')

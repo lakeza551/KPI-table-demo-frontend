@@ -55,7 +55,7 @@ const refreshToken = async () => {
         access_token: resData.data.access_token
     }, {
         path: '/',
-        expires: new Date(Date.now()+(12 * 60 * 60 * 100))
+        expires: new Date(Date.now()+(12 * 60 * 60 * 1000))
     })
 }
 

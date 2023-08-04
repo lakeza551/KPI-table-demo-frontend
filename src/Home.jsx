@@ -19,7 +19,7 @@ function Home() {
                 userInfo: resData.data
             }, {
                 path: '/',
-                expires: new Date(Date.now()+(12 * 60 * 60 * 100))
+                expires: new Date(Date.now()+(12 * 60 * 60 * 1000))
             })
             return resData.data
         }
