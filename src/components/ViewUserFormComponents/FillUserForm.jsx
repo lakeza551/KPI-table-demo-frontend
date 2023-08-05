@@ -57,7 +57,6 @@ function FillUserForm(props) {
         )
 
     const tableTemplate = formTemplate[selectedTable]
-    console.log(formData['#a16_A12'])
     return (
         <div className="content-container">
             <div className="button-bar">

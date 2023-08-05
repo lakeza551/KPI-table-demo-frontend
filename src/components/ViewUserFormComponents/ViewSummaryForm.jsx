@@ -66,7 +66,7 @@ function ViewSummaryForm(props) {
                                                     <TextareaAutosize
                                                     disabled 
                                                     style={cell.textareaStyle} 
-                                                    value={summaryData === null ? '' : summaryData[cell.key] === null ? '' : summaryData[cell.key]}> 
+                                                    value={summaryData === null ? '' : summaryData[cell.key] === null || summaryData[cell.key] === undefined ? '' : summaryData[cell.key]}> 
                                                     </TextareaAutosize>
                                                 </td>
                                             )

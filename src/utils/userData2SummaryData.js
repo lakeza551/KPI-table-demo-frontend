@@ -41,6 +41,7 @@ const evalHasValue = (exp, userData, summary) => {
     const table = startCell.split('_')[0].substring(2)
 
     //data from user
+    console.log(startCell)
     if(form.includes('#a')) {
         //horizontal
         if (startRow === endRow) {
@@ -48,7 +49,7 @@ const evalHasValue = (exp, userData, summary) => {
             const endC = alphabetList.indexOf(endCol)
             for (var c = startC; c <= endC; ++c) {
                 const val = userData[`#a${table}_${alphabetList[c]}${startRow}`]
-                if(val === '' || val === null || val === undefined)
+                if(val === '' || val === null || val === undefined || val === false)
                     continue
                 return 1
             }
@@ -58,7 +59,7 @@ const evalHasValue = (exp, userData, summary) => {
         if (startCol === endCol) {
             for (var r = startRow; r <= endRow; ++r) {
                 const val = userData[`#a${table}_${startCol}${r}`]
-                if(val === '' || val === null || val === undefined)
+                if(val === '' || val === null || val === undefined || val === false)
                     continue
                 return 1
             }
@@ -74,11 +75,11 @@ const evalHasValue = (exp, userData, summary) => {
             const endC = alphabetList.indexOf(endCol)
             for (var c = startC; c <= endC; ++c) {
                 const val = summary[`#b${table}_${alphabetList[c]}${startRow}`]
-                if(val === '' || val === null || val === undefined)
+                if(val === '' || val === null || val === undefined || val === false)
                     continue
-                sum += 1
+                return 1
             }
-            return sum
+            return 0
         }
         //vertical
         if (startCol === endCol) {
@@ -87,11 +88,11 @@ const evalHasValue = (exp, userData, summary) => {
             for (var r = startRow; r <= endRow; ++r) {
                 const val = summary[`#b${table}_${startCol}${r}`]
                 //console.log(val)
-                if(val === '' || val === null || val === undefined)
+                if(val === '' || val === null || val === undefined || val === false)
                     continue
-                sum += 1
+                return 1
             }
-            return sum
+            return 0
         }
     }
 }
@@ -250,6 +251,7 @@ const evaluate = (exp, userData, summary) => {
         }
         if(term.startsWith('hasValue')) {
             terms[index] = evalHasValue(term, userData, summary)
+            //console.log(evalHasValue(term, userData, summary))
         }
         if (isOperator(term))
             continue
