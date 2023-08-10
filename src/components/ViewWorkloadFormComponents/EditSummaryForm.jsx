@@ -48,7 +48,7 @@ function EditSummaryForm(props) {
         form.forEach((table, tIndex) => {
             table.rows.forEach((row, rIndex) => {
                 row.columns.forEach((cell, cIndex) => {
-                    console.log(cell)
+                    // console.log(cell)
                     if (cell.value === null)
                         cell.type = 'none'
                     else if (cell.value.startsWith('='))

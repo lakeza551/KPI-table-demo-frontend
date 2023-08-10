@@ -16,7 +16,7 @@ function TableSelectBar(props) {
                 value: 0
             }}
             onChange={selected => {
-                console.log(selected)
+                // console.log(selected)
                 setSelectedTable(selected.value)
             }}
             options={form.map((table, index) => {
@@ -35,9 +35,9 @@ function ViewSummaryForm(props) {
     const [summaryData, setSummaryData] = useState(null)
     const [selectedTable, setSelectedTable] = useState(0)
 
-    useEffect(() => {
-        setSelectedTable(0)
-    })
+    // useEffect(() => {
+    //     setSelectedTable(0)
+    // })
 
     if (formTemplate === null || userData === null)
         return <div></div>
