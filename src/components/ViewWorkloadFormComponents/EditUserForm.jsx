@@ -52,7 +52,9 @@ function EditUserForm(props) {
                     row.columns.forEach((cell, cIndex) => {
                         cell.key = createCellKey('user-form', tIndex, rIndex, cIndex)
                         if (cell.value !== null && cell.value.startsWith('!input')) {
-                            const [cellType, cellLabel] = cell.value.split(' ')
+                            const cellSplit = cell.value.split(' ')
+                            const cellType = cellSplit[0]
+                            const cellLabel = cellSplit.slice(1).join('')
                             cell.type = cellType.substring(1)
                             if (cellLabel !== undefined)
                                 cell.label = cellLabel

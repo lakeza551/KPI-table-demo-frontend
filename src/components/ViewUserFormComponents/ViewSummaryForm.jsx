@@ -35,6 +35,10 @@ function ViewSummaryForm(props) {
     const [summaryData, setSummaryData] = useState(null)
     const [selectedTable, setSelectedTable] = useState(0)
 
+    useEffect(() => {
+        setSelectedTable(0)
+    })
+
     if (formTemplate === null || userData === null)
         return <div></div>
 

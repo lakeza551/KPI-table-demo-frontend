@@ -56,7 +56,7 @@ function FillUserForm(props) {
             </div>
         )
 
-    const tableTemplate = formTemplate[selectedTable]
+    var tableTemplate = formTemplate[selectedTable]
     return (
         <div className="content-container">
             <div className="button-bar">
@@ -107,6 +107,7 @@ function FillUserForm(props) {
                                                     ref={element => inputRef.current[cell.key] = element} 
                                                     onClick={e => e.stopPropagation()} 
                                                     disabled={disabled} 
+                                                    placeholder={cell.label}
                                                     type="number" 
                                                     value={formData[cell.key] === null || formData[cell.key] === undefined ? '' : formData[cell.key]} onChange={e => {
                                                         setFormData(prev => {
