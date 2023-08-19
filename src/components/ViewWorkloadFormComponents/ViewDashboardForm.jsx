@@ -86,8 +86,6 @@ function ViewDashboardForm(props) {
         const dataRow = templateClone.rows[1]
         for(const obj of rawDataList[selectedDepartment]) {
             const summaryData = userData2SummaryData(summaryFormTemplate, obj.raw_data)
-            console.log(obj.user.name)
-            console.log(summaryData)
             const newRow = {
                 columns: dataRow.columns.map(cell => {
                     return {
@@ -128,7 +126,7 @@ function ViewDashboardForm(props) {
                     }
                 const sum = templateClone.rows.slice(1).reduce((sum, row) => {
                     return sum + Number(row.columns[cIndex].value)
-                }, 0) / departmentList.length
+                }, 0) / rawDataList[selectedDepartment].length
 
                 return {
                     value: sum.toFixed(2)
