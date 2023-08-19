@@ -113,7 +113,6 @@ function ViewUserForm() {
                 const cookies = new Cookies()
                 const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
                 data.append('file', file)
-                console.log(file)
                 //console.log(data)
                 const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/me/`, 'POST', data, true)
                 // const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`, {
@@ -127,16 +126,15 @@ function ViewUserForm() {
                 //console.log(resData)
                 if(resData.status !== 'success')
                     throw resData.data
-                setUserRawData(prev => {
-                    prev[key] = {
-                        filename: resData.data.filename,
-                        filepath: resData.data.url
-                    }
-                    return {...prev}
-                })
+                userRawData[key] = {
+                    filename: resData.data.filename,
+                    filepath: resData.data.url
+                }
+                console.log('hey')
             }
             const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/me/`, 'PUT', userRawData)
             const resData = await res.json()
+            setUserRawData(resData.data)
             if(resData.status === 'success')
                 return alert('บันทึกข้อมูลสำเร็จ')
             else
