@@ -128,7 +128,7 @@ function FillUserForm(props) {
                                                         <input 
                                                         disabled={disabled} 
                                                         type="checkbox" 
-                                                        checked={formData[cell.key] === null || formData[cell.key] === undefined ? false : formData[cell.key]} onChange={e => {
+                                                        checked={formData[cell.key] === null || formData[cell.key] === undefined || typeof formData[cell.key] !== 'boolean' ? false : formData[cell.key]} onChange={e => {
                                                             setFormData(prev => {
                                                                 prev[cell.key] = e.target.checked
                                                                 return { ...prev }
@@ -154,7 +154,7 @@ function FillUserForm(props) {
                                                                 return { ...prev }
                                                             })
                                                         }} />
-                                                        {(formData[cell.key] !== null && formData[cell.key] !== undefined) && <label
+                                                        {(formData[cell.key] !== null && formData[cell.key] !== undefined && typeof formData[cell.key] === 'object') && <label
                                                             onClick={async e => {
                                                                 const res = await callApi(`${process.env.REACT_APP_SERVER_URL}${formData[cell.key].filepath}`, 'GET')
                                                                 const file = await res.blob()

@@ -138,16 +138,21 @@ function ViewUserForm(props) {
                 //console.log(resData)
                 if(resData.status === 'error' || resData.status === 'fail')
                     throw resData.data
-                setUserRawData(prev => {
-                    prev[key] = {
-                        filename: resData.data.filename,
-                        filepath: resData.data.url
-                    }
-                    return {...prev}
-                })
+                userRawData[key] = {
+                    filename: resData.data.filename,
+                    filepath: resData.data.url
+                }
+                // setUserRawData(prev => {
+                //     prev[key] = {
+                //         filename: resData.data.filename,
+                //         filepath: resData.data.url
+                //     }
+                //     return {...prev}
+                // })
             }
             const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'PUT', userRawData)
             const resData = await res.json()
+            setUserRawData(resData.data)
             if(resData.status === 'success')
                 return alert('บันทึกข้อมูลสำเร็จ')
             else

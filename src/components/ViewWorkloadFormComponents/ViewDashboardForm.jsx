@@ -3,6 +3,7 @@ import { Chart } from 'react-google-charts'
 import userData2SummaryData from "../../utils/userData2SummaryData"
 import Select from 'react-select'
 import Cookies from 'universal-cookie'
+import { isNumber, isNumeric } from "mathjs"
 
 function ViewDashboardForm(props) {
     const cookies = new Cookies()
@@ -85,10 +86,13 @@ function ViewDashboardForm(props) {
         const dataRow = templateClone.rows[1]
         for(const obj of rawDataList[selectedDepartment]) {
             const summaryData = userData2SummaryData(summaryFormTemplate, obj.raw_data)
+            console.log(obj.user.name)
+            console.log(summaryData)
             const newRow = {
                 columns: dataRow.columns.map(cell => {
                     return {
-                        value: summaryData[cell.value.substring(1)]
+                        // value: summaryData[cell.value.substring(1)] === null || summaryData[cell.value.substring(1)] === undefined ? 0.00 : summaryData[cell.value.substring(1)]
+                        value:  isNumber(Number(summaryData[cell.value.substring(1)])) ? Number(summaryData[cell.value.substring(1)]).toFixed(2) : 0.00
                     }
                 })
             }
