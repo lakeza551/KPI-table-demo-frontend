@@ -204,7 +204,7 @@ const evalSummation = (exp, userData, summary) => {
                         continue
                     sum += Number(val)
                 }
-                return sum
+                return sum.toFixed(2)
             }
             //vertical
             if (startCol === endCol) {
@@ -215,7 +215,7 @@ const evalSummation = (exp, userData, summary) => {
                         continue
                     sum += Number(val)
                 }
-                return sum
+                return sum.toFixed(2)
             }
         }
         //data from summary
@@ -231,7 +231,7 @@ const evalSummation = (exp, userData, summary) => {
                         continue
                     sum += Number(summary[`#b${table}_${alphabetList[c]}${startRow}`])
                 }
-                return sum
+                return sum.toFixed(2)
             }
             //vertical
             if (startCol === endCol) {
@@ -244,7 +244,7 @@ const evalSummation = (exp, userData, summary) => {
                         continue
                     sum += Number(summary[`#b${table}_${startCol}${r}`])
                 }
-                return sum
+                return sum.toFixed(2)
             }
         }
     } catch (error) {
