@@ -7,6 +7,7 @@ const fetch = require('node-fetch')
 const Cookies = require('universal-cookie')
 const https = require('follow-redirects').https
 const bodyParser = require('body-parser')
+const fs = require('fs')
 const app = express()
 
 dotenv.config()
@@ -118,6 +119,10 @@ app.get('/su-auth-get-info', (req, res) => {
         result.on("end", async function (chunk) {
             const cookies = new Cookies(res.cookie)
             var body = Buffer.concat(chunks).toString('utf8');
+            const logText = new Date().toLocaleString() + ' ' + body + '\r\n'
+            fs.writeFileSync('./logs/log.txt', logText, {
+                flag: 'a+'
+            })
             body = JSON.parse(body)
             //console.log(body)
             const {SERVER_URL, REACT_APP_COOKIE_NAME_TOKEN} = process.env
