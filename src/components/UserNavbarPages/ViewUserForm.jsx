@@ -23,7 +23,6 @@ function ViewUserForm() {
     const [userFormTemplate, setUserFormTemplate] = useState(null)
     const [summaryFormTemplate, setSummaryFormTemplate] = useState(null)
 
-
     const fetchSemesterList = async () => {
         const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/`, 'GET', null)
         const resData = await res.json()
@@ -103,48 +102,6 @@ function ViewUserForm() {
         )
     }
 
-    const save = async () => {
-        try {
-            const arrFiles = Object.entries(userRawData).filter(([key, val]) => val !== null && typeof val === 'object')
-            for(const [key, file] of arrFiles) {
-                if(!(file instanceof File))
-                    continue
-                const data = new FormData()
-                const cookies = new Cookies()
-                const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
-                data.append('file', file)
-                //console.log(data)
-                const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/me/`, 'POST', data, true)
-                // const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`, {
-                //     headers: {
-                //         'Authorization' : `Bearer ${workloadCookie.access_token}`, 
-                //     },
-                //     method: 'POST',
-                //     body: data
-                // })
-                const resData = await res.json()
-                //console.log(resData)
-                if(resData.status !== 'success')
-                    throw resData.data
-                userRawData[key] = {
-                    filename: resData.data.filename,
-                    filepath: resData.data.url
-                }
-                console.log('hey')
-            }
-            const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/me/`, 'PUT', userRawData)
-            const resData = await res.json()
-            setUserRawData(resData.data)
-            if(resData.status === 'success')
-                return alert('บันทึกข้อมูลสำเร็จ')
-            else
-                throw resData.data
-        } catch (error) {
-            //console.log(error)
-            alert('บันทึกข้อมูลล้มเหลว\n' + error)
-        }
-    }
-
     useEffect(() => {
         navigate('/user/form')
         setIsLoading(true)
@@ -169,6 +126,7 @@ function ViewUserForm() {
             setIsLoading(false)
         })
     }, [])
+
 
     return (
         <div className="page-content-container">
@@ -249,7 +207,8 @@ function ViewUserForm() {
                                     setFormData={setUserRawData}
                                     semesterId={selectedSemester}
                                     userId={userInfo.id}
-                                    save={save}
+                                    saveFilesUrl={`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/me/`}
+                                    saveFormDataUrl={`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/me/`}
                                     disabled={userInfo.id === selectedUser ? false : true}
                                 />
                             }

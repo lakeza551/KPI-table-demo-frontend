@@ -253,7 +253,7 @@ const evalSummation = (exp, userData, summary) => {
 }
 
 const evaluate = (exp, userData, summary) => {
-    const terms = exp.split(' ')
+    var terms = exp.split(' ')
     for (const [index, term] of terms.entries()) {
         if(term.startsWith('sum')) {
             terms[index] = evalSummation(term, userData, summary)
@@ -281,6 +281,7 @@ const evaluate = (exp, userData, summary) => {
     if(terms.length === 1)
         return terms[0]
     try {
+        terms = terms.map(term => term === undefined || term === null || term === '' ? '0' : term)
         const val = mathEval(terms.join(''))
         return Number.isInteger(val) ? val : val.toFixed(2)
     }

@@ -369,6 +369,7 @@ td input[type=checkbox] {
 
 .table-select-bar {
   display: flex;
+  align-items: center;
   padding: 0px 10px;
 }
 
@@ -623,4 +624,38 @@ td input[type=checkbox] {
   padding: 3px 5px;
   border-radius: 3px;
   border: 1px solid
+}
+
+.save-indicator {
+  display: flex;
+  align-items: center;
+  padding: 8px 15px;
+  border-radius: 10px;
+  margin-right: 15px;
+}
+
+.download-filename {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}
+
+.file-delete {
+  opacity: 0;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(235, 235, 235);
+  margin-left: 5px;
+  padding: 5px 8px;
+}
+
+.download-filename:hover .file-delete {
+  opacity: 1;
+}
+
+.file-delete:hover {
+  background-color: rgb(196, 196, 196);
 }

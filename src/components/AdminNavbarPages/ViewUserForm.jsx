@@ -114,55 +114,6 @@ function ViewUserForm(props) {
         )
     }
 
-    const save = async () => {
-        try {
-            const arrFiles = Object.entries(userRawData).filter(([key, val]) => val !== null && typeof val === 'object')
-            for(const [key, file] of arrFiles) {
-                if(!(file instanceof File))
-                    continue
-                const data = new FormData()
-                const cookies = new Cookies()
-                const workloadCookie = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
-                data.append('file', file)
-                //console.log(data)
-                const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`, 'POST', data, true)
-                // const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`, {
-                //     headers: {
-                //         'Authorization' : `Bearer ${workloadCookie.access_token}`, 
-                //     },
-                //     method: 'POST',
-                //     body: data
-                // })
-                const resData = await res.json()
-                //console.log(resData)
-                if(resData.status === 'error' || resData.status === 'fail')
-                    throw resData.data
-                userRawData[key] = {
-                    filename: resData.data.filename,
-                    filepath: resData.data.url
-                }
-                console.log('hey')
-                // setUserRawData(prev => {
-                //     prev[key] = {
-                //         filename: resData.data.filename,
-                //         filepath: resData.data.url
-                //     }
-                //     return {...prev}
-                // })
-            }
-            const res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'PUT', userRawData)
-            const resData = await res.json()
-            setUserRawData(resData.data)
-            if(resData.status === 'success')
-                return alert('บันทึกข้อมูลสำเร็จ')
-            else
-                throw resData.data
-        } catch (error) {
-            //console.log(error)
-            alert('บันทึกข้อมูลล้มเหลว\n' + error)
-        }
-    }
-
     useEffect(() => {
         if(selectedSemester === null || selectedUser === null)
             return
@@ -241,7 +192,8 @@ function ViewUserForm(props) {
                             setFormData={setUserRawData}
                             semesterId={selectedSemester}
                             userId={selectedUser}
-                            save={save}
+                            saveFilesUrl={`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`}
+                            saveFormDataUrl={`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`}
                             />
                     }
                 />
