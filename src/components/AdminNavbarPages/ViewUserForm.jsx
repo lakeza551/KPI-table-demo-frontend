@@ -48,7 +48,7 @@ function ViewUserForm(props) {
     }
 
     const filterUserListByDepartmentID = async depId => {
-        const filtered = userList.filter(user => user.groups.length > 0 && user.groups[0].id === depId)
+        const filtered = userList.filter(user => user.groups.length > 0 && user.groups[0].id === depId && user.is_active)
         setFilteredUserList(filtered)
     }
 
