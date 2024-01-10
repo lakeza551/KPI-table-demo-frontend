@@ -43,6 +43,7 @@ function SaveIndicator(props) {
         )
     }
     if(saveState.status === 'failed') {
+        alert(saveState.error)
         return (
             <div className="save-indicator" style={{
                 backgroundColor: '#f8d7da',
@@ -119,42 +120,63 @@ function FillUserForm(props) {
     }, [formData])
 
 
+    const saveFile = async (key, file) => {
+        try {
+            setSaveState({
+                status: 'pending'
+            })
+            const data = new FormData()
+            data.append('file', file)
+            const res = await callApi(saveFilesUrl, 'POST', data, true)
+            const resData = await res.json()
+            if(resData.status === 'error' || resData.status === 'fail')
+                    throw resData.data
+            if(!Array.isArray(formData[key])) {
+                formData[key] = [
+                    {
+                        filename: resData.data.filename,
+                        filepath: resData.data.url
+                    }
+                ]
+            }
+            else {
+                formData[key].push({
+                    filename: resData.data.filename,
+                    filepath: resData.data.url
+                })
+            }
+            await save()
+        } catch (error) {
+            const date = new Date()
+            setSaveState({
+                status: 'failed',
+                time: date.toLocaleDateString() + " " + date.toLocaleTimeString(),
+                error: error
+            })
+        }
+
+    }
+
     const save = async () => {
         try {
             setSaveState({
                 status: 'pending'
             })
-            const arrFiles = Object.entries(formData).filter(([key, val]) => val !== null && typeof val === 'object')
-            for(const [key, file] of arrFiles) {
-                if(!(file instanceof File))
-                    continue
-                const data = new FormData()
-                data.append('file', file)
-                //console.log(data)
-                const res = await callApi(saveFilesUrl, 'POST', data, true)
-                // const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`, {
-                //     headers: {
-                //         'Authorization' : `Bearer ${workloadCookie.access_token}`, 
-                //     },
-                //     method: 'POST',
-                //     body: data
-                // })
-                const resData = await res.json()
-                //console.log(resData)
-                if(resData.status === 'error' || resData.status === 'fail')
-                    throw resData.data
-                formData[key] = {
-                    filename: resData.data.filename,
-                    filepath: resData.data.url
-                }
-                // setUserRawData(prev => {
-                //     prev[key] = {
-                //         filename: resData.data.filename,
-                //         filepath: resData.data.url
-                //     }
-                //     return {...prev}
-                // })
-            }
+            // const arrFiles = Object.entries(formData).filter(([key, val]) => val !== null && typeof val === 'object')
+            // for(const [key, file] of arrFiles) {
+            //     if(!(file instanceof File))
+            //         continue
+            //     const data = new FormData()
+            //     data.append('file', file)
+            //     const res = await callApi(saveFilesUrl, 'POST', data, true)
+            //     const resData = await res.json()
+            //     if(resData.status === 'error' || resData.status === 'fail')
+            //         throw resData.data
+            //     formData[key] = {
+            //         filename: resData.data.filename,
+            //         filepath: resData.data.url
+            //     }
+            // }
             const res = await callApi(saveFormDataUrl, 'PUT', formData)
             const resData = await res.json()
             const date = new Date()
@@ -168,7 +190,6 @@ function FillUserForm(props) {
             else
                 throw resData.data
         } catch (error) {
-            console.log(error)
             const date = new Date()
             setSaveState({
                 status: 'failed',
@@ -288,41 +309,45 @@ function FillUserForm(props) {
                                                         <label style={{marginRight: '5px', fontWeight:'bold'}}>{cell.label ? cell.label : ''}</label>
                                                         <input 
                                                         disabled={disabled} 
-                                                        type="file" onChange={e => {
+                                                        type="file" onChange={async e => {
+                                                            if(e.target.files.length === 0)
+                                                                return
                                                             setDataChanged(true)
-                                                            setFormData(prev => {
-                                                                prev[cell.key] = e.target.files[0]
-                                                                return { ...prev }
-                                                            })
+                                                            await saveFile(cell.key, e.target.files[0])
+                                                            e.target.value = ''
                                                         }} />
-                                                        {(formData[cell.key] !== null && formData[cell.key] !== undefined && typeof formData[cell.key] === 'object') && <label
-                                                            className="download-filename"
-                                                            onClick={async e => {
-                                                                const res = await callApi(`${process.env.REACT_APP_SERVER_URL}${formData[cell.key].filepath}`, 'GET')
-                                                                const file = await res.blob()
-                                                                var a = document.createElement("a");
-                                                                a.href = window.URL.createObjectURL(file);
-                                                                a.download = formData[cell.key].filename;
-                                                                a.click();
-                                                            }}
-                                                            style={{
-                                                                fontWeight: 'bold',
-                                                                margin: '5px',
-                                                                cursor: 'pointer'
-                                                            }}>{formData[cell.key].filename}
-                                                            <div 
-                                                                className="file-delete"
-                                                                onClick={e => {
-                                                                    setDataChanged(true)
-                                                                    setFormData(prev => {
-                                                                        prev[cell.key] = null
-                                                                        return {...prev}
-                                                                    })
+                                                        {(formData[cell.key] !== null && 
+                                                            formData[cell.key] !== undefined && 
+                                                            Array.isArray(formData[cell.key])) && 
+                                                            formData[cell.key].map((fileInfo, index) => <label
+                                                                className="download-filename"
+                                                                onClick={async e => {
+                                                                    const res = await callApi(`${process.env.REACT_APP_SERVER_URL}${fileInfo.filepath}`, 'GET')
+                                                                    const file = await res.blob()
+                                                                    var a = document.createElement("a");
+                                                                    a.href = window.URL.createObjectURL(file);
+                                                                    a.download = fileInfo.filename
+                                                                    a.click();
                                                                 }}
-                                                            >
-                                                                <ImCross color="red" size={15}/>
-                                                            </div>
-                                                            </label>}
+                                                                style={{
+                                                                    fontWeight: 'bold',
+                                                                    margin: '5px',
+                                                                    cursor: 'pointer'
+                                                                }}>{fileInfo.filename}
+                                                                <div 
+                                                                    className="file-delete"
+                                                                    onClick={e => {
+                                                                        e.stopPropagation()
+                                                                        setDataChanged(true)
+                                                                        setFormData(prev => {
+                                                                            prev[cell.key].splice(index, 1)
+                                                                            return {...prev}
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                    <ImCross color="red" size={15}/>
+                                                                </div>
+                                                                </label>)}
                                                     </div>
                                                 )
                                             }
