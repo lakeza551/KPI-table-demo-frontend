@@ -58,6 +58,7 @@ function ViewUserForm(props) {
         res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'GET', null)
         resData = await res.json()
         const rawDataObj = resData
+        console.log(resData)
 
 
         //user form template
@@ -71,7 +72,7 @@ function ViewUserForm(props) {
         const summaryFormTemplate = resData.data
 
         var rawData
-        if (rawDataObj.status === 'fail') {
+        if (rawDataObj.status === 'fail' || rawDataObj.status === 'error') {
             rawData = await initiateRawDataIfNotFound(formTemplate)
         }
         else
