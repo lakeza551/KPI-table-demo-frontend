@@ -58,7 +58,6 @@ function ViewUserForm(props) {
         res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'GET', null)
         resData = await res.json()
         const rawDataObj = resData
-        console.log(resData)
 
 
         //user form template

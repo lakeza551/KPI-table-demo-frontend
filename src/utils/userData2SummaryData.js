@@ -51,7 +51,7 @@ const evalHasValue = (exp, userData, summary) => {
                 const endC = alphabetList.indexOf(endCol)
                 for (var c = startC; c <= endC; ++c) {
                     const val = userData[`#a${table}_${alphabetList[c]}${startRow}`]
-                    if(val === '' || val === null || val === undefined || val === false)
+                    if(String(val).trim() === '' || val === null || val === undefined || val === false)
                         continue
                     return 1
                 }
@@ -253,7 +253,11 @@ const evalSummation = (exp, userData, summary) => {
 }
 
 const evaluate = (exp, userData, summary) => {
-    var terms = exp.split(' ')
+    var max = null
+    if(exp.includes('max')) {
+        max = exp.split(',')[1].split('=')[1]
+    }
+    var terms = exp.split(',')[0].split(' ')
     for (const [index, term] of terms.entries()) {
         if(term.startsWith('sum')) {
             terms[index] = evalSummation(term, userData, summary)
@@ -283,6 +287,8 @@ const evaluate = (exp, userData, summary) => {
     try {
         terms = terms.map(term => term === undefined || term === null || term === '' ? '0' : term)
         const val = mathEval(terms.join(''))
+        if( max !== null && val > max)
+            return max
         return Number.isInteger(val) ? val : val.toFixed(2)
     }
     catch(e) {
