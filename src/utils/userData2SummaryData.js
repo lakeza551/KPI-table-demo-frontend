@@ -61,7 +61,7 @@ const evalHasValue = (exp, userData, summary) => {
             if (startCol === endCol) {
                 for (var r = startRow; r <= endRow; ++r) {
                     const val = userData[`#a${table}_${startCol}${r}`]
-                    if(val === '' || val === null || val === undefined || val === false)
+                    if(String(val).trim() === '' || val === null || val === undefined || val === false)
                         continue
                     return 1
                 }
@@ -177,7 +177,10 @@ const evalCount = (exp, userData, summary) => {
     }
 }
 
-const evalSummation = (exp, userData, summary) => {
+const evalSummation = (exp, userData, summary, cellKey) => {
+    // if(cellKey === '#b1_K33') {
+    //     console.log(summary)
+    // }
     try {
         const reg = /\(([^)]*)\)/;
         const selected = exp.match(reg)[1]
@@ -240,6 +243,9 @@ const evalSummation = (exp, userData, summary) => {
                 for (var r = startRow; r <= endRow; ++r) {
                     const val = summary[`#b${table}_${startCol}${r}`]
                     //console.log(val)
+                    // if(cellKey === '#b1_K33') {
+                    //     console.log(`#b${table}_${startCol}${r}` , summary[`#b${table}_${startCol}${r}`])
+                    // }
                     if(val === '' || val === null || val === undefined || isNaN(Number(val)))
                         continue
                     sum += Number(summary[`#b${table}_${startCol}${r}`])
@@ -252,7 +258,7 @@ const evalSummation = (exp, userData, summary) => {
     }
 }
 
-const evaluate = (exp, userData, summary) => {
+const evaluate = (exp, userData, summary, cellKey) => {
     var max = null
     if(exp.includes('max')) {
         max = exp.split(',')[1].split('=')[1]
@@ -260,7 +266,7 @@ const evaluate = (exp, userData, summary) => {
     var terms = exp.split(',')[0].split(' ')
     for (const [index, term] of terms.entries()) {
         if(term.startsWith('sum')) {
-            terms[index] = evalSummation(term, userData, summary)
+            terms[index] = evalSummation(term, userData, summary, cellKey)
             continue
         }
         if(term.startsWith('count')) {
@@ -305,12 +311,12 @@ const createSummaryData = (formTemplate, userData) => {
             for (const cell of row.columns) {
                 if(userData === null)
                     summary[cell.key] = 0
-                else if (cell.type === 'formula' && isEvaluatable(cell.value.substring(1), userData, summary)) {
-                    summary[cell.key] = evaluate(cell.value.substring(1), userData, summary)
-                }
                 else if (cell.type === 'formula') {
-                    queue.push(cell)
+                    summary[cell.key] = evaluate(cell.value.substring(1), userData, summary, cell.key)
                 }
+                // else if (cell.type === 'formula') {
+                //     queue.push(cell)
+                // }
             }
         }
     }
