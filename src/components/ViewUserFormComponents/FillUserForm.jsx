@@ -6,6 +6,8 @@ import { ClipLoader } from "react-spinners";
 import { FiCheckCircle } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import { ImCross } from "react-icons/im";
+import { GrFormClose } from 'react-icons/gr'
+import verifyImportedData from "../../utils/verifyImportedData";
 
 function SaveIndicator(props) {
     const {saveState} = props
@@ -92,14 +94,16 @@ function TableSelectBar(props) {
 }
 
 function FillUserForm(props) {
-    const { formTemplate, setFormTemplate, formData, setFormData, saveFilesUrl, saveFormDataUrl, disabled, semesterId} = props
+    const { formTemplate, setFormTemplate, formData, setFormData, saveFilesUrl, saveFormDataUrl, disabled, semesterId, semesterTitle} = props
+    console.log(semesterId, semesterTitle)
 
     const inputRef = useRef({})
     const [selectedTable, setSelectedTable] = useState(0)
     const [dataChanged, setDataChanged] = useState(false)
     const [saveTimeout, setSaveTimeout] = useState(null)
-    const [saveInterval, setSaveInterval] = useState(null)
     const [saveState, setSaveState] = useState(null)
+    const [jsonFile, setJsonFile] = useState(null)
+    const [showImportDataMenu, setShowImportDataMenu] = useState(false)
     const focusInput = key => {
         inputRef.current[key] && inputRef.current[key].focus()
     }
@@ -119,6 +123,9 @@ function FillUserForm(props) {
         }, 2000))
     }, [formData])
 
+    const toggleImportDataMenu = () => {
+        setShowImportDataMenu(!showImportDataMenu)
+    }
 
     const saveFile = async (key, file) => {
         try {
@@ -200,6 +207,55 @@ function FillUserForm(props) {
         }
     }
 
+    const exportJson = async () => {
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(formData));
+        var dlAnchorElem = document.createElement('a')
+        dlAnchorElem.setAttribute("href",     dataStr     );
+        dlAnchorElem.setAttribute("download", `${semesterTitle}.json`);
+        dlAnchorElem.click();
+    }
+    
+    const importData = () => {
+        try {
+            const reader = new FileReader()
+
+            reader.onload = e => {
+                const json = JSON.parse(e.target.result)
+                const canBeImported = verifyImportedData(formTemplate, json)
+                if(!canBeImported)
+                    return alert('ไม่สามารถ Import ได้ เนื่องจาก format ข้อมูลและตารางไม่ตรงกัน')
+                
+                return setFormData(json)
+            }
+
+            reader.readAsText(jsonFile)
+        } catch (error) {
+            //console.log(error)
+            alert('Import ฟอร์มล้มเหลว')
+        }
+        setShowImportDataMenu(false)
+    }
+
+    const ImportDataMenu = () => {
+        return (
+            <div className="backdrop">
+                <div className="popup">
+                    <button className="popup-close">
+                        <GrFormClose onClick={() => setShowImportDataMenu(false)} size={30} color='rgb(240, 240, 240)' />
+                    </button>
+                    <div className="popup-input-container">
+                        <label>ไฟล์ (.json)</label>
+                        <input type="file" onChange={e => {
+                            setJsonFile(e.target.files[0])
+                        }}/>
+                    </div>
+                    <button onClick={importData} className="popup-button-edit margin-top-20px">Import</button>
+                </div>
+            </div>
+        )
+    }
+
+
     useEffect(() => {
         setSelectedTable(0)
     }, [semesterId])
@@ -217,8 +273,17 @@ function FillUserForm(props) {
     var tableTemplate = formTemplate[selectedTable]
     return (
         <div className="content-container">
-            <div className="button-bar">
-                <button className="table-button" onClick={save}>Save</button>
+            {showImportDataMenu && ImportDataMenu()}
+            <div className="button-bar" style={{justifyContent: 'space-between'}}>
+                <div style={{display: 'flex'}}>
+                    <button className="table-button" onClick={save}>Save</button>
+                    <div style={{width: '20px'}}></div>
+                    <button className="table-button" onClick={toggleImportDataMenu}>Import</button>
+                </div>
+                <div style={{display: 'flex'}}>
+                    <button className="table-button" onClick={exportJson}>Export</button>
+                    <div style={{width: '30px'}}></div>
+                </div>
             </div>
             <TableSelectBar form={formTemplate} setSelectedTable={setSelectedTable} selectedTable={selectedTable} saveState={saveState}/>
             <div className="table-container">

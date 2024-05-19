@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import Cookies from "universal-cookie"
 
 function Navbar(props) {
     const navigate = useNavigate()
     const cookies = new Cookies()
+    console.log(cookies.getAll())
     const {userInfo} = cookies.get(process.env.REACT_APP_COOKIE_NAME_TOKEN)
     //console.log(userInfo)
     return (

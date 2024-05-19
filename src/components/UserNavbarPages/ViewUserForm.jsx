@@ -15,6 +15,7 @@ function ViewUserForm() {
     const [isLoading, setIsLoading] = useState(false)
     const [semesterList, setSemesterList] = useState(null)
     const [selectedSemester, setSelectedSemester] = useState(null)
+    const [selectedSemesterTitle, setSelectedSemesterTitle] = useState(null)
     const [userList, setUserList] = useState(null)
 
     const [selectedUser, setSelectedUser] = useState(userInfo.id)
@@ -139,6 +140,7 @@ function ViewUserForm() {
                         defaultValue={selectedSemester}
                         onChange={selected => {
                             setSelectedSemester(selected.value)
+                            setSelectedSemesterTitle(selected.label)
                         }}
                         options={semesterList !== null && semesterList.filter(semester => semester.is_active).map(semester => {
                             return {
@@ -170,6 +172,7 @@ function ViewUserForm() {
                         placeholder="-- โปรดระบุ --"
                         onChange={selected => {
                             setSelectedUser(selected.value)
+                            setSelectedSemesterTitle(selected.label)
                         }}
                         defaultValue={{
                             value: userInfo.id,
@@ -206,6 +209,7 @@ function ViewUserForm() {
                                     formData={userRawData}
                                     setFormData={setUserRawData}
                                     semesterId={selectedSemester}
+                                    semesterTitle={selectedSemesterTitle}
                                     userId={userInfo.id}
                                     saveFilesUrl={`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/me/`}
                                     saveFormDataUrl={`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/me/`}

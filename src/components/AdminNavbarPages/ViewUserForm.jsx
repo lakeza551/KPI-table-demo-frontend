@@ -17,6 +17,7 @@ function ViewUserForm(props) {
 
     const [selectedDepartment, setSelectedDepartment] = useState(null)
     const [selectedSemester, setSelectedSemester] = useState(null)
+    const [selectedSemesterTitle, setSelectedSemesterTitle] = useState(null)
     const [selectedUser, setSelectedUser] = useState(null)
 
     const [userRawData, setUserRawData] = useState(null)
@@ -137,6 +138,7 @@ function ViewUserForm(props) {
                         defaultValue={selectedSemester}
                         onChange={selected => {
                             setSelectedSemester(selected.value)
+                            setSelectedSemesterTitle(selected.label)
                         }}
                         options={semesterList !== null && semesterList.map(semester => {
                             return {
@@ -191,6 +193,7 @@ function ViewUserForm(props) {
                             formData={userRawData}
                             setFormData={setUserRawData}
                             semesterId={selectedSemester}
+                            semesterTitle={selectedSemesterTitle}
                             userId={selectedUser}
                             saveFilesUrl={`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/upload/${selectedUser}/`}
                             saveFormDataUrl={`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`}

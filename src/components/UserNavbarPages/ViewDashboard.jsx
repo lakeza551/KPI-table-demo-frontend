@@ -58,7 +58,7 @@ function ViewDashboard(props) {
                 onChange={selected => {
                     setSelectedSemester(selected.value)
                 }}
-                options={semesterList.map(semester => {
+                options={semesterList.toReversed().filter(semester => semester.is_active).map(semester => {
                     return {
                         value: semester.id,
                         label: semester.title
