@@ -5,10 +5,12 @@ import callApi from "../../utils/callApi"
 import Select from "react-select"
 import { Link, Route, useSearchParams, Routes, useLocation } from "react-router-dom"
 import Cookies from "universal-cookie"
+import LoadingLayout from "../common/LoadingLayout"
 
 function ViewUserForm(props) {
 
     const [searchParams, setSearchParams] = useSearchParams({})
+    const [isLoading, setIsloading] = useState(false)
 
     const [departmentList, setDepartmentList] = useState(null)
     const [semesterList, setSemesterList] = useState(null)
@@ -54,6 +56,7 @@ function ViewUserForm(props) {
     }
 
     const fetchForm = async () => {
+        setIsloading(true)
         var res, resData
         //raw data
         res = await callApi(`${process.env.REACT_APP_SERVER_URL}/semester/${selectedSemester}/raw_data/${selectedUser}/`, 'GET', null)
@@ -81,6 +84,7 @@ function ViewUserForm(props) {
         setUserRawData(rawData)
         setUserFormTemplate(formTemplate)
         setSummaryFormTemplate(summaryFormTemplate)
+        setIsloading(false)
     }
 
     const saveInitiateData = async (rawData) => {
@@ -180,6 +184,9 @@ function ViewUserForm(props) {
                 </div>
                 {/* <button onClick={() => fetchForm()}>ค้นหา</button> */}
             </div>
+            <LoadingLayout isLoading={isLoading}>
+
+            </LoadingLayout>
             {userRawData !== null &&
             userFormTemplate !== null &&
             summaryFormTemplate !== null &&
