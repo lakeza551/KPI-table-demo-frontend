@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import callApi from "../../utils/callApi"
 import Select from 'react-select'
 import TextareaAutosize from '@mui/base/TextareaAutosize';
@@ -7,6 +7,7 @@ import { FiCheckCircle } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import { ImCross } from "react-icons/im";
 import { GrFormClose } from 'react-icons/gr'
+import { FaCheck } from "react-icons/fa";
 import verifyImportedData from "../../utils/verifyImportedData";
 
 function SaveIndicator(props) {
@@ -104,9 +105,39 @@ function FillUserForm(props) {
     const [saveState, setSaveState] = useState(null)
     const [jsonFile, setJsonFile] = useState(null)
     const [showImportDataMenu, setShowImportDataMenu] = useState(false)
+    const [isOpenAlertModal, setIsOpenAlertModal] = useState(false)
+    const [messages, setMessages] = useState([])
     const focusInput = key => {
         inputRef.current[key] && inputRef.current[key].focus()
     }
+
+    const save = useCallback(async () => {
+        try {
+            setSaveState({
+                status: 'pending'
+            })
+            const res = await callApi(saveFormDataUrl, 'PUT', formData)
+            const resData = await res.json()
+            const date = new Date()
+            if(resData.status === 'success') {
+                setSaveState({
+                    status: 'success',
+                    time: date.toLocaleDateString() + " " + date.toLocaleTimeString()
+                })
+                // return alert('บันทึกข้อมูลสำเร็จ')
+            }
+            else
+                throw resData.data
+        } catch (error) {
+            const date = new Date()
+            setSaveState({
+                status: 'failed',
+                time: date.toLocaleDateString() + " " + date.toLocaleTimeString(),
+                error: error
+            })
+            // alert('บันทึกข้อมูลล้มเหลว\n' + error)
+        }
+    }, [formData, saveFormDataUrl])
 
     //auto save when data change
     useEffect(() => {
@@ -121,7 +152,7 @@ function FillUserForm(props) {
             save()
             setSaveTimeout(null)
         }, 2000))
-    }, [formData])
+    }, [dataChanged, formData, save, saveTimeout])
 
     const toggleImportDataMenu = () => {
         setShowImportDataMenu(!showImportDataMenu)
@@ -161,51 +192,9 @@ function FillUserForm(props) {
                 error: error
             })
         }
-
     }
 
-    const save = async () => {
-        try {
-            setSaveState({
-                status: 'pending'
-            })
-            // const arrFiles = Object.entries(formData).filter(([key, val]) => val !== null && typeof val === 'object')
-            // for(const [key, file] of arrFiles) {
-            //     if(!(file instanceof File))
-            //         continue
-            //     const data = new FormData()
-            //     data.append('file', file)
-            //     const res = await callApi(saveFilesUrl, 'POST', data, true)
-            //     const resData = await res.json()
-            //     if(resData.status === 'error' || resData.status === 'fail')
-            //         throw resData.data
-            //     formData[key] = {
-            //         filename: resData.data.filename,
-            //         filepath: resData.data.url
-            //     }
-            // }
-            const res = await callApi(saveFormDataUrl, 'PUT', formData)
-            const resData = await res.json()
-            const date = new Date()
-            if(resData.status === 'success') {
-                setSaveState({
-                    status: 'success',
-                    time: date.toLocaleDateString() + " " + date.toLocaleTimeString()
-                })
-                // return alert('บันทึกข้อมูลสำเร็จ')
-            }
-            else
-                throw resData.data
-        } catch (error) {
-            const date = new Date()
-            setSaveState({
-                status: 'failed',
-                time: date.toLocaleDateString() + " " + date.toLocaleTimeString(),
-                error: error
-            })
-            // alert('บันทึกข้อมูลล้มเหลว\n' + error)
-        }
-    }
+    
 
     const exportJson = async () => {
         var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(formData));
@@ -221,11 +210,14 @@ function FillUserForm(props) {
 
             reader.onload = e => {
                 const json = JSON.parse(e.target.result)
-                const canBeImported = verifyImportedData(formTemplate, json)
-                if(!canBeImported)
-                    return alert('ไม่สามารถ Import ได้ เนื่องจาก format ข้อมูลและตารางไม่ตรงกัน')
+                const [data, messages] = verifyImportedData(formTemplate, json)
+                if(messages.length > 0) {
+                    setIsOpenAlertModal(true)
+                    setMessages(messages)
+                    //alert(`ตารางดังต่อไปนี้ไม่สามารถ Import ได้เนื่องจาก Format ข้อมูลและตารางไม่ตรงกัน\n${errors.join('\n')}`)
+                }
                 
-                return setFormData(json)
+                return setFormData(data)
             }
 
             reader.readAsText(jsonFile)
@@ -450,6 +442,32 @@ function FillUserForm(props) {
                 </table>
                 {/* <TextareaAutosize></TextareaAutosize> */}
             </div>
+            {isOpenAlertModal && 
+            <div className="backdrop" onClick={() => setIsOpenAlertModal(false)}>
+                <div className="popup" style={{width: 'fit-content'}}>
+                    <button className="popup-close">
+                        <GrFormClose onClick={() => setIsOpenAlertModal(false)} size={30} color='rgb(240, 240, 240)'/>
+                    </button>
+                    <h1 style={{marginBottom: '16px'}}>ผลลัพธ์การ Import ข้อมูล</h1>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                        minWidth: '800px', 
+                        maxHeight: '600px', 
+                        overflow: 'auto',
+                        paddingLeft: '16px'
+                    }}>
+                        {messages.map(([message, isValid]) => {
+                            return <div style={{display: 'flex', gap: '16px', alignItems: 'center'}}>
+                                {isValid ? <FaCheck color="green"/> : <ImCross color="red"/>}
+                                <div style={{color: isValid ? 'green' : 'red'}}>{message}</div>
+                            </div>
+                        })}
+                    </div>
+                </div>
+            </div>
+            }
         </div>
     )
 }
