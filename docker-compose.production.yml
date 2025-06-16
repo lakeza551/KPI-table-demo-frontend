@@ -7,6 +7,11 @@ services:
       context: .
       dockerfile: production.dockerfile
     restart: unless-stopped
+    volumes:
+      - ./build:/usr/web/build
+      - ./.env:/usr/web/.env
+      - ./app.js:/usr/web/app.js
+    command: "node app.js"
     ports:
       - 3001:3000
     env_file:
