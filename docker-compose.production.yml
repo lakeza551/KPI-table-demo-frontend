@@ -12,6 +12,7 @@ services:
       - ./.env:/usr/web/.env
       - ./app.js:/usr/web/app.js
       - ./logs:/usr/web/logs
+      - ./services:/usr/web/services
     command: "node app.js"
     ports:
       - 3001:3000
